@@ -5,4 +5,5 @@ testing_suites:
   default:
     - "package=all&jquery=1.7.2&extendprototypes=true"
 testing_packages:
+  - ember-data
   - ember-data-validations

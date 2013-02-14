@@ -1,0 +1,55 @@
+DS.Validations.validators.local.reopen({
+  numericality: function(model, property, options) {
+    var CHECKS, check, checkValue, fn, form, operator, val;
+
+    if (!DS.Validations.patterns.numericality.test(model.get(property))) {
+      if (options.allow_blank === true && this.presence(model, property, {message: options.messages.numericality})) {
+        return;
+      } else {
+        return options.messages.numericality;
+      }
+    }
+
+    if (options.only_integer === true && !(/^[+\-]?\d+$/.test(model.get(property)))) {
+      return options.messages.only_integer;
+    }
+
+    CHECKS = {
+      equal_to                  :'===',
+      greater_than              : '>',
+      greater_than_or_equal_to : '>=',
+      less_than                 : '<',
+      less_than_or_equal_to     : '<='
+    };
+
+    for (check in CHECKS) {
+      operator = CHECKS[check];
+
+      if (options[check] === undefined) {
+        continue;
+      }
+
+      if (!isNaN(parseFloat(options[check])) && isFinite(options[check])) {
+        checkValue = options[check];
+      } else if (model.get(options[check])) {
+        checkValue = model.get(options[check]);
+      } else {
+        return;
+      }
+
+      fn = new Function('return ' + model.get(property) + ' ' + operator + ' ' + checkValue);
+
+      if (!fn()) {
+        return options.messages[check];
+      }
+    }
+
+    if (options.odd && parseInt(model.get(property), 10) % 2 === 0) {
+      return options.messages.odd;
+    }
+
+    if (options.even && parseInt(model.get(property), 10) % 2 !== 0) {
+      return options.messages.even;
+    }
+  }
+});
