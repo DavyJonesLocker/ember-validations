@@ -9,6 +9,8 @@ window.DS = Ember.Namespace.create({
 
 })();
 
+
+
 (function() {
 var DeferredMixin = Ember.DeferredMixin,  // ember-runtime/mixins/deferred
     Evented = Ember.Evented,              // ember-runtime/mixins/evented
@@ -3074,6 +3076,7 @@ var DirtyState = DS.State.extend({
     },
 
     becameInvalid: function(manager, errors) {
+      debugger;
       var record = get(manager, 'record');
 
       set(record, 'errors', errors);

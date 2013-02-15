@@ -1,6 +1,6 @@
 GIT
-  remote: https://github.com/emberjs/ember-dev.git
-  revision: d0cd62116bce700680393badbf18278b84f31785
+  remote: https://github.com/bcardarella/ember-dev.git
+  revision: ad237f852a558d70899b6ed181c14bdca9ef06fa
   branch: master
   specs:
     ember-dev (0.1)
@@ -34,7 +34,7 @@ GEM
     debugger-linecache (1.1.2)
       debugger-ruby_core_source (>= 1.1.1)
     debugger-ruby_core_source (1.1.7)
-    diff-lcs (1.2.0)
+    diff-lcs (1.2.1)
     execjs (1.4.0)
       multi_json (~> 1.0)
     grit (2.5.0)
@@ -45,8 +45,8 @@ GEM
     kicker (2.6.1)
       listen
     listen (0.7.2)
-    mime-types (1.20.1)
-    multi_json (1.5.0)
+    mime-types (1.21)
+    multi_json (1.6.1)
     posix-spawn (0.3.6)
     rack (1.5.2)
     rake (10.0.3)
