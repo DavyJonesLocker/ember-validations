@@ -34,3 +34,13 @@ test('when attribute value is 1 and accept value is 2', function() {
   options = { message: 'failed validation', accept: 2 };
   equal(DS.Validations.validators.local.acceptance(model, 'attribute', options), 'failed validation');
 });
+
+test('when options is true', function() {
+  options = true;
+  equal(DS.Validations.validators.local.acceptance(model, 'attribute', options), 'must be accepted');
+});
+
+test('when no message is passed', function() {
+  options = { accept: 2 };
+  equal(DS.Validations.validators.local.acceptance(model, 'attribute', options), 'must be accepted');
+});

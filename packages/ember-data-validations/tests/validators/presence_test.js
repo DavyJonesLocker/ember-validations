@@ -21,3 +21,8 @@ test('when value is null from non-selected multi-select element', function() {
   options = { message: 'failed validation' };
   equal(DS.Validations.validators.local.presence(model, 'attribute', options), 'failed validation');
 });
+
+test('when options is true', function() {
+  options = true;
+  equal(DS.Validations.validators.local.format(model, 'attribute', options), "can't be blank");
+});

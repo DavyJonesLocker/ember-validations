@@ -18,3 +18,9 @@ test('when values do not match', function() {
   options = { message: 'failed validation' };
   equal(DS.Validations.validators.local.confirmation(model, 'attribute', options), 'failed validation');
 });
+
+test('when options is true', function() {
+  model.set('attribute', 'test');
+  options = true;
+  equal(DS.Validations.validators.local.confirmation(model, 'attribute', options), "doesn't match attribute");
+});

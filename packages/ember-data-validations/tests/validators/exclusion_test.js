@@ -39,3 +39,13 @@ test('when value is in the range', function() {
   options = { 'message': 'failed validation', 'range': [1, 3] };
   equal(DS.Validations.validators.local.exclusion(model, 'attribute', options), 'failed validation');
 });
+
+test('when options is array', function() {
+  options = [1, 2, 3];
+  equal(DS.Validations.validators.local.exclusion(model, 'attribute', options), 'is reserved');
+});
+
+test('when no message is passed', function() {
+  options = { in: [1, 2, 3] };
+  equal(DS.Validations.validators.local.exclusion(model, 'attribute', options), 'is reserved');
+});

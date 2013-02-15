@@ -39,3 +39,13 @@ test('when value is not in the range', function() {
   options = { 'message': 'failed validation', 'range': [1, 3] };
   equal(DS.Validations.validators.local.inclusion(model, 'attribute', options), 'failed validation');
 });
+
+test('when options is array', function() {
+  options = [1, 2, 3];
+  equal(DS.Validations.validators.local.inclusion(model, 'attribute', options), 'is not included in the list');
+});
+
+test('when no message is passed', function() {
+  options = { in: [1, 2, 3] };
+  equal(DS.Validations.validators.local.inclusion(model, 'attribute', options), 'is not included in the list');
+});

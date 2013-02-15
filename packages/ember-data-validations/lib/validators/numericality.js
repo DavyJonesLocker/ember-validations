@@ -1,9 +1,43 @@
 DS.Validations.validators.local.reopen({
   numericality: function(model, property, options) {
-    var CHECKS, check, checkValue, fn, form, operator, val;
+    var CHECKS, check, checkValue, fn, form, operator, val, index, keys, key;
+
+    CHECKS = {
+      equal_to                  :'===',
+      greater_than              : '>',
+      greater_than_or_equal_to : '>=',
+      less_than                 : '<',
+      less_than_or_equal_to     : '<='
+    };
+
+    if (options === true) {
+      options = {};
+    }
+
+    if (options.messages === undefined) {
+      options.messages = { numericality: DS.Validations.messages.render('not_a_number', options) };
+    }
+
+    if (options.only_integer !== undefined && options.messages.only_integer === undefined) {
+      options.messages.only_integer = DS.Validations.messages.render('not_an_integer', options);
+    }
+
+    keys = Object.keys(CHECKS).concat(['odd', 'even']);
+    for(index in keys) {
+      key = keys[index];
+      if (options[key] !== undefined && options.messages[key] === undefined) {
+        if (Ember.$.inArray(key, Object.keys(CHECKS)) !== -1) {
+          options.count = options[key];
+        }
+        options.messages[key] = DS.Validations.messages.render(key, options);
+        if (options.count !== undefined) {
+          delete options.count;
+        }
+      }
+    }
 
     if (!DS.Validations.patterns.numericality.test(model.get(property))) {
-      if (options.allow_blank === true && this.presence(model, property, {message: options.messages.numericality})) {
+      if (options.allow_blank === true && this.presence(model, property, { message: options.messages.numericality })) {
         return;
       } else {
         return options.messages.numericality;
@@ -13,14 +47,6 @@ DS.Validations.validators.local.reopen({
     if (options.only_integer === true && !(/^[+\-]?\d+$/.test(model.get(property)))) {
       return options.messages.only_integer;
     }
-
-    CHECKS = {
-      equal_to                  :'===',
-      greater_than              : '>',
-      greater_than_or_equal_to : '>=',
-      less_than                 : '<',
-      less_than_or_equal_to     : '<='
-    };
 
     for (check in CHECKS) {
       operator = CHECKS[check];

@@ -1,6 +1,16 @@
 DS.Validations.validators.local.reopen({
   format: function(model, property, options) {
-    var message = this.presence(model, property, options);
+    var message;
+
+    if (options.constructor === RegExp) {
+      options = { 'with': options };
+    }
+
+    if (options.message === undefined) {
+      options.message = DS.Validations.messages.render('invalid', options);
+    }
+
+    message = this.presence(model, property, options);
 
     if (message) {
       if (options.allow_blank === true) {

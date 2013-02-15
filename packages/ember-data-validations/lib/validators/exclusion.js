@@ -1,7 +1,16 @@
 DS.Validations.validators.local.reopen({
   exclusion: function(model, property, options) {
-    var message = this.presence(model, property, options), lower, upper;
+    var message, lower, upper;
 
+    if (options.constructor === Array) {
+      options = { 'in': options };
+    }
+
+    if (options.message === undefined) {
+      options.message = DS.Validations.messages.render('exclusion', options);
+    }
+
+    message = this.presence(model, property, options);
     if (message) {
       if (options.allow_blank === true) {
         return;

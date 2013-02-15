@@ -1,5 +1,13 @@
 DS.Validations.validators.local.reopen({
   acceptance: function(model, property, options) {
+    if (options === true) {
+      options = {};
+    }
+
+    if (options.message === undefined) {
+      options.message = DS.Validations.messages.render('accepted', options);
+    }
+
     if (options.accept) {
       if (model.get(property) !== options.accept) {
         return options.message;
