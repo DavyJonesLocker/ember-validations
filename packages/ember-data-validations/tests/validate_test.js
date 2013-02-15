@@ -6,25 +6,31 @@ module('Validate test', {
       validations: {
         firstName: {
           presence: true,
-          length: 5
+          length: [5]
         },
         lastName: {
-          presence: true
+          format: { with: /\w+/ }
         }
       }
     });
     user = new User();
-    // user.stateManager.transitionTo('loaded.created');
   }
 });
 
-// test('sets the record in the invalid state when running validations and they fail', function() {
-  // user.validate();
-  // equal(user.errors.get('firstName'), "can't be blank");
-  // equal(user.errors.get('lastName'), "can't be blank");
-  // user.set('firstName', 'Bob');
-  // user.validate();
-  // equal(user.errors.get('firstName'), 'wrong length');
-  // ok(!user.isValid);
-  // equal(user.stateManager.get('currentState.name'), 'invalid');
-// });
+test('runs all validations', function() {
+  user.validate();
+  equal(user.errors.get('firstName'), "can't be blank");
+  equal(user.errors.get('lastName'), "is invalid");
+  user.set('firstName', 'Bob');
+  user.validate();
+  equal(user.errors.get('firstName'), 'is the wrong length (should be 5 characters)');
+});
+
+test('runs a single validation', function() {
+  user.validate('firstName');
+  equal(user.errors.get('firstName'), "can't be blank");
+  equal(user.errors.get('lastName'), undefined);
+  user.set('firstName', 'Bob');
+  user.validate('firstName');
+  equal(user.errors.get('firstName'), 'is the wrong length (should be 5 characters)');
+});

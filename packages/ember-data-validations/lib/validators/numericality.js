@@ -23,7 +23,7 @@ DS.Validations.validators.local.reopen({
     }
 
     keys = Object.keys(CHECKS).concat(['odd', 'even']);
-    for(index in keys) {
+    for(index = 0; index < keys.length; index++) {
       key = keys[index];
       if (options[key] !== undefined && options.messages[key] === undefined) {
         if (Ember.$.inArray(key, Object.keys(CHECKS)) !== -1) {
