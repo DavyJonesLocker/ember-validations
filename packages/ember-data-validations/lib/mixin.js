@@ -2,7 +2,7 @@ DS.Validations.Mixin = Ember.Object.create({
   errors: DS.Validations.Errors.create(),
   validations: {},
   validate: function(filter) {
-    var options, message, property, validator, toRun, value, index1, index2;
+    var options, message, property, validator, toRun, value, index1, index2, valid = true;
     if (filter !== undefined) {
       toRun = [filter];
     } else {
@@ -28,9 +28,12 @@ DS.Validations.Mixin = Ember.Object.create({
 
         if (message) {
           this.errors.set(property, message);
+          valid = false;
           break;
         }
       }
     }
+
+    return valid;
   }
 });
