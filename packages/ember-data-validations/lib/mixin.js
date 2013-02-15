@@ -1,5 +1,6 @@
 DS.Validations.Mixin = Ember.Object.create({
   errors: DS.Validations.Errors.create(),
+  validations: {},
   validate: function(filter) {
     var options, message, property, validator, toRun, value, index1, index2;
     if (filter !== undefined) {

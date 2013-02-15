@@ -1,7 +1,4 @@
-DS.Validations.validators        = Ember.Namespace.create();
-DS.Validations.validators.local  = Ember.Namespace.create();
-DS.Validations.validators.remote = Ember.Namespace.create();
-
+require('ember-data-validations/validatorNamespaces');
 require('ember-data-validations/validators/acceptance');
 require('ember-data-validations/validators/confirmation');
 require('ember-data-validations/validators/exclusion');
