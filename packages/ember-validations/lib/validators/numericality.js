@@ -5,7 +5,7 @@ Ember.Validations.validators.local.reopen({
     CHECKS = {
       equal_to                  :'===',
       greater_than              : '>',
-      greater_than_or_equal_to : '>=',
+      greater_than_or_equal_to  : '>=',
       less_than                 : '<',
       less_than_or_equal_to     : '<='
     };
