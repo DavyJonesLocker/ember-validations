@@ -5,7 +5,7 @@ Ember.Validations.validators.local.reopen({
       options = { message: Ember.Validations.messages.render('confirmation', options) };
     }
 
-    if (model.get(property) !== model.get('' + property + '_confirmation')) {
+    if (model.get(property) !== model.get('' + property + 'Confirmation')) {
       return options.message;
     }
   }

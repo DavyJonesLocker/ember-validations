@@ -8,7 +8,7 @@ module('Confirmation Validator', {
 
 test('when values match', function() {
   model.set('attribute', 'test');
-  model.set('attribute_confirmation', 'test');
+  model.set('attributeConfirmation', 'test');
   options = { message: 'failed validation' };
   equal(Ember.Validations.validators.local.confirmation(model, 'attribute', options), undefined);
 });
