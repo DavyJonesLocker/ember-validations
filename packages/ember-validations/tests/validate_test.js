@@ -13,7 +13,7 @@ module('Validate test', {
         }
       }
     });
-    user = new User();
+    user = User.create();
   }
 });
 
