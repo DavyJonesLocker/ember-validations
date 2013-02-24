@@ -1,6 +1,6 @@
 # Ember Validations #
 
-Validation support for Ember Data
+Validation support for Ember Objects
 
 ## Getting a build ##
 
