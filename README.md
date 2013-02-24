@@ -1,11 +1,11 @@
-# Ember Data Validations #
+# Ember Validations #
 
 Validation support for Ember Data
 
 ## Looking for help? ##
 
 If it is a bug [please open an issue on
-GitHub](https://github.com/dockyard/ember-data-validations/issues). If you need help using
+GitHub](https://github.com/dockyard/ember-validations/issues). If you need help using
 the gem please ask the question on
 [Stack Overflow](http://stackoverflow.com). Be sure to tag the
 question with `DockYard` so we can find it.
@@ -18,7 +18,7 @@ question with `DockYard` so we can find it.
 
 This is partially influenced by [Ember FormBuilder](https://github.com/luan/ember-formbuilder) by [Luan Haddad Ricardo dos Santos](https://twitter.com/cfcluan)
 
-[We are very thankful for the many contributors](https://github.com/dockyard/ember-data-validations/graphs/contributors)
+[We are very thankful for the many contributors](https://github.com/dockyard/ember-validations/graphs/contributors)
 
 ## Versioning ##
 
@@ -27,7 +27,7 @@ This gem follows [Semantic Versioning](http://semver.org)
 ## Want to help? ##
 
 Please do! We are always looking to improve this gem. Please see our
-[Contribution Guidelines](https://github.com/dockyard/ember-data-validations/blob/master/CONTRIBUTING.md)
+[Contribution Guidelines](https://github.com/dockyard/ember-validations/blob/master/CONTRIBUTING.md)
 on how to properly submit issues and pull requests.
 
 ## Legal ##

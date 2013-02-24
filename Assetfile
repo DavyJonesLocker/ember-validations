@@ -2,13 +2,13 @@ instance_eval File.read(EmberDev.support_path.join('Assetfile'))
 require 'debugger'
 
 distros = {
-  :full    => %w(ember-data-validations)
+  :full    => %w(ember-validations)
 }
 
 output "dist"
 
 distros.each do |name, modules|
-  name = "ember-data-validations"
+  name = "ember-validations"
 
   input "dist/modules" do
     module_paths = modules.map{|m| "#{m}.js" }

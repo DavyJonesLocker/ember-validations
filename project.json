@@ -1,8 +1,8 @@
 {
-  "name": "ember-data-validations-project",
+  "name": "ember-validations-project",
   "bpm": "1.0.0",
   "dependencies": {
-    "ember-data-validations": ">= 0"
+    "ember-validations": ">= 0"
   },
 
   "bpm:build": {

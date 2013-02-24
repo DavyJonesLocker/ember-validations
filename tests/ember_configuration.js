@@ -30,6 +30,6 @@
 
   EmberDev.distros = {
     spade:   'ember-spade.js',
-    build:   'ember-data-validations.js'
+    build:   'ember-validations.js'
   };
 })();
