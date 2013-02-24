@@ -209,7 +209,7 @@ Not yet implemented.
 
 ## Versioning ##
 
-This gem follows [Semantic Versioning](http://semver.org)
+This library follows [Semantic Versioning](http://semver.org)
 
 ## Want to help? ##
 
