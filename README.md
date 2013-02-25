@@ -201,6 +201,34 @@ presence: { message: 'must not be blank' }
 
 Not yet implemented.
 
+## Running Validations
+
+Simply call `.validate()` on the object. `true` or `false` will be
+returned.
+
+```javascript
+user.validate();
+=> false
+```
+
+## Inspecting Errors
+
+After mixing in `Ember.Validations` into your object it will now have a
+`.errors` object. All validation error messages will be placed in there
+for the corresponding property.
+
+```javascript
+App.User = Ember.Object.extend(Ember.Validations,
+  validations:
+    firstName: { presence: true }
+  }
+});
+
+user = App.User.create();
+user.validate(); // false
+user.errors.get('firstName') // "can't be blank"
+```
+
 ## Authors ##
 
 * [Brian Cardarella](http://twitter.com/bcardarella)
