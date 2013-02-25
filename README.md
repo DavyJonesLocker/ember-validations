@@ -1,5 +1,7 @@
 # Ember Validations #
 
+[![Build Status](https://secure.travis-ci.org/dockyard/ember-validations.png?branch=master)](http://travis-ci.org/dockyard/ember-validations)
+
 Validation support for Ember Objects
 
 **Note: This is an implementation of ActiveModel::Validations from
