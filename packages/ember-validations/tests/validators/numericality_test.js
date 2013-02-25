@@ -204,3 +204,10 @@ test('when even and no message is passed', function() {
   options = { even: true };
   equal(Ember.Validations.validators.local.numericality(model, 'attribute', options), 'must be even');
 });
+
+test('when deferred object is passed', function() {
+  options = true;
+  var deferredObject = new Ember.$.Deferred();
+  Ember.Validations.validators.local.numericality(model, 'attribute', options, deferredObject);
+  equal(deferredObject.state(), 'resolved');
+});

@@ -49,3 +49,10 @@ test('when no message is passed', function() {
   options = { in: [1, 2, 3] };
   equal(Ember.Validations.validators.local.exclusion(model, 'attribute', options), 'is reserved');
 });
+
+test('when deferred object is passed', function() {
+  options = { in: [1, 2, 3] };
+  var deferredObject = new Ember.$.Deferred();
+  Ember.Validations.validators.local.exclusion(model, 'attribute', options, deferredObject);
+  equal(deferredObject.state(), 'resolved');
+});

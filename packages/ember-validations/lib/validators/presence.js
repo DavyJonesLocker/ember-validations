@@ -1,5 +1,6 @@
 Ember.Validations.validators.local.reopen({
-  presence: function(model, property, options) {
+  presence: function(model, property, options, deferredObject) {
+    /*jshint expr:true*/
     if (options === true) {
       options = {};
     }
@@ -9,7 +10,9 @@ Ember.Validations.validators.local.reopen({
     }
 
     if (/^\s*$/.test(model.get(property) || '')) {
+      deferredObject && deferredObject.resolve();
       return options.message;
     }
+    deferredObject && deferredObject.resolve();
   }
 });

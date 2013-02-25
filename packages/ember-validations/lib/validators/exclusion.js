@@ -1,5 +1,6 @@
 Ember.Validations.validators.local.reopen({
-  exclusion: function(model, property, options) {
+  exclusion: function(model, property, options, deferredObject) {
+    /*jshint expr:true*/
     var message, lower, upper;
 
     if (options.constructor === Array) {
@@ -13,14 +14,17 @@ Ember.Validations.validators.local.reopen({
     message = this.presence(model, property, options);
     if (message) {
       if (options.allow_blank === true) {
+        deferredObject && deferredObject.resolve();
         return;
       } else {
+        deferredObject && deferredObject.resolve();
         return message;
       }
     }
 
     if (options['in']) {
       if (Ember.$.inArray(model.get(property), options['in']) !== -1) {
+        deferredObject && deferredObject.resolve();
         return options.message;
       }
     }
@@ -30,8 +34,10 @@ Ember.Validations.validators.local.reopen({
       upper = options.range[1];
 
       if (model.get(property) >= lower && model.get(property) <= upper) {
+        deferredObject && deferredObject.resolve();
         return options.message;
       }
     }
+    deferredObject && deferredObject.resolve();
   }
 });

@@ -44,3 +44,10 @@ test('when no message is passed', function() {
   options = { accept: 2 };
   equal(Ember.Validations.validators.local.acceptance(model, 'attribute', options), 'must be accepted');
 });
+
+test('when deferred object is passed', function() {
+  options = true;
+  var deferredObject = new Ember.$.Deferred();
+  Ember.Validations.validators.local.acceptance(model, 'attribute', options, deferredObject);
+  equal(deferredObject.state(), 'resolved');
+});

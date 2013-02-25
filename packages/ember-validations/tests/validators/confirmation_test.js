@@ -24,3 +24,10 @@ test('when options is true', function() {
   options = true;
   equal(Ember.Validations.validators.local.confirmation(model, 'attribute', options), "doesn't match attribute");
 });
+
+test('when deferred object is passed', function() {
+  options = true;
+  var deferredObject = new Ember.$.Deferred();
+  Ember.Validations.validators.local.confirmation(model, 'attribute', options, deferredObject);
+  equal(deferredObject.state(), 'resolved');
+});

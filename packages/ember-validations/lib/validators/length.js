@@ -1,5 +1,6 @@
 Ember.Validations.validators.local.reopen({
-  length: function(model, property, options) {
+  length: function(model, property, options, deferredObject) {
+    /*jshint expr:true*/
     var CHECKS, MESSAGES, allowBlankOptions, check, fn, message, operator, tokenized_length, tokenizer, index, keys, key;
 
     CHECKS = {
@@ -49,8 +50,10 @@ Ember.Validations.validators.local.reopen({
     message = this.presence(model, property, allowBlankOptions);
     if (message) {
       if (options.allow_blank === true) {
+        deferredObject && deferredObject.resolve();
         return;
       } else {
+        deferredObject && deferredObject.resolve();
         return message;
       }
     }
@@ -63,8 +66,10 @@ Ember.Validations.validators.local.reopen({
 
       fn = new Function("return " + tokenized_length + " " + operator + " " + options[check]);
       if (!fn()) {
+        deferredObject && deferredObject.resolve();
         return options.messages[check];
       }
     }
+    deferredObject && deferredObject.resolve();
   }
 });

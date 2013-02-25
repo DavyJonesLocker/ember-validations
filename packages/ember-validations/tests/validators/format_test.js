@@ -37,3 +37,10 @@ test('when no message is passed', function() {
   options = { 'with': /\d+/ };
   equal(Ember.Validations.validators.local.format(model, 'attribute', options), 'is invalid');
 });
+
+test('when deferred object is passed', function() {
+  options = { 'with': /\d+/ };
+  var deferredObject = new Ember.$.Deferred();
+  Ember.Validations.validators.local.format(model, 'attribute', options, deferredObject);
+  equal(deferredObject.state(), 'resolved');
+});

@@ -92,3 +92,10 @@ test('when allowed length maximum is 3, value length is 4 and no message is set'
   options = { maximum: 3 };
   equal(Ember.Validations.validators.local.length(model, 'attribute', options), 'is too long (maximum is 3 characters)');
 });
+
+test('when deferred object is passed', function() {
+  options = 3;
+  var deferredObject = new Ember.$.Deferred();
+  Ember.Validations.validators.local.length(model, 'attribute', options, deferredObject);
+  equal(deferredObject.state(), 'resolved');
+});

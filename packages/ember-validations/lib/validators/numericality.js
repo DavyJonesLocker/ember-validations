@@ -1,5 +1,6 @@
 Ember.Validations.validators.local.reopen({
-  numericality: function(model, property, options) {
+  numericality: function(model, property, options, deferredObject) {
+    /*jshint expr:true*/
     var CHECKS, check, checkValue, fn, form, operator, val, index, keys, key;
 
     CHECKS = {
@@ -38,8 +39,10 @@ Ember.Validations.validators.local.reopen({
 
     if (!Ember.Validations.patterns.numericality.test(model.get(property))) {
       if (options.allow_blank === true && this.presence(model, property, { message: options.messages.numericality })) {
+        deferredObject && deferredObject.resolve();
         return;
       } else {
+        deferredObject && deferredObject.resolve();
         return options.messages.numericality;
       }
     }
@@ -60,22 +63,27 @@ Ember.Validations.validators.local.reopen({
       } else if (model.get(options[check])) {
         checkValue = model.get(options[check]);
       } else {
+        deferredObject && deferredObject.resolve();
         return;
       }
 
       fn = new Function('return ' + model.get(property) + ' ' + operator + ' ' + checkValue);
 
       if (!fn()) {
+        deferredObject && deferredObject.resolve();
         return options.messages[check];
       }
     }
 
     if (options.odd && parseInt(model.get(property), 10) % 2 === 0) {
+      deferredObject && deferredObject.resolve();
       return options.messages.odd;
     }
 
     if (options.even && parseInt(model.get(property), 10) % 2 !== 0) {
+      deferredObject && deferredObject.resolve();
       return options.messages.even;
     }
+    deferredObject && deferredObject.resolve();
   }
 });

@@ -1,5 +1,6 @@
 Ember.Validations.validators.local.reopen({
-  acceptance: function(model, property, options) {
+  acceptance: function(model, property, options, deferredObject) {
+    /*jshint expr:true*/
     if (options === true) {
       options = {};
     }
@@ -10,13 +11,17 @@ Ember.Validations.validators.local.reopen({
 
     if (options.accept) {
       if (model.get(property) !== options.accept) {
+        deferredObject && deferredObject.resolve();
         return options.message;
       } else {
+        deferredObject && deferredObject.resolve();
         return;
       }
     }
     if (model.get(property) !== '1' && model.get(property) !== 1 && model.get(property) !== true) {
+      deferredObject && deferredObject.resolve();
       return options.message;
     }
+    deferredObject && deferredObject.resolve();
   }
 });
