@@ -6,11 +6,12 @@ Ember.Validations.Mixin = Ember.Mixin.create({
     }
   },
   validate: function(filter) {
-    var options, message, property, validator, toRun, value, index1, index2, valid = true;
+    var options, message, property, validator, toRun, value, index1, index2, valid = true, deferreds = [];
+    var object = this;
     if (filter !== undefined) {
       toRun = [filter];
     } else {
-      toRun = Object.keys(this.validations);
+      toRun = Object.keys(object.validations);
     }
     for(index1 = 0; index1 < toRun.length; index1++) {
       property = toRun[index1];
@@ -18,13 +19,15 @@ Ember.Validations.Mixin = Ember.Mixin.create({
       delete this.errors[property];
 
       for(validator in this.validations[property]) {
-        value = this.validations[property][validator];
+        value = object.validations[property][validator];
         if (typeof(value) !== 'object' || (typeof(value) === 'object' && value.constructor !== Array)) {
           value = [value];
         }
 
         for(index2 = 0; index2 < value.length; index2++) {
-          message = Ember.Validations.validators.local[validator](this, property, value[index2]);
+          var deferredObject = new Ember.Deferred();
+          deferreds = deferreds.concat(deferredObject);
+          message = Ember.Validations.validators.local[validator](object, property, value[index2], deferredObject);
           if (message) {
             break;
           }
@@ -37,7 +40,8 @@ Ember.Validations.Mixin = Ember.Mixin.create({
         }
       }
     }
-
-    return valid;
+    Ember.RSVP.all(deferreds).then(function() {
+      object.set('isValid', valid);
+    });
   }
 });

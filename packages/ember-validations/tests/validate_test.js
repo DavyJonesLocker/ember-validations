@@ -1,4 +1,9 @@
 var user, User;
+var validate = function(object, property) {
+  Ember.run(function() {
+    object.validate(property);
+  });
+};
 
 module('Validate test', {
   setup: function() {
@@ -17,20 +22,40 @@ module('Validate test', {
   }
 });
 
-test('runs all validations', function() {
-  user.validate();
-  equal(user.errors.get('firstName'), "can't be blank");
-  equal(user.errors.get('lastName'), "is invalid");
-  user.set('firstName', 'Bob');
-  user.validate();
-  equal(user.errors.get('firstName'), 'is the wrong length (should be 5 characters)');
+asyncTest('runs all validations', function() {
+  validate(user);
+  setTimeout(function() {
+    equal(user.errors.get('firstName'), "can't be blank");
+    equal(user.errors.get('lastName'), "is invalid");
+    equal(user.get('isValid'), false);
+    user.set('firstName', 'Bob');
+    validate(user);
+    setTimeout(function() {
+      equal(user.errors.get('firstName'), 'is the wrong length (should be 5 characters)');
+      equal(user.get('isValid'), false);
+      user.set('firstName', 'Brian');
+      user.set('lastName', 'Cardarella');
+      validate(user);
+      setTimeout(function() {
+        equal(user.get('isValid'), true);
+        start();
+      }, 50);
+    }, 50);
+  }, 50);
 });
 
-test('runs a single validation', function() {
-  user.validate('firstName');
-  equal(user.errors.get('firstName'), "can't be blank");
-  equal(user.errors.get('lastName'), undefined);
-  user.set('firstName', 'Bob');
-  user.validate('firstName');
-  equal(user.errors.get('firstName'), 'is the wrong length (should be 5 characters)');
+asyncTest('runs a single validation', function() {
+  validate(user, 'firstName');
+  setTimeout(function() {
+    equal(user.errors.get('firstName'), "can't be blank");
+    equal(user.errors.get('lastName'), undefined);
+    equal(user.get('isValid'), false);
+    user.set('firstName', 'Bob');
+    validate(user, 'firstName');
+    setTimeout(function() {
+      equal(user.errors.get('firstName'), 'is the wrong length (should be 5 characters)');
+      equal(user.get('isValid'), false);
+      start();
+    }, 50);
+  }, 50);
 });
