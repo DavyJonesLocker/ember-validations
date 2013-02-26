@@ -4,11 +4,11 @@ Ember.Validations.validators.local.reopen({
     var CHECKS, check, checkValue, fn, form, operator, val, index, keys, key;
 
     CHECKS = {
-      equal_to                  :'===',
-      greater_than              : '>',
-      greater_than_or_equal_to  : '>=',
-      less_than                 : '<',
-      less_than_or_equal_to     : '<='
+      equalTo                  :'===',
+      greaterThan              : '>',
+      greaterThanOrEqualTo  : '>=',
+      lessThan                 : '<',
+      lessThanOrEqualTo     : '<='
     };
 
     if (options === true) {
@@ -16,11 +16,11 @@ Ember.Validations.validators.local.reopen({
     }
 
     if (options.messages === undefined) {
-      options.messages = { numericality: Ember.Validations.messages.render('not_a_number', options) };
+      options.messages = { numericality: Ember.Validations.messages.render('notANumber', options) };
     }
 
-    if (options.only_integer !== undefined && options.messages.only_integer === undefined) {
-      options.messages.only_integer = Ember.Validations.messages.render('not_an_integer', options);
+    if (options.onlyInteger !== undefined && options.messages.onlyInteger === undefined) {
+      options.messages.onlyInteger = Ember.Validations.messages.render('notAnInteger', options);
     }
 
     keys = Object.keys(CHECKS).concat(['odd', 'even']);
@@ -38,13 +38,13 @@ Ember.Validations.validators.local.reopen({
     }
 
     if (Ember.Validations.Utilities.isBlank(model.get(property))) {
-      if (options.allow_blank === undefined) {
+      if (options.allowBlank === undefined) {
         model.errors.add(property, options.messages.numericality);
       }
     } else if (!Ember.Validations.patterns.numericality.test(model.get(property))) {
       model.errors.add(property, options.messages.numericality);
-    } else if (options.only_integer === true && !(/^[+\-]?\d+$/.test(model.get(property)))) {
-      model.errors.add(property, options.messages.only_integer);
+    } else if (options.onlyInteger === true && !(/^[+\-]?\d+$/.test(model.get(property)))) {
+      model.errors.add(property, options.messages.onlyInteger);
     } else if (options.odd  && parseInt(model.get(property), 10) % 2 === 0) {
       model.errors.add(property, options.messages.odd);
     } else if (options.even && parseInt(model.get(property), 10) % 2 !== 0) {

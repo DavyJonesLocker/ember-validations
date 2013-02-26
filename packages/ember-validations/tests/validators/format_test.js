@@ -22,7 +22,7 @@ test('when not matching format', function() {
 });
 
 test('when allowing blank', function() {
-  options = { 'message': 'failed validation', 'with': /\d+/, 'allow_blank': true };
+  options = { 'message': 'failed validation', 'with': /\d+/, 'allowBlank': true };
   Ember.Validations.validators.local.format(model, 'attribute', options);
   equal(model.errors.get('attribute'), undefined);
 });

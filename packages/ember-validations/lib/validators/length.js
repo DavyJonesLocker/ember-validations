@@ -1,7 +1,7 @@
 Ember.Validations.validators.local.reopen({
   length: function(model, property, options, deferredObject) {
     /*jshint expr:true*/
-    var CHECKS, MESSAGES, allowBlankOptions, check, fn, message, operator, tokenized_length, tokenizer, index, keys, key;
+    var CHECKS, MESSAGES, allowBlankOptions, check, fn, message, operator, tokenizedLength, tokenizer, index, keys, key;
 
     CHECKS = {
       'is'      : '==',
@@ -10,9 +10,9 @@ Ember.Validations.validators.local.reopen({
     };
 
     MESSAGES = {
-      'is'      : 'wrong_length',
-      'minimum' : 'too_short',
-      'maximum' : 'too_long'
+      'is'      : 'wrongLength',
+      'minimum' : 'tooShort',
+      'maximum' : 'tooLong'
     };
 
     if (typeof(options) === 'number') {
@@ -38,7 +38,7 @@ Ember.Validations.validators.local.reopen({
     }
 
     tokenizer = options.tokenizer || 'split("")';
-    tokenized_length = new Function('value', 'return value.' + tokenizer + '.length')(model.get(property) || '');
+    tokenizedLength = new Function('value', 'return value.' + tokenizer + '.length')(model.get(property) || '');
 
     allowBlankOptions = {};
     if (options.is) {
@@ -48,7 +48,7 @@ Ember.Validations.validators.local.reopen({
     }
 
     if (Ember.Validations.Utilities.isBlank(model.get(property))) {
-      if (options.allow_blank === undefined) {
+      if (options.allowBlank === undefined) {
         model.errors.add(property, allowBlankOptions.message);
       }
     } else {
@@ -58,7 +58,7 @@ Ember.Validations.validators.local.reopen({
           continue;
         }
 
-        fn = new Function("return " + tokenized_length + " " + operator + " " + options[check]);
+        fn = new Function("return " + tokenizedLength + " " + operator + " " + options[check]);
         if (!fn()) {
           model.errors.add(property, options.messages[check]);
         }

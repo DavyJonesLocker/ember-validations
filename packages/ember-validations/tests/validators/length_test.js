@@ -29,13 +29,13 @@ test('when allowed length is 3 and value length is 2', function() {
 });
 
 test('when allowing blank and allowed length is 3', function() {
-  options = { messages: { is: 'failed validation' }, is: 3, allow_blank: true };
+  options = { messages: { is: 'failed validation' }, is: 3, allowBlank: true };
   Ember.Validations.validators.local.length(model, 'attribute', options);
   equal(model.errors.get('attribute'), undefined);
 });
 
 test('when allowing blank and minimum length is 3 and maximum length is 100', function() {
-  options = { messages: { minimum: 'failed minimum validation', maximum: 'failed maximum validation' }, minimum: 3, maximum: 100, allow_blank: true };
+  options = { messages: { minimum: 'failed minimum validation', maximum: 'failed maximum validation' }, minimum: 3, maximum: 100, allowBlank: true };
   Ember.Validations.validators.local.length(model, 'attribute', options);
   equal(model.errors.get('attribute'), undefined);
 });

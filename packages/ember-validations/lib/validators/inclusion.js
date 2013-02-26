@@ -12,7 +12,7 @@ Ember.Validations.validators.local.reopen({
     }
 
     if (Ember.Validations.Utilities.isBlank(model.get(property))) {
-      if (options.allow_blank === undefined) {
+      if (options.allowBlank === undefined) {
         model.errors.add(property, options.message);
       }
     } else if (options['in']) {

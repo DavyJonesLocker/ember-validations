@@ -22,7 +22,7 @@ test('when value is not in the list', function() {
 });
 
 test('when allowing blank', function() {
-  options = { 'message': 'failed validation', 'in': [1, 2, 3], allow_blank: true };
+  options = { 'message': 'failed validation', 'in': [1, 2, 3], allowBlank: true };
   Ember.Validations.validators.local.inclusion(model, 'attribute', options);
   equal(model.errors.get('attribute'), undefined);
 });

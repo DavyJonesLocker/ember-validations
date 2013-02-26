@@ -35,105 +35,105 @@ test('when no value', function() {
 });
 
 test('when no value and allowing blank', function() {
-  options = { messages: { numericality: 'failed validation' }, allow_blank: true };
+  options = { messages: { numericality: 'failed validation' }, allowBlank: true };
   Ember.Validations.validators.local.numericality(model, 'attribute', options);
   equal(model.errors.get('attribute'), undefined);
 });
 
 test('when bad value and allowing blank', function() {
   model.set('attribute', 'abc123');
-  options = { messages: { numericality: 'failed validation' }, allow_blank: true };
+  options = { messages: { numericality: 'failed validation' }, allowBlank: true };
   Ember.Validations.validators.local.numericality(model, 'attribute', options);
   deepEqual(model.errors.get('attribute'), ['failed validation']);
 });
 
 test('when only allowing integers and value is integer', function() {
   model.set('attribute', 123);
-  options = { messages: { only_integer: 'failed validation', numericality: 'failed validation' }, only_integer: true };
+  options = { messages: { onlyInteger: 'failed validation', numericality: 'failed validation' }, onlyInteger: true };
   Ember.Validations.validators.local.numericality(model, 'attribute', options);
   equal(model.errors.get('attribute'), undefined);
 });
 
 test('when only allowing integers and value is not integer', function() {
   model.set('attribute', 123.456);
-  options = { messages: { only_integer: 'failed integer validation', numericality: 'failed validation' }, only_integer: true };
+  options = { messages: { onlyInteger: 'failed integer validation', numericality: 'failed validation' }, onlyInteger: true };
   Ember.Validations.validators.local.numericality(model, 'attribute', options);
   deepEqual(model.errors.get('attribute'), ['failed integer validation']);
 });
 
 test('when only allowing values greater than 10 and value is greater than 10', function() {
   model.set('attribute', 11);
-  options = { messages: { greater_than: 'failed validation', numericality: 'failed validation' }, greater_than: 10 };
+  options = { messages: { greaterThan: 'failed validation', numericality: 'failed validation' }, greaterThan: 10 };
   Ember.Validations.validators.local.numericality(model, 'attribute', options);
   equal(model.errors.get('attribute'), undefined);
 });
 
 test('when only allowing values greater than 10 and value is 10', function() {
   model.set('attribute', 10);
-  options = { messages: { greater_than: 'failed validation', numericality: 'failed validation' }, greater_than: 10 };
+  options = { messages: { greaterThan: 'failed validation', numericality: 'failed validation' }, greaterThan: 10 };
   Ember.Validations.validators.local.numericality(model, 'attribute', options);
   deepEqual(model.errors.get('attribute'), ['failed validation']);
 });
 
 test('when only allowing values greater than or equal to 10 and value is 10', function() {
   model.set('attribute', 10);
-  options = { messages: { greater_than_or_equal_to: 'failed validation', numericality: 'failed validation' }, greater_than_or_equal_to: 10 };
+  options = { messages: { greaterThanOrEqualTo: 'failed validation', numericality: 'failed validation' }, greaterThanOrEqualTo: 10 };
   Ember.Validations.validators.local.numericality(model, 'attribute', options);
   equal(model.errors.get('attribute'), undefined);
 });
 
 test('when only allowing values greater than or equal to 10 and value is 9', function() {
   model.set('attribute', 9);
-  options = { messages: { greater_than_or_equal_to: 'failed validation', numericality: 'failed validation' }, greater_than_or_equal_to: 10 };
+  options = { messages: { greaterThanOrEqualTo: 'failed validation', numericality: 'failed validation' }, greaterThanOrEqualTo: 10 };
   Ember.Validations.validators.local.numericality(model, 'attribute', options);
   deepEqual(model.errors.get('attribute'), ['failed validation']);
 });
 
 test('when only allowing values less than 10 and value is less than 10', function() {
   model.set('attribute', 9);
-  options = { messages: { less_than: 'failed validation', numericality: 'failed validation' }, less_than: 10 };
+  options = { messages: { lessThan: 'failed validation', numericality: 'failed validation' }, lessThan: 10 };
   Ember.Validations.validators.local.numericality(model, 'attribute', options);
   equal(model.errors.get('attribute'), undefined);
 });
 
 test('when only allowing values less than 10 and value is 10', function() {
   model.set('attribute', 10);
-  options = { messages: { less_than: 'failed validation', numericality: 'failed validation' }, less_than: 10 };
+  options = { messages: { lessThan: 'failed validation', numericality: 'failed validation' }, lessThan: 10 };
   Ember.Validations.validators.local.numericality(model, 'attribute', options);
   deepEqual(model.errors.get('attribute'), ['failed validation']);
 });
 
 test('when only allowing values less than or equal to 10 and value is 10', function() {
   model.set('attribute', 10);
-  options = { messages: { less_than_or_equal_to: 'failed validation', numericality: 'failed validation' }, less_than_or_equal_to: 10 };
+  options = { messages: { lessThanOrEqualTo: 'failed validation', numericality: 'failed validation' }, lessThanOrEqualTo: 10 };
   Ember.Validations.validators.local.numericality(model, 'attribute', options);
   equal(model.errors.get('attribute'), undefined);
 });
 
 test('when only allowing values less than or equal to 10 and value is 11', function() {
   model.set('attribute', 11);
-  options = { messages: { less_than_or_equal_to: 'failed validation', numericality: 'failed validation' }, less_than_or_equal_to: 10 };
+  options = { messages: { lessThanOrEqualTo: 'failed validation', numericality: 'failed validation' }, lessThanOrEqualTo: 10 };
   Ember.Validations.validators.local.numericality(model, 'attribute', options);
   deepEqual(model.errors.get('attribute'), ['failed validation']);
 });
 
 test('when only allowing values equal to 10 and value is 10', function() {
   model.set('attribute', 10);
-  options = { messages: { equal_to: 'failed validation', numericality: 'failed validation' }, equal_to: 10 };
+  options = { messages: { equalTo: 'failed validation', numericality: 'failed validation' }, equalTo: 10 };
   Ember.Validations.validators.local.numericality(model, 'attribute', options);
   equal(model.errors.get('attribute'), undefined);
 });
 
 test('when only allowing values equal to 10 and value is 11', function() {
   model.set('attribute', 11);
-  options = { messages: { equal_to: 'failed equal validation', numericality: 'failed validation' }, equal_to: 10 };
+  options = { messages: { equalTo: 'failed equal validation', numericality: 'failed validation' }, equalTo: 10 };
   Ember.Validations.validators.local.numericality(model, 'attribute', options);
   deepEqual(model.errors.get('attribute'), ['failed equal validation']);
 });
 
 test('when only allowing value equal to 0 and value is 1', function() {
   model.set('attribute', 1);
-  options = { messages: { equal_to: 'failed equal validation', numericality: 'failed validation' }, equal_to: 0 };
+  options = { messages: { equalTo: 'failed equal validation', numericality: 'failed validation' }, equalTo: 0 };
   Ember.Validations.validators.local.numericality(model, 'attribute', options);
   deepEqual(model.errors.get('attribute'), ['failed equal validation']);
 });
@@ -167,7 +167,7 @@ test('when only allowing even values and the value is odd', function() {
 });
 
 test('when value refers to another present property', function() {
-  options   = { messages: { greater_than: 'failed to be greater', numericality: 'failed validation' }, greater_than: 'attribute_2' };
+  options   = { messages: { greaterThan: 'failed to be greater', numericality: 'failed validation' }, greaterThan: 'attribute_2' };
   model.set('attribute_1', 0);
   model.set('attribute_2', 1);
   Ember.Validations.validators.local.numericality(model, 'attribute_1', options);
@@ -187,42 +187,42 @@ test('when options is true', function() {
 
 test('when only integer and no message is passed', function() {
   model.set('attribute', 1.1);
-  options = { only_integer: true };
+  options = { onlyInteger: true };
   Ember.Validations.validators.local.numericality(model, 'attribute', options);
   deepEqual(model.errors.get('attribute'), ['must be an integer']);
 });
 
 test('when equal to  and no message is passed', function() {
   model.set('attribute', 10);
-  options = { equal_to: 11 };
+  options = { equalTo: 11 };
   Ember.Validations.validators.local.numericality(model, 'attribute', options);
   deepEqual(model.errors.get('attribute'), ['must be equal to 11']);
 });
 
 test('when greater than and no message is passed', function() {
   model.set('attribute', 10);
-  options = { greater_than: 11 };
+  options = { greaterThan: 11 };
   Ember.Validations.validators.local.numericality(model, 'attribute', options);
   deepEqual(model.errors.get('attribute'), ['must be greater than 11']);
 });
 
 test('when greater than or equal to and no message is passed', function() {
   model.set('attribute', 10);
-  options = { greater_than_or_equal_to: 11 };
+  options = { greaterThanOrEqualTo: 11 };
   Ember.Validations.validators.local.numericality(model, 'attribute', options);
   deepEqual(model.errors.get('attribute'), ['must be greater than or equal to 11']);
 });
 
 test('when less than and no message is passed', function() {
   model.set('attribute', 11);
-  options = { less_than: 10 };
+  options = { lessThan: 10 };
   Ember.Validations.validators.local.numericality(model, 'attribute', options);
   deepEqual(model.errors.get('attribute'), ['must be less than 10']);
 });
 
 test('when less than or equal to and no message is passed', function() {
   model.set('attribute', 11);
-  options = { less_than_or_equal_to: 10 };
+  options = { lessThanOrEqualTo: 10 };
   Ember.Validations.validators.local.numericality(model, 'attribute', options);
   deepEqual(model.errors.get('attribute'), ['must be less than or equal to 10']);
 });

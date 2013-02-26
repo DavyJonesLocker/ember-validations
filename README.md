@@ -122,14 +122,14 @@ A list of values that are not allowed
 
 #### Options
   * `message` - Any string you wish to be the error message. Overrides `i18n`.
-  * `allow_blank` - If `true` skips validation if value is empty
+  * `allowBlank` - If `true` skips validation if value is empty
   * `in` - An array of values that are excluded
   * `range` - an array with the first element as the lower bound the and second element as the upper bound. Any value that falls within the range will be considered excluded
 
 ```javascript
 // Examples
 exclusion: { in: ['Yellow', 'Black', 'Red'] }
-exclusion: { range: [5, 10], allow_blank: true, message: 'cannot be between 5 and 10' }
+exclusion: { range: [5, 10], allowBlank: true, message: 'cannot be between 5 and 10' }
 ```
 
 ### Format
@@ -137,12 +137,12 @@ A regular expression to test with the value
 
 #### Options
   * `message` - Any string you wish to be the error message. Overrides `i18n`.
-  * `allow_blank` - If `true` skips validation if value is empty
+  * `allowBlank` - If `true` skips validation if value is empty
   * `with` - The regular expression to test with
 
 ```javascript
 // Examples
-format: { with: /^([a-zA-Z]|\d)+$/, allow_blank: true, message: 'must be letters and numbers only'  }
+format: { with: /^([a-zA-Z]|\d)+$/, allowBlank: true, message: 'must be letters and numbers only'  }
 ```
 
 ### Inclusion
@@ -150,7 +150,7 @@ A list of the only values allowed
 
 #### Options
   * `message` - Any string you wish to be the error message. Overrides `i18n`.
-  * `allow_blank` - If `true` skips validation if value is empty
+  * `allowBlank` - If `true` skips validation if value is empty
   * `in` - An array of values that are allowed
   * `range` - an array with the first element as the lower bound the and
 second element as the upper bound. Only values that fall within the range will be considered allowed
@@ -158,7 +158,7 @@ second element as the upper bound. Only values that fall within the range will b
 ```javascript
 // Examples
 inclusion: { in: ['Yellow', 'Black', 'Red'] }
-inclusion: { range: [5, 10], allow_blank: true, message: 'must be between 5 and 10' }
+inclusion: { range: [5, 10], allowBlank: true, message: 'must be between 5 and 10' }
 ```
 
 ### Length
@@ -167,23 +167,23 @@ Define the lengths that are allowed
 #### Options
   * `number` - Alias for `is`
   * `array` - Will expand to `minimum` and `maximum`. First element is the lower bound, second element is the upper bound.
-  * `allow_blank` - If `true` skips validation if value is empty
+  * `allowBlank` - If `true` skips validation if value is empty
   * `minimum` - The minimum length of the value allowed
   * `maximum` - The maximum length of the value allowed
   * `is` - The exact length of the value allowed
   * `tokenizer` - A function that should return a object that responds to `length`
   
 ##### Messages
-  * `too_short` - the message used when the `minimum` validation fails. Overrides `i18n`
-  * `too_long` - the message used when the `maximum` validation fails. Overrides `i18n`
-  * `wrong_length` - the message used when the `is` validation fails. Overrides `i18n`
+  * `tooShort` - the message used when the `minimum` validation fails. Overrides `i18n`
+  * `tooLong` - the message used when the `maximum` validation fails. Overrides `i18n`
+  * `wrongLength` - the message used when the `is` validation fails. Overrides `i18n`
 
 ```javascript
 // Examples
 length: 5
 length: [3, 5]
-length: { is: 10, allow_blank: true } 
-length: { minimum: 3, maximum: 5, messages { too_short: 'should be more than 3 characters', too_long: 'should be less than 5 characters' } }
+length: { is: 10, allowBlank: true } 
+length: { minimum: 3, maximum: 5, messages { tooShort: 'should be more than 3 characters', tooLong: 'should be less than 5 characters' } }
 length: { is: 5, tokenizer: function(value) { return value.split(''); } }
 ```
 
@@ -192,22 +192,22 @@ Will ensure the value is a number
 
 #### Options
   * `true` - Passing just `true` will activate validation and use default message
-  * `allow_blank` - If `true` skips validation if value is empty
-  * `only_integer` - Will only allow integers
-  * `greater_than` - Ensures the value is greater than
-  * `greater_than_or_equal_to` - Ensures the value is greater than or equal to
-  * `equal_to` - Ensures the value is equal to
-  * `less_than` - Ensures the value is less than
-  * `less_than_or_equal_to` - Ensures the value is less than or equal to
+  * `allowBlank` - If `true` skips validation if value is empty
+  * `onlyInteger` - Will only allow integers
+  * `greaterThan` - Ensures the value is greater than
+  * `greaterThanOrEqualTo` - Ensures the value is greater than or equal to
+  * `equalTo` - Ensures the value is equal to
+  * `lessThan` - Ensures the value is less than
+  * `lessThanOrEqualTo` - Ensures the value is less than or equal to
   * `odd` - Ensures the value is odd
   * `even` - Ensures the value is even
 
 ##### Messages
-  * `greater_than` - Message used when value failes to be greater than. Overrides `i18n`
-  * `greater_than_or_equal_to` - Message used when value failes to be greater than or equal to. Overrides `i18n`
-  * `equal_to` - Message used when value failes to be equal to. Overrides `i18n`
-  * `less_than` - Message used when value failes to be less than. Overrides `i18n`
-  * `less_than_or_equal_to` - Message used when value failes to be less than or equal to. Overrides `i18n`
+  * `greaterThan` - Message used when value failes to be greater than. Overrides `i18n`
+  * `greaterThanOrEqualTo` - Message used when value failes to be greater than or equal to. Overrides `i18n`
+  * `equalTo` - Message used when value failes to be equal to. Overrides `i18n`
+  * `lessThan` - Message used when value failes to be less than. Overrides `i18n`
+  * `lessThanOrEqualTo` - Message used when value failes to be less than or equal to. Overrides `i18n`
   * `odd` - Message used when value failes to be odd. Overrides `i18n`
   * `even` - Message used when value failes to be even. Overrides `i18n`
 
@@ -215,7 +215,7 @@ Will ensure the value is a number
 // Examples
 numericality: true
 numericality: { odd: true, messages: { odd: 'must be an odd number } }
-numericality: { only_integer, greater_than: 5, less_than_or_equal_to : 10 }
+numericality: { onlyInteger, greaterThan: 5, lessThanOrEqualTo : 10 }
 ```
 
 ### Presence

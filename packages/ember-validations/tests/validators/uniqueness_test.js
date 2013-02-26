@@ -108,7 +108,7 @@
 
 // test('when allowing blank', function() {
  // var element = $('<input type="text" name="user2[email]" />');
- // var options = { 'message': "failed validation", 'with': /\d+/, 'allow_blank': true };
+ // var options = { 'message': "failed validation", 'with': /\d+/, 'allowBlank': true };
  // equal(Ember.Validations.validators.remote.uniqueness(model, property, options), undefined);
 // });
 
