@@ -4,11 +4,11 @@ Ember.Validations.validators.local.reopen({
     var CHECKS, check, checkValue, fn, form, operator, val, index, keys, key;
 
     CHECKS = {
-      equalTo                  :'===',
-      greaterThan              : '>',
-      greaterThanOrEqualTo  : '>=',
-      lessThan                 : '<',
-      lessThanOrEqualTo     : '<='
+      equalTo              :'===',
+      greaterThan          : '>',
+      greaterThanOrEqualTo : '>=',
+      lessThan             : '<',
+      lessThanOrEqualTo    : '<='
     };
 
     if (options === true) {
