@@ -1,4 +1,5 @@
 require('ember-validations/validatorNamespaces');
+require('ember-validations/validators/absence');
 require('ember-validations/validators/acceptance');
 require('ember-validations/validators/confirmation');
 require('ember-validations/validators/exclusion');

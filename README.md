@@ -76,6 +76,19 @@ App.User.reopen({
 
 The currently supported validators
 
+### Absence 
+Validates the property has a value that is not `null`, `undefined`, or `''`
+
+#### Options
+  * `true` - Passing just `true` will activate validation and use default message
+  * `message` - Any string you wish to be the error message. Overrides `i18n`.
+ 
+```javascript
+// Examples
+absence: true
+absence: { message: 'must be blank' }
+```
+
 ### Acceptance
 By default the values `'1'`, `1`, and `true` are the acceptable values
 
