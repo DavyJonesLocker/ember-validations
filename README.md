@@ -46,11 +46,11 @@ question with `DockYard` so we can find it.
 
 ## Usage ##
 
-You need to mixin `Ember.Validations` into any object you want to add
+You need to mixin `Ember.Validations.Mixin` into any object you want to add
 validations to:
 
 ```javascript
-var App.User = Ember.Object.extend(Ember.Validations);
+var App.User = Ember.Object.extend(Ember.Validations.Mixin);
 ```
 
 You can add validations to an object by defining the `validations`
@@ -228,12 +228,12 @@ user.validate();
 
 ## Inspecting Errors
 
-After mixing in `Ember.Validations` into your object it will now have a
+After mixing in `Ember.Validations.Mixin` into your object it will now have a
 `.errors` object. All validation error messages will be placed in there
 for the corresponding property.
 
 ```javascript
-App.User = Ember.Object.extend(Ember.Validations,
+App.User = Ember.Object.extend(Ember.Validations.Mixin,
   validations:
     firstName: { presence: true }
   }
