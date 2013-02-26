@@ -77,7 +77,7 @@ App.User.reopen({
 The currently supported validators
 
 ### Absence 
-Validates the property has a value that is not `null`, `undefined`, or `''`
+Validates the property has a value that is `null`, `undefined`, or `''`
 
 #### Options
   * `true` - Passing just `true` will activate validation and use default message
