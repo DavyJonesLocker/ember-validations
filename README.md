@@ -214,7 +214,7 @@ Will ensure the value is a number
 ```javascript
 // Examples
 numericality: true
-numericality: { odd: true, messages: { odd: 'must be an odd number } }
+numericality: { odd: true, messages: { odd: 'must be an odd number' } }
 numericality: { onlyInteger, greaterThan: 5, lessThanOrEqualTo : 10 }
 ```
 
