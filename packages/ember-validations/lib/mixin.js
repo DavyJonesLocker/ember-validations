@@ -28,20 +28,12 @@ Ember.Validations.Mixin = Ember.Mixin.create({
           var deferredObject = new Ember.Deferred();
           deferreds = deferreds.concat(deferredObject);
           message = Ember.Validations.validators.local[validator](object, property, value[index2], deferredObject);
-          if (message) {
-            break;
-          }
-        }
-
-        if (message) {
-          this.errors.set(property, message);
-          valid = false;
-          break;
         }
       }
     }
+
     Ember.RSVP.all(deferreds).then(function() {
-      object.set('isValid', valid);
+      object.set('isValid', Object.keys(object.errors).length === 0);
     });
   }
 });

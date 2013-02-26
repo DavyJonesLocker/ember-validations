@@ -47,27 +47,21 @@ Ember.Validations.validators.local.reopen({
       allowBlankOptions.message = options.messages.minimum;
     }
 
-    message = this.presence(model, property, allowBlankOptions);
-    if (message) {
-      if (options.allow_blank === true) {
-        deferredObject && deferredObject.resolve();
-        return;
-      } else {
-        deferredObject && deferredObject.resolve();
-        return message;
+    if (Ember.Validations.Utilities.isBlank(model.get(property))) {
+      if (options.allow_blank === undefined) {
+        model.errors.add(property, allowBlankOptions.message);
       }
-    }
+    } else {
+      for (check in CHECKS) {
+        operator = CHECKS[check];
+        if (!options[check]) {
+          continue;
+        }
 
-    for (check in CHECKS) {
-      operator = CHECKS[check];
-      if (!options[check]) {
-        continue;
-      }
-
-      fn = new Function("return " + tokenized_length + " " + operator + " " + options[check]);
-      if (!fn()) {
-        deferredObject && deferredObject.resolve();
-        return options.messages[check];
+        fn = new Function("return " + tokenized_length + " " + operator + " " + options[check]);
+        if (!fn()) {
+          model.errors.add(property, options.messages[check]);
+        }
       }
     }
     deferredObject && deferredObject.resolve();

@@ -11,16 +11,10 @@ Ember.Validations.validators.local.reopen({
 
     if (options.accept) {
       if (model.get(property) !== options.accept) {
-        deferredObject && deferredObject.resolve();
-        return options.message;
-      } else {
-        deferredObject && deferredObject.resolve();
-        return;
+        model.errors.add(property, options.message);
       }
-    }
-    if (model.get(property) !== '1' && model.get(property) !== 1 && model.get(property) !== true) {
-      deferredObject && deferredObject.resolve();
-      return options.message;
+    } else if (model.get(property) !== '1' && model.get(property) !== 1 && model.get(property) !== true) {
+      model.errors.add(property, options.message);
     }
     deferredObject && deferredObject.resolve();
   }

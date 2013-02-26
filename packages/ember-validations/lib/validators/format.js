@@ -11,27 +11,16 @@ Ember.Validations.validators.local.reopen({
       options.message = Ember.Validations.messages.render('invalid', options);
     }
 
-    message = this.presence(model, property, options);
-
-    if (message) {
-      if (options.allow_blank === true) {
-        deferredObject && deferredObject.resolve();
-        return;
-      } else {
-        deferredObject && deferredObject.resolve();
-        return message;
+    if (Ember.Validations.Utilities.isBlank(model.get(property))) {
+      if (options.allow_blank === undefined) {
+        model.errors.add(property, options.message);
       }
+    } else if (options['with'] && !options['with'].test(model.get(property))) {
+      model.errors.add(property, options.message);
+    } else if (options.without && options.without.test(model.get(property))) {
+      model.errors.add(property, options.message);
     }
 
-    if (options['with'] && !options['with'].test(model.get(property))) {
-      deferredObject && deferredObject.resolve();
-      return options.message;
-    }
-
-    if (options.without && options.without.test(model.get(property))) {
-      deferredObject && deferredObject.resolve();
-      return options.message;
-    }
     deferredObject && deferredObject.resolve();
   }
 });

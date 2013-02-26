@@ -1,8 +1,9 @@
-var model, options;
+var model, Model, options;
 
 module('Confirmation Validator', {
   setup: function() {
-    model = new Ember.Object();
+    Model = Ember.Object.extend(Ember.Validations.Mixin);
+    model = Model.create();
   }
 });
 
@@ -10,19 +11,22 @@ test('when values match', function() {
   model.set('attribute', 'test');
   model.set('attributeConfirmation', 'test');
   options = { message: 'failed validation' };
-  equal(Ember.Validations.validators.local.confirmation(model, 'attribute', options), undefined);
+  Ember.Validations.validators.local.confirmation(model, 'attribute', options);
+  equal(model.errors.get('attribute'), undefined);
 });
 
 test('when values do not match', function() {
   model.set('attribute', 'test');
   options = { message: 'failed validation' };
-  equal(Ember.Validations.validators.local.confirmation(model, 'attribute', options), 'failed validation');
+  Ember.Validations.validators.local.confirmation(model, 'attribute', options);
+  deepEqual(model.errors.get('attribute'), ['failed validation']);
 });
 
 test('when options is true', function() {
   model.set('attribute', 'test');
   options = true;
-  equal(Ember.Validations.validators.local.confirmation(model, 'attribute', options), "doesn't match attribute");
+  Ember.Validations.validators.local.confirmation(model, 'attribute', options);
+  deepEqual(model.errors.get('attribute'), ["doesn't match attribute"]);
 });
 
 test('when deferred object is passed', function() {

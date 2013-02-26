@@ -9,10 +9,10 @@ Ember.Validations.validators.local.reopen({
       options.message = Ember.Validations.messages.render('blank', options);
     }
 
-    if (/^\s*$/.test(model.get(property) || '')) {
-      deferredObject && deferredObject.resolve();
-      return options.message;
+    if (Ember.Validations.Utilities.isBlank(model.get(property))) {
+      model.errors.add(property, options.message);
     }
+
     deferredObject && deferredObject.resolve();
   }
 });

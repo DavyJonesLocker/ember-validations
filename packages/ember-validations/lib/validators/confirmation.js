@@ -7,8 +7,7 @@ Ember.Validations.validators.local.reopen({
     }
 
     if (model.get(property) !== model.get('' + property + 'Confirmation')) {
-      deferredObject && deferredObject.resolve();
-      return options.message;
+      model.errors.add(property, options.message);
     }
     deferredObject && deferredObject.resolve();
   }

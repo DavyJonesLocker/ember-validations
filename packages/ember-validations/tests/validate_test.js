@@ -25,13 +25,13 @@ module('Validate test', {
 asyncTest('runs all validations', function() {
   validate(user);
   setTimeout(function() {
-    equal(user.errors.get('firstName'), "can't be blank");
-    equal(user.errors.get('lastName'), "is invalid");
+    deepEqual(user.errors.get('firstName'), ["can't be blank", 'is the wrong length (should be 5 characters)']);
+    deepEqual(user.errors.get('lastName'), ["is invalid"]);
     equal(user.get('isValid'), false);
     user.set('firstName', 'Bob');
     validate(user);
     setTimeout(function() {
-      equal(user.errors.get('firstName'), 'is the wrong length (should be 5 characters)');
+      deepEqual(user.errors.get('firstName'), ['is the wrong length (should be 5 characters)']);
       equal(user.get('isValid'), false);
       user.set('firstName', 'Brian');
       user.set('lastName', 'Cardarella');
@@ -47,13 +47,13 @@ asyncTest('runs all validations', function() {
 asyncTest('runs a single validation', function() {
   validate(user, 'firstName');
   setTimeout(function() {
-    equal(user.errors.get('firstName'), "can't be blank");
+    deepEqual(user.errors.get('firstName'), ["can't be blank", 'is the wrong length (should be 5 characters)']);
     equal(user.errors.get('lastName'), undefined);
     equal(user.get('isValid'), false);
     user.set('firstName', 'Bob');
     validate(user, 'firstName');
     setTimeout(function() {
-      equal(user.errors.get('firstName'), 'is the wrong length (should be 5 characters)');
+      deepEqual(user.errors.get('firstName'), ['is the wrong length (should be 5 characters)']);
       equal(user.get('isValid'), false);
       start();
     }, 50);

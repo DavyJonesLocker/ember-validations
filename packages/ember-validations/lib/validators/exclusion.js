@@ -11,31 +11,20 @@ Ember.Validations.validators.local.reopen({
       options.message = Ember.Validations.messages.render('exclusion', options);
     }
 
-    message = this.presence(model, property, options);
-    if (message) {
-      if (options.allow_blank === true) {
-        deferredObject && deferredObject.resolve();
-        return;
-      } else {
-        deferredObject && deferredObject.resolve();
-        return message;
+    if (Ember.Validations.Utilities.isBlank(model.get(property))) {
+      if (options.allow_blank === undefined) {
+        model.errors.add(property, options.message);
       }
-    }
-
-    if (options['in']) {
+    } else if (options['in']) {
       if (Ember.$.inArray(model.get(property), options['in']) !== -1) {
-        deferredObject && deferredObject.resolve();
-        return options.message;
+        model.errors.add(property, options.message);
       }
-    }
-
-    if (options.range) {
+    } else if (options.range) {
       lower = options.range[0];
       upper = options.range[1];
 
       if (model.get(property) >= lower && model.get(property) <= upper) {
-        deferredObject && deferredObject.resolve();
-        return options.message;
+        model.errors.add(property, options.message);
       }
     }
     deferredObject && deferredObject.resolve();

@@ -37,52 +37,42 @@ Ember.Validations.validators.local.reopen({
       }
     }
 
-    if (!Ember.Validations.patterns.numericality.test(model.get(property))) {
-      if (options.allow_blank === true && this.presence(model, property, { message: options.messages.numericality })) {
-        deferredObject && deferredObject.resolve();
-        return;
-      } else {
-        deferredObject && deferredObject.resolve();
-        return options.messages.numericality;
+    if (Ember.Validations.Utilities.isBlank(model.get(property))) {
+      if (options.allow_blank === undefined) {
+        model.errors.add(property, options.messages.numericality);
       }
-    }
+    } else if (!Ember.Validations.patterns.numericality.test(model.get(property))) {
+      model.errors.add(property, options.messages.numericality);
+    } else if (options.only_integer === true && !(/^[+\-]?\d+$/.test(model.get(property)))) {
+      model.errors.add(property, options.messages.only_integer);
+    } else if (options.odd  && parseInt(model.get(property), 10) % 2 === 0) {
+      model.errors.add(property, options.messages.odd);
+    } else if (options.even && parseInt(model.get(property), 10) % 2 !== 0) {
+      model.errors.add(property, options.messages.even);
+    } else {
 
-    if (options.only_integer === true && !(/^[+\-]?\d+$/.test(model.get(property)))) {
-      return options.messages.only_integer;
-    }
+      for (check in CHECKS) {
+        operator = CHECKS[check];
 
-    for (check in CHECKS) {
-      operator = CHECKS[check];
+        if (options[check] === undefined) {
+          continue;
+        }
 
-      if (options[check] === undefined) {
-        continue;
+        if (!isNaN(parseFloat(options[check])) && isFinite(options[check])) {
+          checkValue = options[check];
+        } else if (model.get(options[check]) !== undefined) {
+          checkValue = model.get(options[check]);
+        } else {
+          deferredObject && deferredObject.resolve();
+          return;
+        }
+
+        fn = new Function('return ' + model.get(property) + ' ' + operator + ' ' + checkValue);
+
+        if (!fn()) {
+          model.errors.add(property, options.messages[check]);
+        }
       }
-
-      if (!isNaN(parseFloat(options[check])) && isFinite(options[check])) {
-        checkValue = options[check];
-      } else if (model.get(options[check])) {
-        checkValue = model.get(options[check]);
-      } else {
-        deferredObject && deferredObject.resolve();
-        return;
-      }
-
-      fn = new Function('return ' + model.get(property) + ' ' + operator + ' ' + checkValue);
-
-      if (!fn()) {
-        deferredObject && deferredObject.resolve();
-        return options.messages[check];
-      }
-    }
-
-    if (options.odd && parseInt(model.get(property), 10) % 2 === 0) {
-      deferredObject && deferredObject.resolve();
-      return options.messages.odd;
-    }
-
-    if (options.even && parseInt(model.get(property), 10) % 2 !== 0) {
-      deferredObject && deferredObject.resolve();
-      return options.messages.even;
     }
     deferredObject && deferredObject.resolve();
   }
