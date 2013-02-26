@@ -112,6 +112,7 @@ Expects a `propertyConfirmation` to have the same value as
   * `message` - Any string you wish to be the error message. Overrides `i18n`.
  
 ```javascript
+// Examples
 confirmation: true
 confirmation: { message: 'you must confirm' }
 ```
@@ -126,6 +127,7 @@ A list of values that are not allowed
   * `range` - an array with the first element as the lower bound the and second element as the upper bound. Any value that falls within the range will be considered excluded
 
 ```javascript
+// Examples
 exclusion: { in: ['Yellow', 'Black', 'Red'] }
 exclusion: { range: [5, 10], allow_blank: true, message: 'cannot be between 5 and 10' }
 ```
@@ -139,6 +141,7 @@ A regular expression to test with the value
   * `with` - The regular expression to test with
 
 ```javascript
+// Examples
 format: { with: /^([a-zA-Z]|\d)+$/, allow_blank: true, message: 'must be letters and numbers only'  }
 ```
 
@@ -153,6 +156,7 @@ A list of the only values allowed
 second element as the upper bound. Only values that fall within the range will be considered allowed
 
 ```javascript
+// Examples
 inclusion: { in: ['Yellow', 'Black', 'Red'] }
 inclusion: { range: [5, 10], allow_blank: true, message: 'must be between 5 and 10' }
 ```
@@ -175,6 +179,7 @@ Define the lengths that are allowed
   * `wrong_length` - the message used when the `is` validation fails. Overrides `i18n`
 
 ```javascript
+// Examples
 length: 5
 length: [3, 5]
 length: { is: 10, allow_blank: true } 
@@ -207,6 +212,7 @@ Will ensure the value is a number
   * `even` - Message used when value failes to be even. Overrides `i18n`
 
 ```javascript
+// Examples
 numericality: true
 numericality: { odd: true, messages: { odd: 'must be an odd number } }
 numericality: { only_integer, greater_than: 5, less_than_or_equal_to : 10 }
