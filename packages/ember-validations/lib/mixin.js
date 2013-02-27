@@ -1,5 +1,6 @@
 Ember.Validations.Mixin = Ember.Mixin.create({
   init: function() {
+    this._super();
     this.set('errors', Ember.Validations.Errors.create());
     if (this.get('validations') === undefined) {
       this.set('validations', {});
