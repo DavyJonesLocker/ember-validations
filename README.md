@@ -287,7 +287,7 @@ representation of the object names. For example, if your app has a model
 named `App.UserProfile` then the emitted validation rules should look
 like:
 
-```json
+```javascript
 {
   'user_profile' : {
     'first_name' : {
