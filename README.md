@@ -311,11 +311,9 @@ application namespace. If any validation rules exist on the object
 already those rules will take presedence if any conflicts occur from the
 bootstrapped rules.
 
-It is up to you how best to extract the rules from our server.
+### Libraries for packaging and extracting from server ###
 
-If you have a Ruby on Rails backend you should checkout our
-[ClientSideValidations-Ember](https://github.com/dockyard/client_side_validations-ember) gem which handles the packaging and
-bootstrapping automatically. 
+* Ruby on Rails - [ClientSideValidations-Ember](https://github.com/dockyard/client_side_validations-ember)
 
 We will list solutions for other backend frameworks as they become
 available.
