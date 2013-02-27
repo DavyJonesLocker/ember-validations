@@ -1,4 +1,4 @@
-Ember.Validations.Mixin = Ember.Mixin.create({
+Ember.Validations.Mixin = Ember.Mixin.create(Ember.Evented, {
   init: function() {
     this.set('errors', Ember.Validations.Errors.create());
     if (this.get('validations') === undefined) {
@@ -33,7 +33,9 @@ Ember.Validations.Mixin = Ember.Mixin.create({
     }
 
     Ember.RSVP.all(deferreds).then(function() {
-      object.set('isValid', Object.keys(object.errors).length === 0);
+      var isValid = Object.keys(object.errors).length === 0;
+      object.set('isValid', isValid);
+      object.trigger('didValidate', isValid);
     });
   }
 });

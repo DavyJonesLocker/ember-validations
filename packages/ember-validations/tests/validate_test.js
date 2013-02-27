@@ -59,3 +59,12 @@ asyncTest('runs a single validation', function() {
     }, 50);
   }, 50);
 });
+
+asyncTest('fires an event once validated', function(){
+  user.one('didValidate', user, function(valid){
+    equal(user.get('isValid'), false);
+    equal(valid, false);
+    start();
+  });
+  validate(user);
+});
