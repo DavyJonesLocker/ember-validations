@@ -72,14 +72,14 @@ App.User.reopen({
 }); 
 ```
 
-## Validators
+## Validators ##
 
 The currently supported validators
 
-### Absence 
+### Absence ###
 Validates the property has a value that is `null`, `undefined`, or `''`
 
-#### Options
+#### Options ####
   * `true` - Passing just `true` will activate validation and use default message
   * `message` - Any string you wish to be the error message. Overrides `i18n`.
  
@@ -89,10 +89,10 @@ absence: true
 absence: { message: 'must be blank' }
 ```
 
-### Acceptance
+### Acceptance ###
 By default the values `'1'`, `1`, and `true` are the acceptable values
 
-#### Options
+#### Options ####
   * `true` - Passing just `true` will activate validation and use default message
   * `message` - Any string you wish to be the error message. Overrides `i18n`.
   * `accept` - the value for acceptance
@@ -103,11 +103,11 @@ acceptance: true
 acceptance: { message: 'you must accept', accept: 'yes' }
 ```
 
-### Confirmation
+### Confirmation ###
 Expects a `propertyConfirmation` to have the same value as
 `property`
 
-#### Options
+#### Options ####
   * `true` - Passing just `true` will activate validation and use default message
   * `message` - Any string you wish to be the error message. Overrides `i18n`.
  
@@ -117,10 +117,10 @@ confirmation: true
 confirmation: { message: 'you must confirm' }
 ```
 
-### Exclusion
+### Exclusion ###
 A list of values that are not allowed
 
-#### Options
+#### Options ####
   * `message` - Any string you wish to be the error message. Overrides `i18n`.
   * `allowBlank` - If `true` skips validation if value is empty
   * `in` - An array of values that are excluded
@@ -132,10 +132,10 @@ exclusion: { in: ['Yellow', 'Black', 'Red'] }
 exclusion: { range: [5, 10], allowBlank: true, message: 'cannot be between 5 and 10' }
 ```
 
-### Format
+### Format ###
 A regular expression to test with the value
 
-#### Options
+#### Options ####
   * `message` - Any string you wish to be the error message. Overrides `i18n`.
   * `allowBlank` - If `true` skips validation if value is empty
   * `with` - The regular expression to test with
@@ -145,10 +145,10 @@ A regular expression to test with the value
 format: { with: /^([a-zA-Z]|\d)+$/, allowBlank: true, message: 'must be letters and numbers only'  }
 ```
 
-### Inclusion
+### Inclusion ###
 A list of the only values allowed
 
-#### Options
+#### Options ####
   * `message` - Any string you wish to be the error message. Overrides `i18n`.
   * `allowBlank` - If `true` skips validation if value is empty
   * `in` - An array of values that are allowed
@@ -161,10 +161,10 @@ inclusion: { in: ['Yellow', 'Black', 'Red'] }
 inclusion: { range: [5, 10], allowBlank: true, message: 'must be between 5 and 10' }
 ```
 
-### Length
+### Length ###
 Define the lengths that are allowed
 
-#### Options
+#### Options ####
   * `number` - Alias for `is`
   * `array` - Will expand to `minimum` and `maximum`. First element is the lower bound, second element is the upper bound.
   * `allowBlank` - If `true` skips validation if value is empty
@@ -173,7 +173,7 @@ Define the lengths that are allowed
   * `is` - The exact length of the value allowed
   * `tokenizer` - A function that should return a object that responds to `length`
   
-##### Messages
+##### Messages #####
   * `tooShort` - the message used when the `minimum` validation fails. Overrides `i18n`
   * `tooLong` - the message used when the `maximum` validation fails. Overrides `i18n`
   * `wrongLength` - the message used when the `is` validation fails. Overrides `i18n`
@@ -187,10 +187,10 @@ length: { minimum: 3, maximum: 5, messages { tooShort: 'should be more than 3 ch
 length: { is: 5, tokenizer: function(value) { return value.split(''); } }
 ```
 
-### Numericality
+### Numericality ###
 Will ensure the value is a number
 
-#### Options
+#### Options ####
   * `true` - Passing just `true` will activate validation and use default message
   * `allowBlank` - If `true` skips validation if value is empty
   * `onlyInteger` - Will only allow integers
@@ -202,7 +202,7 @@ Will ensure the value is a number
   * `odd` - Ensures the value is odd
   * `even` - Ensures the value is even
 
-##### Messages
+##### Messages #####
   * `greaterThan` - Message used when value failes to be greater than. Overrides `i18n`
   * `greaterThanOrEqualTo` - Message used when value failes to be greater than or equal to. Overrides `i18n`
   * `equalTo` - Message used when value failes to be equal to. Overrides `i18n`
@@ -218,10 +218,10 @@ numericality: { odd: true, messages: { odd: 'must be an odd number' } }
 numericality: { onlyInteger, greaterThan: 5, lessThanOrEqualTo : 10 }
 ```
 
-### Presence
+### Presence ###
 Validates the property has a value that is not `null`, `undefined`, or `''`
 
-#### Options
+#### Options ####
   * `true` - Passing just `true` will activate validation and use default message
   * `message` - Any string you wish to be the error message. Overrides `i18n`.
  
@@ -231,9 +231,9 @@ presence: true
 presence: { message: 'must not be blank' }
 ```
 
-### Uniqueness
+### Uniqueness ###
 
-Not yet implemented.
+*Not yet implemented.*
 
 ## Running Validations
 
@@ -245,7 +245,7 @@ user.validate();
 => false
 ```
 
-## Inspecting Errors
+## Inspecting Errors ##
 
 After mixing in `Ember.Validations.Mixin` into your object it will now have a
 `.errors` object. All validation error messages will be placed in there
@@ -268,7 +268,7 @@ user.get('isValid'); // true
 user.errors.get('firstName'); // undefined
 ```
 
-## Bootstrapping With Server Side Validations
+## Bootstrapping With Server Side Validations ##
 
 You may want to bootstrap Ember objects that correspond to server-side
 models with the validation rules that are already defined on the server.
