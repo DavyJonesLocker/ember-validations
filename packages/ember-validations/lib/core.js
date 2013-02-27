@@ -1,3 +1,3 @@
 Ember.Validations = Ember.Namespace.create({
-  VERSION: '0.2.0'
+  VERSION: '0.2.1'
 });
