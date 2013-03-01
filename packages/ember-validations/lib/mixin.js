@@ -33,7 +33,7 @@ Ember.Validations.Mixin = Ember.Mixin.create({
       }
     }
 
-    Ember.RSVP.all(deferreds).then(function() {
+    return Ember.RSVP.all(deferreds).then(function() {
       object.set('isValid', Object.keys(object.errors).length === 0);
     });
   }
