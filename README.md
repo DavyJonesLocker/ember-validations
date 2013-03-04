@@ -264,12 +264,13 @@ firstName: {
 
 ## Running Validations
 
-Simply call `.validate()` on the object. `true` or `false` will be
-returned.
+Simply call `.validate()` on the object. `isValid` will be set to `true`
+or `false`.
 
 ```javascript
 user.validate();
-=> false
+user.get('isValid');
+=> true
 ```
 
 ## Inspecting Errors ##
