@@ -235,17 +235,7 @@ presence: { message: 'must not be blank' }
 
 *Not yet implemented.*
 
-## Running Validations
-
-Simply call `.validate()` on the object. `true` or `false` will be
-returned.
-
-```javascript
-user.validate();
-=> false
-```
-
-## Conditional Validators ##
+### Conditional Validators ##
 
 Each validator can take an `if` or an `unless` in its `options` hash.
 The value of the conditional can be an inline function, a string that
@@ -270,6 +260,16 @@ firstName: {
     unless: 'canValidate'
   }
 }
+```
+
+## Running Validations
+
+Simply call `.validate()` on the object. `true` or `false` will be
+returned.
+
+```javascript
+user.validate();
+=> false
 ```
 
 ## Inspecting Errors ##
