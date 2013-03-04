@@ -245,6 +245,33 @@ user.validate();
 => false
 ```
 
+## Conditional Validators ##
+
+Each validator can take an `if` or an `unless` in its `options` hash.
+The value of the conditional can be an inline function, a string that
+represents a property on the object, or a string that represents a
+function on the object. The result should be a boolean.
+
+```javascript
+// function form
+firstName: {
+  presence: {
+    if: function(object, validator) {
+      return true;
+    }
+  }
+}
+
+// string form
+// if 'canValidate' is a function on the object it will be called
+// if 'canValidate' is a property object.get('canValidate') will be called
+firstName: {
+  presence: {
+    unless: 'canValidate'
+  }
+}
+```
+
 ## Inspecting Errors ##
 
 After mixing in `Ember.Validations.Mixin` into your object it will now have a
