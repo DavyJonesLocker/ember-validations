@@ -1,5 +1,4 @@
 instance_eval File.read(EmberDev.support_path.join('Assetfile'))
-require 'debugger'
 
 distros = {
   :full    => %w(ember-validations)
