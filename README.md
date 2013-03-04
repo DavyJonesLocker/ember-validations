@@ -324,7 +324,7 @@ like:
     'age' : {
       'numericality' : {
         'messages' : {
-          'greaterThan' : 10
+          'greater_than' : 10
         }
       }
     }
