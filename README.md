@@ -265,12 +265,16 @@ firstName: {
 ## Running Validations
 
 Simply call `.validate()` on the object. `isValid` will be set to `true`
-or `false`.
+or `false`. All validations are run as deferred objects, so the validations will 
+not be completed when `validate` is done. So `validate` returns a promise, call `then` 
+wih a function containing the code you want to run after the validations have
+completed.
 
 ```javascript
-user.validate();
-user.get('isValid');
-=> true
+user.validate().then(function() {
+  user.get('isValid');
+  // true
+})
 ```
 
 ## Inspecting Errors ##
@@ -287,13 +291,16 @@ App.User = Ember.Object.extend(Ember.Validations.Mixin,
 });
 
 user = App.User.create();
-user.validate();
-user.get('isValid'); // false
-user.errors.get('firstName'); // "can't be blank"
-user.set('firstName', 'Brian');
-user.validate();
-user.get('isValid'); // true
-user.errors.get('firstName'); // undefined
+user.validate().then(function() {
+  user.get('isValid'); // false
+  user.errors.get('firstName'); // "can't be blank"
+  user.set('firstName', 'Brian');
+  user.validate().then(function() {
+    user.get('isValid'); // true
+    user.errors.get('firstName'); // undefined
+  })  
+})
+
 ```
 
 ## Bootstrapping With Server Side Validations ##
