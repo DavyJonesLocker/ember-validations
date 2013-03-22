@@ -26,6 +26,40 @@ asyncTest('returns a promise', function() {
   });
 });
 
+asyncTest('works with objects that rely on stateManager for isValid', function() {
+  var retrieveFromCurrentState = Ember.computed(function(key, value) {
+    if (arguments.length > 1) {
+      throw new Error('Cannot Set: ' + key + ' on: ' + this.toString() );
+    }
+    return Ember.get(Ember.get(this, 'stateManager.currentState'), key);
+  }).property('stateManager.currentState');
+
+  User.reopen({
+    isValid: retrieveFromCurrentState,
+    stateManager: Ember.StateManager.create({
+      initialState: 'uncommitted',
+      uncommitted: Ember.State.create({
+        isValid: true
+      }),
+      invalid: Ember.State.create({
+        isValid: false
+      })
+    })
+  });
+
+  user = User.create();
+  Ember.run(function(){
+    user.validate().then(function(){
+      equal(user.get('isValid'), false);
+      start();
+    }, function() {
+      equal(1, 0, 'should never get here');
+      start();
+    });
+  });
+});
+
+
 asyncTest('runs all validations', function() {
   Ember.run(function(){
     user.validate().then(function(){

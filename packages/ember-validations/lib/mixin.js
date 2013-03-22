@@ -65,7 +65,15 @@ Ember.Validations.Mixin = Ember.Mixin.create({
     }
 
     return Ember.RSVP.all(deferreds).then(function() {
-      object.set('isValid', Object.keys(object.errors).length === 0);
+      if (object.get('stateManager')) {
+        if (Object.keys(object.errors).length === 0) {
+          object.get('stateManager').transitionTo('uncommitted');
+        } else {
+          object.get('stateManager').transitionTo('invalid');
+        }
+      } else {
+        object.set('isValid', Object.keys(object.errors).length === 0);
+      }
     });
   }
 });
