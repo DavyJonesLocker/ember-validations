@@ -58,7 +58,11 @@ Ember.Validations.Mixin = Ember.Mixin.create({
           if (canValidate(value[index2], validator)) {
             var deferredObject = new Ember.Deferred();
             deferreds = deferreds.concat(deferredObject);
-            message = Ember.Validations.validators.local[validator](object, property, value[index2], deferredObject);
+            if (!Ember.isNone(Ember.Validations.validators.local[validator])) {
+              Ember.Validations.validators.local[validator](object, property, value[index2], deferredObject);
+            } else if (!Ember.isNone(Ember.Validations.validators.remote[validator])) {
+              Ember.Validations.validators.remote[validator](object, property, value[index2], deferredObject);
+            }
           }
         }
       }
