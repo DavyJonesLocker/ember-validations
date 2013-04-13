@@ -9,74 +9,74 @@ module('Length Validator', {
 
 test('when allowed length is 3 and value length is 3', function() {
   model.set('attribute', '123');
-  options = { messages: { is: 'failed validation' }, is: 3 };
+  options = { messages: { wrongLength: 'failed validation' }, is: 3 };
   Ember.Validations.validators.local.length(model, 'attribute', options);
   equal(model.errors.get('attribute'), undefined);
 });
 
 test('when allowed length is 3 and value length is 4', function() {
   model.set('attribute', '1234');
-  options = { messages: { is: 'failed validation' }, is: 3 };
+  options = { messages: { wrongLength: 'failed validation' }, is: 3 };
   Ember.Validations.validators.local.length(model, 'attribute', options);
   deepEqual(model.errors.get('attribute'), ['failed validation']);
 });
 
 test('when allowed length is 3 and value length is 2', function() {
   model.set('attribute', '12');
-  options = { messages: { is: 'failed validation' }, is: 3 };
+  options = { messages: { wrongLength: 'failed validation' }, is: 3 };
   Ember.Validations.validators.local.length(model, 'attribute', options);
   deepEqual(model.errors.get('attribute'), ['failed validation']);
 });
 
 test('when allowing blank and allowed length is 3', function() {
-  options = { messages: { is: 'failed validation' }, is: 3, allowBlank: true };
+  options = { messages: { wrongLength: 'failed validation' }, is: 3, allowBlank: true };
   Ember.Validations.validators.local.length(model, 'attribute', options);
   equal(model.errors.get('attribute'), undefined);
 });
 
 test('when allowing blank and minimum length is 3 and maximum length is 100', function() {
-  options = { messages: { minimum: 'failed minimum validation', maximum: 'failed maximum validation' }, minimum: 3, maximum: 100, allowBlank: true };
+  options = { messages: { tooShort: 'failed minimum validation', tooLong: 'failed maximum validation' }, minimum: 3, maximum: 100, allowBlank: true };
   Ember.Validations.validators.local.length(model, 'attribute', options);
   equal(model.errors.get('attribute'), undefined);
 });
 
 test('when not allowing blank and allowed length is 3', function() {
-  options = { messages: { is: 'failed validation' }, is: 3 };
+  options = { messages: { wrongLength: 'failed validation' }, is: 3 };
   Ember.Validations.validators.local.length(model, 'attribute', options);
   deepEqual(model.errors.get('attribute'), ['failed validation']);
 });
 
 test('when allowed length is 3 and a differnet tokenizer', function() {
   model.set('attribute', 'one two three');
-  options = { messages: { is: 'failed validation' }, is: 3, tokenizer: 'match(/\\w+/g)' };
+  options = { messages: { wrongLength: 'failed validation' }, is: 3, tokenizer: 'match(/\\w+/g)' };
   Ember.Validations.validators.local.length(model, 'attribute', options);
   equal(model.errors.get('attribute'), undefined);
 });
 
 test('when allowed length minimum is 3 and value length is 3', function() {
   model.set('attribute', '123');
-  options = { messages: { is: 'failed validation' }, is: 3 };
+  options = { messages: { wrongLength: 'failed validation' }, is: 3 };
   Ember.Validations.validators.local.length(model, 'attribute', options);
   equal(model.errors.get('attribute'), undefined);
 });
 
 test('when allowed length minimum is 3 and value length is 2', function() {
   model.set('attribute', '12');
-  options = { messages: { minimum: 'failed validation' }, minimum: 3 };
+  options = { messages: { tooShort: 'failed validation' }, minimum: 3 };
   Ember.Validations.validators.local.length(model, 'attribute', options);
   deepEqual(model.errors.get('attribute'), ['failed validation']);
 });
 
 test('when allowed length maximum is 3 and value length is 3', function() {
   model.set('attribute', '123');
-  options = { messages: { is: 'failed validation' }, is: 3 };
+  options = { messages: { wrongLength: 'failed validation' }, is: 3 };
   Ember.Validations.validators.local.length(model, 'attribute', options);
   equal(model.errors.get('attribute'), undefined);
 });
 
 test('when allowed length maximum is 3 and value length is 4', function() {
   model.set('attribute', '1234');
-  options = { messages: { maximum: 'failed validation' }, maximum: 3 };
+  options = { messages: { tooLong: 'failed validation' }, maximum: 3 };
   Ember.Validations.validators.local.length(model, 'attribute', options);
   deepEqual(model.errors.get('attribute'), ['failed validation']);
 });

@@ -26,11 +26,11 @@ Ember.Validations.validators.local.reopen({
     keys = Object.keys(MESSAGES);
     for (index = 0; index < keys.length; index++) {
       key = keys[index];
-      if (options[key] !== undefined && options.messages[key] === undefined) {
+      if (options[key] !== undefined && options.messages[MESSAGES[key]] === undefined) {
         if (Ember.$.inArray(key, Object.keys(CHECKS)) !== -1) {
           options.count = options[key];
         }
-        options.messages[key] = Ember.Validations.messages.render(MESSAGES[key], options);
+        options.messages[MESSAGES[key]] = Ember.Validations.messages.render(MESSAGES[key], options);
         if (options.count !== undefined) {
           delete options.count;
         }
@@ -42,9 +42,9 @@ Ember.Validations.validators.local.reopen({
 
     allowBlankOptions = {};
     if (options.is) {
-      allowBlankOptions.message = options.messages.is;
+      allowBlankOptions.message = options.messages.wrongLength;
     } else if (options.minimum) {
-      allowBlankOptions.message = options.messages.minimum;
+      allowBlankOptions.message = options.messages.tooShort;
     }
 
     if (Ember.Validations.Utilities.isBlank(model.get(property))) {
@@ -60,7 +60,7 @@ Ember.Validations.validators.local.reopen({
 
         fn = new Function("return " + tokenizedLength + " " + operator + " " + options[check]);
         if (!fn()) {
-          model.errors.add(property, options.messages[check]);
+          model.errors.add(property, options.messages[MESSAGES[check]]);
         }
       }
     }
