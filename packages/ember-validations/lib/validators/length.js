@@ -48,7 +48,7 @@ Ember.Validations.validators.local.reopen({
     }
 
     if (Ember.Validations.Utilities.isBlank(model.get(property))) {
-      if (options.allowBlank === undefined) {
+      if (options.allowBlank === undefined && (options.is || options.minimum)) {
         model.errors.add(property, allowBlankOptions.message);
       }
     } else {
