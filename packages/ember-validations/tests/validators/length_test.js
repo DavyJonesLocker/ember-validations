@@ -81,6 +81,13 @@ test('when allowed length maximum is 3 and value length is 4', function() {
   deepEqual(model.errors.get('attribute'), ['failed validation']);
 });
 
+test('when allowed length maximum is 3 and value is blank', function() {
+  model.set('attribute', '');
+  options = { maximum: 3 };
+  Ember.Validations.validators.local.length(model, 'attribute', options);
+  deepEqual(model.errors.get('attribute'), undefined);
+});
+
 test('when options is a number', function() {
   model.set('attribute', '1234');
   options = 3;
