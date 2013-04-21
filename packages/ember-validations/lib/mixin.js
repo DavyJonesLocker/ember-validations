@@ -71,7 +71,9 @@ Ember.Validations.Mixin = Ember.Mixin.create({
     return Ember.RSVP.all(deferreds).then(function() {
       if (object.get('stateManager')) {
         if (Object.keys(object.errors).length === 0) {
-          object.get('stateManager').transitionTo('uncommitted');
+          if (object.get('isDirty')) {
+            object.get('stateManager').transitionTo('uncommitted');
+          }
         } else {
           object.get('stateManager').transitionTo('invalid');
         }

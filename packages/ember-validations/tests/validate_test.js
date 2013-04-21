@@ -59,6 +59,49 @@ asyncTest('works with objects that rely on stateManager for isValid', function()
   });
 });
 
+asyncTest('does not change the state when is not dirty and does not have errors', function() {
+  var retrieveFromCurrentState = Ember.computed(function(key, value) {
+    if (arguments.length > 1) {
+      throw new Error('Cannot Set: ' + key + ' on: ' + this.toString() );
+    }
+    return Ember.get(Ember.get(this, 'stateManager.currentState'), key);
+  }).property('stateManager.currentState');
+
+  User.reopen({
+    isValid: retrieveFromCurrentState,
+    isDirty: retrieveFromCurrentState,
+    stateManager: Ember.StateManager.create({
+      initialState: 'saved',
+      // when the model is loaded using find(), the state is 'saved'
+      saved: Ember.State.create({
+        isValid: true,
+        isDirty: false
+      }),
+      // when the model is changed, it become 'updated.uncommited'
+      updated: Ember.State.create({
+        isDirty: true,
+        uncommitted: Ember.State.create({
+          isValid: true
+        }),
+        invalid: Ember.State.create({
+          isValid: false
+        })
+      })
+    })
+  });
+
+  user = User.create({firstName: 'Abcde', lastName: 'Xyz'});
+  Ember.run(function(){
+    user.validate().then(function(){
+      equal(user.get('stateManager.currentState.name'), 'saved');
+      start();
+    }, function(err) {
+      equal(1, 0, 'Should never get here. Error: ' + err);
+      start();
+    });
+  });
+});
+
 
 asyncTest('runs all validations', function() {
   Ember.run(function(){
