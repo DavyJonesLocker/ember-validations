@@ -11,14 +11,14 @@ Ember.Validations.Mixin = Ember.Mixin.create({
     var object = this;
     var canValidate = function(options, validator) {
       if (typeof(options) === 'object') {
-        if (options.if) {
-          if (typeof(options.if) === 'function') {
-            return options.if(object, validator);
-          } else if (typeof(options.if) === 'string') {
-            if (typeof(object[options.if]) === 'function') {
-              return object[options.if]();
+        if (options['if']) {
+          if (typeof(options['if']) === 'function') {
+            return options['if'](object, validator);
+          } else if (typeof(options['if']) === 'string') {
+            if (typeof(object[options['if']]) === 'function') {
+              return object[options['if']]();
             } else {
-              return object.get(options.if);
+              return object.get(options['if']);
             }
           }
         } else if (options.unless) {
