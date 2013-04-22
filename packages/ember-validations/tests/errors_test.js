@@ -21,3 +21,13 @@ test('clears existing errors', function() {
   user.errors.clear();
   deepEqual(Object.keys(user.errors), []);
 });
+
+
+test('clear error on some attribute', function() {
+  user.errors.add('firstName', "can't be blank");
+  user.errors.add('lastName', "can't be blank");
+  user.errors.add('email', "can't be blank");
+  deepEqual(Object.keys(user.errors), ['firstName', 'lastName', 'email']);
+  user.errors.clear('firstName', 'email');
+  deepEqual(Object.keys(user.errors), ['lastName']);
+});
