@@ -2,9 +2,16 @@ var App;
 
 module('Bootstrap test', {
   setup: function() {
-    App = Ember.Application.create();
+    Ember.run(function() {
+      App = Ember.Application.create();
+    });
     App.User = Ember.Object.extend(Ember.Validations.Mixin);
-  }
+  },
+  teardown: function() {
+    Ember.run(function() {
+      App.destroy();
+    });
+   }
 });
 
 test('Bootstraping an object will find by name, camelcase properly, and apply validations', function() {
