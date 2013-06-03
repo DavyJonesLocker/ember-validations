@@ -1,79 +1,86 @@
-Ember.Validations.validators.local.reopen({
-  numericality: function(model, property, options, deferredObject) {
+Ember.Validations.validators.local.Numericality = Ember.Validations.validators.Base.extend({
+  init: function() {
     /*jshint expr:true*/
-    var CHECKS, check, checkValue, fn, form, operator, val, index, keys, key;
+    var index, keys, key;
+    this._super();
 
-    CHECKS = {
-      equalTo              :'===',
-      greaterThan          : '>',
-      greaterThanOrEqualTo : '>=',
-      lessThan             : '<',
-      lessThanOrEqualTo    : '<='
-    };
-
-    if (options === true) {
-      options = {};
+    if (this.options === true) {
+      this.options = {};
     }
 
-    if (options.messages === undefined) {
-      options.messages = { numericality: Ember.Validations.messages.render('notANumber', options) };
+    if (this.options.messages === undefined) {
+      this.options.messages = { numericality: Ember.Validations.messages.render('notANumber', this.options) };
     }
 
-    if (options.onlyInteger !== undefined && options.messages.onlyInteger === undefined) {
-      options.messages.onlyInteger = Ember.Validations.messages.render('notAnInteger', options);
+    if (this.options.onlyInteger !== undefined && this.options.messages.onlyInteger === undefined) {
+      this.options.messages.onlyInteger = Ember.Validations.messages.render('notAnInteger', this.options);
     }
 
-    keys = Object.keys(CHECKS).concat(['odd', 'even']);
+    keys = Object.keys(this.CHECKS).concat(['odd', 'even']);
     for(index = 0; index < keys.length; index++) {
       key = keys[index];
-      if (options[key] !== undefined && options.messages[key] === undefined) {
-        if (Ember.$.inArray(key, Object.keys(CHECKS)) !== -1) {
-          options.count = options[key];
+      if (this.options[key] !== undefined && this.options.messages[key] === undefined) {
+        if (Ember.$.inArray(key, Object.keys(this.CHECKS)) !== -1) {
+          this.options.count = this.options[key];
         }
-        options.messages[key] = Ember.Validations.messages.render(key, options);
-        if (options.count !== undefined) {
-          delete options.count;
+        this.options.messages[key] = Ember.Validations.messages.render(key, this.options);
+        if (this.options.count !== undefined) {
+          delete this.options.count;
         }
       }
     }
+  },
+  CHECKS: {
+    equalTo              :'===',
+    greaterThan          : '>',
+    greaterThanOrEqualTo : '>=',
+    lessThan             : '<',
+    lessThanOrEqualTo    : '<='
+  },
+  validate: function(model, resolve, reject) {
+    var check, checkValue, fn, form, operator, val;
 
-    if (Ember.Validations.Utilities.isBlank(model.get(property))) {
-      if (options.allowBlank === undefined) {
-        model.errors.add(property, options.messages.numericality);
+    if (Ember.Validations.Utilities.isBlank(model.get(this.property))) {
+      if (this.options.allowBlank === undefined) {
+        model.errors.add(this.property, this.options.messages.numericality);
+        return reject();
       }
-    } else if (!Ember.Validations.patterns.numericality.test(model.get(property))) {
-      model.errors.add(property, options.messages.numericality);
-    } else if (options.onlyInteger === true && !(/^[+\-]?\d+$/.test(model.get(property)))) {
-      model.errors.add(property, options.messages.onlyInteger);
-    } else if (options.odd  && parseInt(model.get(property), 10) % 2 === 0) {
-      model.errors.add(property, options.messages.odd);
-    } else if (options.even && parseInt(model.get(property), 10) % 2 !== 0) {
-      model.errors.add(property, options.messages.even);
+    } else if (!Ember.Validations.patterns.numericality.test(model.get(this.property))) {
+      model.errors.add(this.property, this.options.messages.numericality);
+      return reject();
+    } else if (this.options.onlyInteger === true && !(/^[+\-]?\d+$/.test(model.get(this.property)))) {
+      model.errors.add(this.property, this.options.messages.onlyInteger);
+      return reject();
+    } else if (this.options.odd  && parseInt(model.get(this.property), 10) % 2 === 0) {
+      model.errors.add(this.property, this.options.messages.odd);
+      return reject();
+    } else if (this.options.even && parseInt(model.get(this.property), 10) % 2 !== 0) {
+      model.errors.add(this.property, this.options.messages.even);
+      return reject();
     } else {
+      for (check in this.CHECKS) {
+        operator = this.CHECKS[check];
 
-      for (check in CHECKS) {
-        operator = CHECKS[check];
-
-        if (options[check] === undefined) {
+        if (this.options[check] === undefined) {
           continue;
         }
 
-        if (!isNaN(parseFloat(options[check])) && isFinite(options[check])) {
-          checkValue = options[check];
-        } else if (model.get(options[check]) !== undefined) {
-          checkValue = model.get(options[check]);
+        if (!isNaN(parseFloat(this.options[check])) && isFinite(this.options[check])) {
+          checkValue = this.options[check];
+        } else if (model.get(this.options[check]) !== undefined) {
+          checkValue = model.get(this.options[check]);
         } else {
-          deferredObject && deferredObject.resolve();
-          return;
+          return resolve();
         }
 
-        fn = new Function('return ' + model.get(property) + ' ' + operator + ' ' + checkValue);
+        fn = new Function('return ' + model.get(this.property) + ' ' + operator + ' ' + checkValue);
 
         if (!fn()) {
-          model.errors.add(property, options.messages[check]);
+          model.errors.add(this.property, this.options.messages[check]);
+          return reject();
         }
       }
     }
-    deferredObject && deferredObject.resolve();
+    return resolve();
   }
 });
