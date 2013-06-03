@@ -1,14 +1,20 @@
-Ember.Validations.validators.local.reopen({
-  confirmation: function(model, property, options, deferredObject) {
+Ember.Validations.validators.local.Confirmation = Ember.Validations.validators.Base.extend({
+  init: function() {
+    this._super();
+    this.originalProperty = this.property;
+    this.property = this.property + 'Confirmation';
     /*jshint expr:true*/
-    if (options === true) {
-      options = { attribute: property };
-      options = { message: Ember.Validations.messages.render('confirmation', options) };
+    if (this.options === true) {
+      this.set('options', { attribute: this.originalProperty });
+      this.set('options', { message: Ember.Validations.messages.render('confirmation', this.options) });
     }
-
-    if (model.get(property) !== model.get('' + property + 'Confirmation')) {
-      model.errors.add(property, options.message);
+  },
+  validate: function(model, resolve, reject) {
+    if (model.get(this.originalProperty) !== model.get(this.property)) {
+      model.errors.add(this.property, this.options.message);
+      return reject();
+    } else {
+      return resolve();
     }
-    deferredObject && deferredObject.resolve();
   }
 });

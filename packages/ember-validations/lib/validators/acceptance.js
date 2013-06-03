@@ -1,21 +1,25 @@
-Ember.Validations.validators.local.reopen({
-  acceptance: function(model, property, options, deferredObject) {
+Ember.Validations.validators.local.Acceptance = Ember.Validations.validators.Base.extend({
+  init: function() {
+    this._super();
     /*jshint expr:true*/
-    if (options === true) {
-      options = {};
+    if (this.options === true) {
+      this.set('options', {});
     }
 
-    if (options.message === undefined) {
-      options.message = Ember.Validations.messages.render('accepted', options);
+    if (this.options.message === undefined) {
+      this.set('options.message', Ember.Validations.messages.render('accepted', this.options));
     }
-
-    if (options.accept) {
-      if (model.get(property) !== options.accept) {
-        model.errors.add(property, options.message);
+  },
+  validate: function(model, resolve, reject) {
+    if (this.options.accept) {
+      if (model.get(this.property) !== this.options.accept) {
+        model.errors.add(this.property, this.options.message);
+        return reject();
       }
-    } else if (model.get(property) !== '1' && model.get(property) !== 1 && model.get(property) !== true) {
-      model.errors.add(property, options.message);
+    } else if (model.get(this.property) !== '1' && model.get(this.property) !== 1 && model.get(this.property) !== true) {
+      model.errors.add(this.property, this.options.message);
+      return reject();
     }
-    deferredObject && deferredObject.resolve();
+    return resolve();
   }
 });
