@@ -1,4 +1,10 @@
-var model, Model, options;
+var model, Model, options, validator;
+var pass = function() {
+  ok(true, 'validation is working');
+};
+var fail = function() {
+  ok(false, 'validation is not working');
+};
 
 module('Absence Validator', {
   setup: function() {
@@ -10,27 +16,22 @@ module('Absence Validator', {
 test('when value is not empty', function() {
   model.set('attribute', 'not empty');
   options = { message: 'failed validation' };
-  Ember.Validations.validators.local.absence(model, 'attribute', options);
+  validator = Ember.Validations.validators.local.Absence.create({property: 'attribute', options: options});
+  validator.validate(model, fail, pass);
   deepEqual(model.errors.get('attribute'), ['failed validation']);
 });
 
 test('when value is empty', function() {
   options = { message: 'failed validation' };
-  Ember.Validations.validators.local.absence(model, 'attribute', options);
+  validator = Ember.Validations.validators.local.Absence.create({property: 'attribute', options: options});
+  validator.validate(model, pass, fail);
   equal(model.errors.get('attribute'), undefined);
 });
 
 test('when options is true', function() {
   options = true;
   model.set('attribute', 'not empty');
-  Ember.Validations.validators.local.absence(model, 'attribute', options);
+  validator = Ember.Validations.validators.local.Absence.create({property: 'attribute', options: options});
+  validator.validate(model, fail, pass);
   deepEqual(model.errors.get('attribute'), ["must be blank"]);
-});
-
-test('when deferred object is passed', function() {
-  options = true;
-  model.set('attribute', 'not empty');
-  var deferredObject = new Ember.$.Deferred();
-  Ember.Validations.validators.local.absence(model, 'attribute', options, deferredObject);
-  equal(deferredObject.state(), 'resolved');
 });

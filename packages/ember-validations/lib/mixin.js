@@ -2,84 +2,62 @@ Ember.Validations.Mixin = Ember.Mixin.create({
   init: function() {
     this._super();
     this.set('errors', Ember.Validations.Errors.create());
+    this.set('validators', Ember.A([]));
     if (this.get('validations') === undefined) {
       this.set('validations', {});
     }
+    this.buildValidators();
   },
-  validate: function(filter) {
-    var options, message, property, validator, toRun, value, index1, index2, valid = true, deferreds = [];
-    var object = this;
-    var canValidate = function(options, validator) {
-      if (typeof(options) === 'object') {
-        if (options['if']) {
-          if (typeof(options['if']) === 'function') {
-            return options['if'](object, validator);
-          } else if (typeof(options['if']) === 'string') {
-            if (typeof(object[options['if']]) === 'function') {
-              return object[options['if']]();
-            } else {
-              return object.get(options['if']);
-            }
-          }
-        } else if (options.unless) {
-          if (typeof(options.unless) === 'function') {
-            return !options.unless(object, validator);
-          } else if (typeof(options.unless) === 'string') {
-            if (typeof(object[options.unless]) === 'function') {
-              return !object[options.unless]();
-            } else {
-              return !object.get(options.unless);
-            }
-          }
-        } else {
-          return true;
-        }
-      } else {
-        return true;
-      }
+  buildValidators: function() {
+    var index, findValidator, property, validator;
+
+    findValidator = function(validator) {
+      var klass = validator.classify();
+      return Ember.Validations.validators.local[klass] || Ember.Validations.validator.remote[klass];
     };
-    if (filter !== undefined) {
-      toRun = [filter];
-    } else {
-      toRun = Object.keys(object.validations);
-    }
-    for(index1 = 0; index1 < toRun.length; index1++) {
-      property = toRun[index1];
-      this.errors.set(property, undefined);
-      delete this.errors[property];
 
-      for(validator in object.validations[property]) {
-        value = object.validations[property][validator];
-        if (typeof(value) !== 'object' || (typeof(value) === 'object' && value.constructor !== Array)) {
-          value = [value];
-        }
-
-        for(index2 = 0; index2 < value.length; index2++) {
-          if (canValidate(value[index2], validator)) {
-            var deferredObject = new Ember.Deferred();
-            deferreds = deferreds.concat(deferredObject);
-            if (!Ember.isNone(Ember.Validations.validators.local[validator])) {
-              Ember.Validations.validators.local[validator](object, property, value[index2], deferredObject);
-            } else if (!Ember.isNone(Ember.Validations.validators.remote[validator])) {
-              Ember.Validations.validators.remote[validator](object, property, value[index2], deferredObject);
-            }
+    for (property in this.validations) {
+      if (this.validations.hasOwnProperty(property)) {
+        for (validator in this.validations[property]) {
+          if (this.validations[property].hasOwnProperty(validator)) {
+            this.validators.pushObject(findValidator(validator).create({property: property, options: this.validations[property][validator]}));
           }
         }
       }
     }
+  },
+  validate: function(property) {
+    var model = this, promises;
+    model.errors.clear();
 
-    return Ember.RSVP.all(deferreds).then(function() {
-      if (object.get('stateManager')) {
-        if (Object.keys(object.errors).length === 0) {
-          if (object.get('isDirty')) {
-            object.get('stateManager').transitionTo('uncommitted');
-          }
-        } else {
-          object.get('stateManager').transitionTo('invalid');
+    promises = this.validators.map(function(validator) {
+      if (property) {
+        if (validator.property === property) {
+          return validator.run(model);
         }
       } else {
-        object.set('isValid', Object.keys(object.errors).length === 0);
+        return validator.run(model);
       }
+    }).without(undefined);
+
+    return Ember.RSVP.all(promises).then(function(x) {
+      if (model.get('stateManager')) {
+        if (model.get('isDirty')) {
+          model.get('stateManager').transitionTo('uncommitted');
+        }
+      } else {
+        model.set('isValid', true);
+      }
+
+      return Ember.RSVP.resolve();
+    }, function() {
+      if (model.get('stateManager')) {
+        model.get('stateManager').transitionTo('invalid');
+      } else {
+        model.set('isValid', false);
+      }
+
+      return Ember.RSVP.reject();
     });
   }
 });
