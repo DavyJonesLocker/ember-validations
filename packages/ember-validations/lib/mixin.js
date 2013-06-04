@@ -33,10 +33,10 @@ Ember.Validations.Mixin = Ember.Mixin.create({
     promises = this.validators.map(function(validator) {
       if (property) {
         if (validator.property === property) {
-          return validator.run(model);
+          return validator.validate(model);
         }
       } else {
-        return validator.run(model);
+        return validator.validate(model);
       }
     }).without(undefined);
 

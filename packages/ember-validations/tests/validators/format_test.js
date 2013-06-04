@@ -17,7 +17,7 @@ test('when matching format', function() {
   model.set('attribute',  '123');
   options = { 'message': 'failed validation', 'with': /\d+/ };
   validator = Ember.Validations.validators.local.Format.create({property: 'attribute', options: options});
-  validator.validate(model, pass, fail);
+  validator.call(model, pass, fail);
   equal(model.errors.get('attribute'), undefined);
 });
 
@@ -25,34 +25,34 @@ test('when not matching format', function() {
   model.set('attribute', 'abc');
   options = { 'message': 'failed validation', 'with': /\d+/ };
   validator = Ember.Validations.validators.local.Format.create({property: 'attribute', options: options});
-  validator.validate(model, fail, pass);
+  validator.call(model, fail, pass);
   deepEqual(model.errors.get('attribute'), ['failed validation']);
 });
 
 test('when allowing blank', function() {
   options = { 'message': 'failed validation', 'with': /\d+/, 'allowBlank': true };
   validator = Ember.Validations.validators.local.Format.create({property: 'attribute', options: options});
-  validator.validate(model, pass, fail);
+  validator.call(model, pass, fail);
   equal(model.errors.get('attribute'), undefined);
 });
 
 test('when not allowing blank', function() {
   options = { 'message': 'failed validation', 'with': /\d+/ };
   validator = Ember.Validations.validators.local.Format.create({property: 'attribute', options: options});
-  validator.validate(model, fail, pass);
+  validator.call(model, fail, pass);
   deepEqual(model.errors.get('attribute'), ['failed validation']);
 });
 
 test('when options is regexp', function() {
   options = /\d+/;
   validator = Ember.Validations.validators.local.Format.create({property: 'attribute', options: options});
-  validator.validate(model, fail, pass);
+  validator.call(model, fail, pass);
   deepEqual(model.errors.get('attribute'), ['is invalid']);
 });
 
 test('when no message is passed', function() {
   options = { 'with': /\d+/ };
   Ember.Validations.validators.local.Format.create({property: 'attribute', options: options});
-  validator.validate(model, fail, pass);
+  validator.call(model, fail, pass);
   deepEqual(model.errors.get('attribute'), ['is invalid']);
 });

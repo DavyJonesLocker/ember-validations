@@ -26,7 +26,7 @@
           // type: 'text'
         // }))
 
-    // $('form#new_user').validate();
+    // $('form#new_user').call();
   // }
 // });
 
@@ -142,7 +142,7 @@
     // label_tag: '<div class="field_with_errors"><label id="label_tag" /></div>',
     // validators: { 'user[email]':{"uniqueness":[{"message": "must be unique"}]}}
   // }
-  // $('form#new_user_2').validate();
+  // $('form#new_user_2').call();
 
   // var user_0_email = $('#user_0_email'),
       // user_1_email = $('#user_1_email'),

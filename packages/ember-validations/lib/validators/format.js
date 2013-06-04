@@ -9,7 +9,7 @@ Ember.Validations.validators.local.Format = Ember.Validations.validators.Base.ex
       this.set('options.message',  Ember.Validations.messages.render('invalid', this.options));
     }
    },
-   validate: function(model, resolve, reject) {
+   call: function(model, resolve, reject) {
     if (Ember.Validations.Utilities.isBlank(model.get(this.property))) {
       if (this.options.allowBlank === undefined) {
         model.errors.add(this.property, this.options.message);
