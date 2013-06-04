@@ -18,7 +18,7 @@ test('when values match', function() {
   model.set('attributeConfirmation', 'test');
   options = { message: 'failed validation' };
   validator = Ember.Validations.validators.local.Confirmation.create({property: 'attribute', options: options});
-  validator.validate(model, pass, fail);
+  validator.call(model, pass, fail);
   equal(model.errors.get('attribute_confirmation'), undefined);
   equal(model.errors.get('attribute'), undefined);
 });
@@ -27,7 +27,7 @@ test('when values do not match', function() {
   model.set('attribute', 'test');
   options = { message: 'failed validation' };
   validator = Ember.Validations.validators.local.Confirmation.create({property: 'attribute', options: options});
-  validator.validate(model, fail, pass);
+  validator.call(model, fail, pass);
   deepEqual(model.errors.get('attributeConfirmation'), ['failed validation']);
   equal(model.errors.get('attribute'), undefined);
 });
@@ -36,7 +36,7 @@ test('when options is true', function() {
   model.set('attribute', 'test');
   options = true;
   validator = Ember.Validations.validators.local.Confirmation.create({property: 'attribute', options: options});
-  validator.validate(model, fail, pass);
+  validator.call(model, fail, pass);
   deepEqual(model.errors.get('attributeConfirmation'), ["doesn't match attribute"]);
   equal(model.errors.get('attribute'), undefined);
 });

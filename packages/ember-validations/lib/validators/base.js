@@ -5,18 +5,18 @@ Ember.Validations.validators.Base = Ember.Object.extend({
       unless: this.get('options.unless')
     };
   },
-  validate: function (model) {
+  call: function (model) {
     throw 'Not implemented!';
   },
-  run: function(model) {
+  validate: function(model) {
     var _this = this;
-    if (this.canRun(model)) {
+    if (this.canValidate(model)) {
       return Ember.RSVP.Promise(function(resolve, reject) {
-        _this.validate(model, resolve, reject);
+        _this.call(model, resolve, reject);
       });
     }
   },
-  canRun: function(model) {
+  canValidate: function(model) {
     if (typeof(this.conditionals) === 'object') {
       if (this.conditionals['if']) {
         if (typeof(this.conditionals['if']) === 'function') {
