@@ -2,14 +2,13 @@ Ember.Validations.Mixin = Ember.Mixin.create({
   init: function() {
     this._super();
     this.set('errors', Ember.Validations.Errors.create());
-    this.set('validators', Ember.A([]));
     if (this.get('validations') === undefined) {
       this.set('validations', {});
     }
-    this.buildValidators();
   },
   buildValidators: function() {
     var index, findValidator, property, validator;
+    this.set('validators', Ember.A([]));
 
     findValidator = function(validator) {
       var klass = validator.classify();
@@ -28,6 +27,7 @@ Ember.Validations.Mixin = Ember.Mixin.create({
   },
   validate: function(property) {
     var model = this, promises;
+    this.buildValidators();
     model.errors.clear();
 
     promises = this.validators.map(function(validator) {

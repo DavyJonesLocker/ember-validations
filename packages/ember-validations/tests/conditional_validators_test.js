@@ -23,7 +23,7 @@ asyncTest('if with function', function() {
   Ember.run(function(){
     user.validate().then(function(){
       deepEqual(user.errors.get('firstName'), undefined);
-      user.validators[0].conditionals['if'] = function(model) { return true; };
+      user.validations.firstName.presence['if'] = function(model) { return true; };
       user.validate().then(null, function(){
         deepEqual(user.errors.get('firstName'), ["can't be blank"]);
         start();
@@ -105,7 +105,7 @@ asyncTest('unless with function', function() {
   Ember.run(function(){
     user.validate().then(function(){
       deepEqual(user.errors.get('firstName'), undefined);
-      user.validators[0].conditionals['unless'] = function(model) { return false; };
+      user.validations.firstName.presence.unless  = function(model) { return false; };
       user.validate().then(null, function(){
         deepEqual(user.errors.get('firstName'), ["can't be blank"]);
         start();
