@@ -49,12 +49,12 @@ Ember.Validations.validators.local.Length = Ember.Validations.validators.Base.ex
   checkKeys: function() {
     return Object.keys(this.CHECKS);
   },
-  call: function(model, resolve, reject) {
+  call: function(resolve, reject) {
     var check, fn, message, operator;
 
-    if (Ember.Validations.Utilities.isBlank(model.get(this.property))) {
+    if (Ember.Validations.Utilities.isBlank(this.model.get(this.property))) {
       if (this.options.allowBlank === undefined && (this.options.is || this.options.minimum)) {
-        model.errors.add(this.property, this.allowBlankOptions.message);
+        this.model.errors.add(this.property, this.allowBlankOptions.message);
         return reject();
       }
     } else {
@@ -64,9 +64,9 @@ Ember.Validations.validators.local.Length = Ember.Validations.validators.Base.ex
           continue;
         }
 
-        fn = new Function('return ' + this.tokenizedLength(model.get(this.property)) + ' ' + operator + ' ' + this.options[check]);
+        fn = new Function('return ' + this.tokenizedLength(this.model.get(this.property)) + ' ' + operator + ' ' + this.options[check]);
         if (!fn()) {
-          model.errors.add(this.property, this.options.messages[this.MESSAGES[check]]);
+          this.model.errors.add(this.property, this.options.messages[this.MESSAGES[check]]);
           return reject();
         }
       }
