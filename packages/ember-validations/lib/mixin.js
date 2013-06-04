@@ -7,19 +7,39 @@ Ember.Validations.Mixin = Ember.Mixin.create({
     }
   },
   buildValidators: function() {
-    var index, findValidator, property, validator;
     this.set('validators', Ember.A([]));
+    if (this.validations.constructor === Array) {
+      this.buildCompositeValidators(this.validations);
+    } else {
+      this.buildPropertyValidators(this.validations);
+    }
+  },
+  buildCompositeValidators: function(validations) {
+    var i, validator;
+
+    for (i = 0; i < validations.length; i++) {
+      validator = validations[i];
+
+      if (validator.constructor === Object && validator.validate === undefined) {
+        this.buildPropertyValidators(validator);
+      } else {
+        this.validators.pushObject(validator);
+      }
+    }
+  },
+  buildPropertyValidators: function(validations) {
+    var findValidator, property, validator;
 
     findValidator = function(validator) {
       var klass = validator.classify();
-      return Ember.Validations.validators.local[klass] || Ember.Validations.validator.remote[klass];
+      return Ember.Validations.validators.local[klass] || Ember.Validations.validators.remote[klass];
     };
 
-    for (property in this.validations) {
-      if (this.validations.hasOwnProperty(property)) {
-        for (validator in this.validations[property]) {
-          if (this.validations[property].hasOwnProperty(validator)) {
-            this.validators.pushObject(findValidator(validator).create({property: property, options: this.validations[property][validator]}));
+    for (property in validations) {
+      if (validations.hasOwnProperty(property)) {
+        for (validator in validations[property]) {
+          if (validations[property].hasOwnProperty(validator)) {
+            this.validators.pushObject(findValidator(validator).create({model: this, property: property, options: validations[property][validator]}));
           }
         }
       }
@@ -33,10 +53,10 @@ Ember.Validations.Mixin = Ember.Mixin.create({
     promises = this.validators.map(function(validator) {
       if (property) {
         if (validator.property === property) {
-          return validator.validate(model);
+          return validator.validate();
         }
       } else {
-        return validator.validate(model);
+        return validator.validate();
       }
     }).without(undefined);
 

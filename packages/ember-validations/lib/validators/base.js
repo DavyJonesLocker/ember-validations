@@ -5,37 +5,37 @@ Ember.Validations.validators.Base = Ember.Object.extend({
       unless: this.get('options.unless')
     };
   },
-  call: function (model) {
+  call: function () {
     throw 'Not implemented!';
   },
-  validate: function(model) {
+  validate: function() {
     var _this = this;
-    if (this.canValidate(model)) {
+    if (this.canValidate()) {
       return Ember.RSVP.Promise(function(resolve, reject) {
-        _this.call(model, resolve, reject);
+        _this.call(resolve, reject);
       });
     }
   },
-  canValidate: function(model) {
+  canValidate: function() {
     if (typeof(this.conditionals) === 'object') {
       if (this.conditionals['if']) {
         if (typeof(this.conditionals['if']) === 'function') {
-          return this.conditionals['if'](model);
+          return this.conditionals['if'](this.model);
         } else if (typeof(this.conditionals['if']) === 'string') {
-          if (typeof(model[this.conditionals['if']]) === 'function') {
-            return model[this.conditionals['if']]();
+          if (typeof(this.model[this.conditionals['if']]) === 'function') {
+            return this.model[this.conditionals['if']]();
           } else {
-            return model.get(this.conditionals['if']);
+            return this.model.get(this.conditionals['if']);
           }
         }
       } else if (this.conditionals.unless) {
         if (typeof(this.conditionals.unless) === 'function') {
-          return !this.conditionals.unless(model);
+          return !this.conditionals.unless(this.model);
         } else if (typeof(this.conditionals.unless) === 'string') {
-          if (typeof(model[this.conditionals.unless]) === 'function') {
-            return !model[this.conditionals.unless]();
+          if (typeof(this.model[this.conditionals.unless]) === 'function') {
+            return !this.model[this.conditionals.unless]();
           } else {
-            return !model.get(this.conditionals.unless);
+            return !this.model.get(this.conditionals.unless);
           }
         }
       } else {
