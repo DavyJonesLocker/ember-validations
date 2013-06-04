@@ -37,7 +37,7 @@ Ember.Validations.validators.local.Numericality = Ember.Validations.validators.B
     lessThan             : '<',
     lessThanOrEqualTo    : '<='
   },
-  validate: function(model, resolve, reject) {
+  call: function(model, resolve, reject) {
     var check, checkValue, fn, form, operator, val;
 
     if (Ember.Validations.Utilities.isBlank(model.get(this.property))) {

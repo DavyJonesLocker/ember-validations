@@ -10,7 +10,7 @@ Ember.Validations.validators.local.Acceptance = Ember.Validations.validators.Bas
       this.set('options.message', Ember.Validations.messages.render('accepted', this.options));
     }
   },
-  validate: function(model, resolve, reject) {
+  call: function(model, resolve, reject) {
     if (this.options.accept) {
       if (model.get(this.property) !== this.options.accept) {
         model.errors.add(this.property, this.options.message);

@@ -49,7 +49,7 @@ Ember.Validations.validators.local.Length = Ember.Validations.validators.Base.ex
   checkKeys: function() {
     return Object.keys(this.CHECKS);
   },
-  validate: function(model, resolve, reject) {
+  call: function(model, resolve, reject) {
     var check, fn, message, operator;
 
     if (Ember.Validations.Utilities.isBlank(model.get(this.property))) {

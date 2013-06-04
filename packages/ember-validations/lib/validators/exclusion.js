@@ -9,7 +9,7 @@ Ember.Validations.validators.local.Exclusion = Ember.Validations.validators.Base
       this.set('options.message', Ember.Validations.messages.render('exclusion', this.options));
     }
   },
-  validate: function(model, resolve, reject) {
+  call: function(model, resolve, reject) {
     /*jshint expr:true*/
     var message, lower, upper;
 

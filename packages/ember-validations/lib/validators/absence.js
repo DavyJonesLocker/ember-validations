@@ -10,7 +10,7 @@ Ember.Validations.validators.local.Absence = Ember.Validations.validators.Base.e
       this.set('options.message', Ember.Validations.messages.render('present', this.options));
     }
   },
-  validate: function(model, resolve, reject) {
+  call: function(model, resolve, reject) {
     if (!Ember.Validations.Utilities.isBlank(model.get(this.property))) {
       model.errors.add(this.property, this.options.message);
       return reject();
