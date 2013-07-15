@@ -195,6 +195,14 @@ test('when passed a model attribute as a number value, value is 3 and number val
   deepEqual(model.errors.get('attribute'), ['is the wrong length (should be 2 characters)']);
 });
 
+test('when passed a model attribute as a number value, value is 3 and number value is 2', function() {
+  model.set('attribute', 'abc');
+  model.set('validationProperty', 2);
+  options = { is: 'validationProperty' };
+  Ember.Validations.validators.local.length(model, 'attribute', options);
+  deepEqual(model.errors.get('attribute'), ['is the wrong length (should be 2 characters)']);
+});
+
 test('when passed an undefined model attribute as minimum value, value is 1', function() {
   model.set('attribute', 'a');
   options = {minimum: 'validationProperty'};

@@ -58,7 +58,7 @@ Ember.Validations.validators.local.reopen({
     } else {
       for (check in CHECKS) {
         operator = CHECKS[check];
-        if (typeof options[check] === "undefined") {
+        if (!options[check]) {
           continue;
         }
 
