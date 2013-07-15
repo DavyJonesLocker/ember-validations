@@ -195,21 +195,21 @@ test('when passed a model attribute as a number value, value is 3 and number val
   deepEqual(model.errors.get('attribute'), ['is the wrong length (should be 2 characters)']);
 });
 
-test('when passed an undefined mode as minimum value, value is 1', function() {
+test('when passed an undefined model attribute as minimum value, value is 1', function() {
   model.set('attribute', 'a');
   options = {minimum: 'validationProperty'};
   Ember.Validations.validators.local.length(model, 'attribute', options);
   deepEqual(model.errors.get('attribute'), undefined);
 });
 
-test('when passed an undefined mode as maximum value, value is 1', function() {
+test('when passed an undefined model attribute as maximum value, value is 1', function() {
   model.set('attribute', 'a');
   options = {maximum: 'validationProperty'};
   Ember.Validations.validators.local.length(model, 'attribute', options);
   deepEqual(model.errors.get('attribute'), undefined);
 });
 
-test('when passed an undefined mode as number value, value is 1', function() {
+test('when passed an undefined model attribute as number value, value is 1', function() {
   model.set('attribute', 'a');
   options = {is: 'validationProperty'};
   Ember.Validations.validators.local.length(model, 'attribute', options);
