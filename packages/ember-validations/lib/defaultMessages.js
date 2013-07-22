@@ -6,7 +6,7 @@ Ember.Validations.messages = {
     inclusion: "is not included in the list",
     exclusion: "is reserved",
     invalid: "is invalid",
-    confirmation: "doesn't match {{attribute}}",
+    confirmation: "doesn't match {{propertyToMatch}}",
     accepted: "must be accepted",
     empty: "can't be empty",
     blank: "can't be blank",
