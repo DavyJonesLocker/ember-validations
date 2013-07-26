@@ -15,7 +15,11 @@ Ember.Validations.validators.local.Length = Ember.Validations.validators.Base.ex
       key = this.messageKeys()[index];
       if (this.options[key] !== undefined && this.options.messages[this.MESSAGES[key]] === undefined) {
         if (Ember.$.inArray(key, this.checkKeys()) !== -1) {
-          this.options.count = this.options[key];
+          if (isNaN(parseFloat(this.options[key])) && this.model.get(this.options[key]) !== undefined) {
+            this.options.count = this.model.get(this.options[key]);
+          } else {
+            this.options.count = this.options[key];
+          }
         }
         this.options.messages[this.MESSAGES[key]] = Ember.Validations.messages.render(this.MESSAGES[key], this.options);
         if (this.options.count !== undefined) {
@@ -59,12 +63,21 @@ Ember.Validations.validators.local.Length = Ember.Validations.validators.Base.ex
       }
     } else {
       for (check in this.CHECKS) {
+        var checkValue;
         operator = this.CHECKS[check];
         if (!this.options[check]) {
           continue;
         }
 
-        fn = new Function('return ' + this.tokenizedLength(this.model.get(this.property)) + ' ' + operator + ' ' + this.options[check]);
+        if (!isNaN(parseFloat(this.options[check])) && isFinite(this.options[check])) {
+          checkValue = this.options[check];
+        } else if (this.model.get(this.options[check]) !== undefined) {
+          checkValue = this.model.get(this.options[check]);
+        } else {
+          return reject();
+        }
+
+        fn = new Function('return ' + this.tokenizedLength(this.model.get(this.property)) + ' ' + operator + ' ' + checkValue);
         if (!fn()) {
           this.model.errors.add(this.property, this.options.messages[this.MESSAGES[check]]);
           return reject();
