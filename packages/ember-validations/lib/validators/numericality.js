@@ -19,6 +19,11 @@ Ember.Validations.validators.local.Numericality = Ember.Validations.validators.B
     keys = Object.keys(this.CHECKS).concat(['odd', 'even']);
     for(index = 0; index < keys.length; index++) {
       key = keys[index];
+
+      if (isNaN(this.options[key])) {
+        this.model.addObserver(this.options[key], this, this.validate);
+      }
+
       if (this.options[key] !== undefined && this.options.messages[key] === undefined) {
         if (Ember.$.inArray(key, Object.keys(this.CHECKS)) !== -1) {
           this.options.count = this.options[key];
@@ -42,20 +47,20 @@ Ember.Validations.validators.local.Numericality = Ember.Validations.validators.B
 
     if (Ember.Validations.Utilities.isBlank(this.model.get(this.property))) {
       if (this.options.allowBlank === undefined) {
-        this.model.errors.add(this.property, this.options.messages.numericality);
+        this.errors.pushObject(this.options.messages.numericality);
         return reject();
       }
     } else if (!Ember.Validations.patterns.numericality.test(this.model.get(this.property))) {
-      this.model.errors.add(this.property, this.options.messages.numericality);
+      this.errors.pushObject(this.options.messages.numericality);
       return reject();
     } else if (this.options.onlyInteger === true && !(/^[+\-]?\d+$/.test(this.model.get(this.property)))) {
-      this.model.errors.add(this.property, this.options.messages.onlyInteger);
+      this.errors.pushObject(this.options.messages.onlyInteger);
       return reject();
     } else if (this.options.odd  && parseInt(this.model.get(this.property), 10) % 2 === 0) {
-      this.model.errors.add(this.property, this.options.messages.odd);
+      this.errors.pushObject(this.options.messages.odd);
       return reject();
     } else if (this.options.even && parseInt(this.model.get(this.property), 10) % 2 !== 0) {
-      this.model.errors.add(this.property, this.options.messages.even);
+      this.errors.pushObject(this.options.messages.even);
       return reject();
     } else {
       for (check in this.CHECKS) {
@@ -76,7 +81,7 @@ Ember.Validations.validators.local.Numericality = Ember.Validations.validators.B
         fn = new Function('return ' + this.model.get(this.property) + ' ' + operator + ' ' + checkValue);
 
         if (!fn()) {
-          this.model.errors.add(this.property, this.options.messages[check]);
+          this.errors.pushObject(this.options.messages[check]);
           return reject();
         }
       }

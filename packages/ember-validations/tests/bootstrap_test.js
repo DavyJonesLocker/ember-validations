@@ -1,4 +1,4 @@
-var App;
+var App, validations, user;
 
 module('Bootstrap test', {
   setup: function() {
@@ -15,9 +15,11 @@ module('Bootstrap test', {
 });
 
 test('Bootstraping an object will find by name, camelcase properly, and apply validations', function() {
-  var validations = { 'user': { 'first_name': { 'presence': true } } };
-  App.bootstrapValidations(validations);
-  var user = App.User.create();
+  validations = { 'user': { 'first_name': { 'presence': true } } };
+  Ember.run(function() {
+    App.bootstrapValidations(validations);
+    user = App.User.create();
+  });
   deepEqual(user.validations, {'firstName': { 'presence': true } });
 });
 
@@ -29,8 +31,10 @@ test('Bootstraping will not override existing validations', function() {
       }
     }
   });
-  var validations = { 'user': { 'first_name': { 'presence': true } } };
-  App.bootstrapValidations(validations);
-  var user = App.User.create();
+  validations = { 'user': { 'first_name': { 'presence': true } } };
+  Ember.run(function() {
+    App.bootstrapValidations(validations);
+    user = App.User.create();
+  });
   deepEqual(user.validations, {'firstName': { 'presence': true }, 'age': { 'numericality': true } });
 });

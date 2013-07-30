@@ -13,11 +13,11 @@ Ember.Validations.validators.local.Acceptance = Ember.Validations.validators.Bas
   call: function(resolve, reject) {
     if (this.options.accept) {
       if (this.model.get(this.property) !== this.options.accept) {
-        this.model.errors.add(this.property, this.options.message);
+        this.errors.pushObject(this.options.message);
         return reject();
       }
     } else if (this.model.get(this.property) !== '1' && this.model.get(this.property) !== 1 && this.model.get(this.property) !== true) {
-      this.model.errors.add(this.property, this.options.message);
+      this.errors.pushObject(this.options.message);
       return reject();
     }
     return resolve();

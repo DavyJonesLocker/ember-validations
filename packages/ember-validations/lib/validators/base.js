@@ -1,18 +1,28 @@
 Ember.Validations.validators.Base = Ember.Object.extend({
   init: function() {
+    this.set('errors', Ember.makeArray());
     this.conditionals = {
       'if': this.get('options.if'),
       unless: this.get('options.unless')
     };
+    this.model.addObserver(this.property, this, this.validate);
   },
   call: function () {
     throw 'Not implemented!';
+  },
+  unknownProperty: function(key) {
+    var model = this.get('model');
+    if (model) {
+      return model.get(key);
+    }
   },
   validate: function() {
     var _this = this;
     if (this.canValidate()) {
       return Ember.RSVP.Promise(function(resolve, reject) {
+        _this.errors.clear();
         _this.call(resolve, reject);
+        _this.set('isValid', !_this.errors.length);
       });
     }
   },
@@ -44,5 +54,5 @@ Ember.Validations.validators.Base = Ember.Object.extend({
     } else {
       return true;
     }
-  },
+  }
 });

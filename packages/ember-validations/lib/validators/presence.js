@@ -12,7 +12,7 @@ Ember.Validations.validators.local.Presence = Ember.Validations.validators.Base.
   },
   call: function(resolve, reject) {
     if (Ember.Validations.Utilities.isBlank(this.model.get(this.property))) {
-      this.model.errors.add(this.property, this.options.message);
+      this.errors.pushObject(this.options.message);
       return reject();
     }
     return resolve();

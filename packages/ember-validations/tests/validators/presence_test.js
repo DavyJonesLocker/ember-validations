@@ -1,36 +1,37 @@
 var model, Model, options, validator;
-var pass = function() {
-  ok(true, 'validation is working');
-};
-var fail = function() {
-  ok(false, 'validation is not working');
-};
 
 module('Presence Validator', {
   setup: function() {
     Model = Ember.Object.extend(Ember.Validations.Mixin);
-    model = Model.create();
+    Ember.run(function() {
+      model = Model.create();
+    });
   }
 });
 
 test('when value is not empty', function() {
-  model.set('attribute', 'not empty');
   options = { message: 'failed validation' };
   validator = Ember.Validations.validators.local.Presence.create({model: model, property: 'attribute', options: options});
-  validator.call(pass, fail);
-  equal(model.errors.get('attribute'), undefined);
+  Ember.run(function() {
+    model.set('attribute', 'not empty');
+  });
+  deepEqual(validator.errors, []);
 });
 
 test('when value is empty', function() {
   options = { message: 'failed validation' };
   validator = Ember.Validations.validators.local.Presence.create({model: model, property: 'attribute', options: options});
-  validator.call(fail, pass);
-  deepEqual(model.errors.get('attribute'), ['failed validation']);
+  Ember.run(function() {
+    model.set('attribute', '');
+  });
+  deepEqual(validator.errors, ['failed validation']);
 });
 
 test('when options is true', function() {
   options = true;
   validator = Ember.Validations.validators.local.Presence.create({model: model, property: 'attribute', options: options});
-  validator.call(fail, pass);
-  deepEqual(model.errors.get('attribute'), ["can't be blank"]);
+  Ember.run(function() {
+    model.set('attribute', '');
+  });
+  deepEqual(validator.errors, ["can't be blank"]);
 });
