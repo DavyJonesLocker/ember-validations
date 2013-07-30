@@ -1,8 +1,9 @@
 Ember.Validations.validators.local.Confirmation = Ember.Validations.validators.Base.extend({
   init: function() {
-    this._super();
     this.originalProperty = this.property;
     this.property = this.property + 'Confirmation';
+    this._super();
+    this.model.addObserver(this.originalProperty, this, this.validate);
     /*jshint expr:true*/
     if (this.options === true) {
       this.set('options', { attribute: this.originalProperty });
@@ -11,7 +12,7 @@ Ember.Validations.validators.local.Confirmation = Ember.Validations.validators.B
   },
   call: function(resolve, reject) {
     if (this.model.get(this.originalProperty) !== this.model.get(this.property)) {
-      this.model.errors.add(this.property, this.options.message);
+      this.errors.pushObject(this.options.message);
       return reject();
     } else {
       return resolve();

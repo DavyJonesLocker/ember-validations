@@ -2,32 +2,58 @@ var user, User;
 
 module('Errors test', {
   setup: function() {
-    User = Ember.Object.extend(Ember.Validations.Mixin);
-    user = User.create();
+    User = Ember.Object.extend(Ember.Validations.Mixin, {
+      validations: {
+        name: {
+          presence: true
+        },
+        age: {
+          presence: true,
+          numericality: true
+        }
+      }
+    });
   }
 });
 
-test('adding a new error for a property', function() {
-  user.errors.add('firstName', "can't be blank");
-  deepEqual(user.get('errors.firstName'), ["can't be blank"]);
-  user.errors.add('firstName', "is invalid");
-  deepEqual(user.get('errors.firstName'), ["can't be blank", 'is invalid']);
+test('validations are run on instantiation', function() {
+  Ember.run(function() {
+    user = User.create();
+  });
+  equal(user.get('isValid'), false);
+  deepEqual(user.get('errors.name'), ["can't be blank"]);
+  deepEqual(user.get('errors.age'), ["can't be blank", 'is not a number']);
+  Ember.run(function() {
+    user = User.create({name: 'Brian', age: 33});
+  });
+  ok(user.get('isValid'));
+  deepEqual(user.get('errors.name'), []);
+  deepEqual(user.get('errors.age'), []);
 });
 
-test('clears existing errors', function() {
-  user.errors.add('firstName', "can't be blank");
-  user.errors.add('lastName', "can't be blank");
-  deepEqual(Object.keys(user.errors), ['firstName', 'lastName']);
-  user.errors.clear();
-  deepEqual(Object.keys(user.errors), []);
-});
-
-
-test('clear error on some attribute', function() {
-  user.errors.add('firstName', "can't be blank");
-  user.errors.add('lastName', "can't be blank");
-  user.errors.add('email', "can't be blank");
-  deepEqual(Object.keys(user.errors), ['firstName', 'lastName', 'email']);
-  user.errors.clear('firstName', 'email');
-  deepEqual(Object.keys(user.errors), ['lastName']);
+test('when errors are resolved', function() {
+  Ember.run(function() {
+    user = User.create();
+  });
+  equal(user.get('isValid'), false);
+  deepEqual(user.get('errors.name'), ["can't be blank"]);
+  deepEqual(user.get('errors.age'), ["can't be blank", 'is not a number']);
+  Ember.run(function() {
+    user.set('name', 'Brian');
+  });
+  equal(user.get('isValid'), false);
+  deepEqual(user.get('errors.name'), []);
+  deepEqual(user.get('errors.age'), ["can't be blank", 'is not a number']);
+  Ember.run(function() {
+    user.set('age', 'thirty three');
+  });
+  equal(user.get('isValid'), false);
+  deepEqual(user.get('errors.name'), []);
+  deepEqual(user.get('errors.age'), ['is not a number']);
+  Ember.run(function() {
+    user.set('age', 33);
+  });
+  ok(user.get('isValid'));
+  deepEqual(user.get('errors.name'), []);
+  deepEqual(user.get('errors.age'), []);
 });

@@ -54,7 +54,7 @@ Ember.Validations.validators.local.Length = Ember.Validations.validators.Base.ex
 
     if (Ember.Validations.Utilities.isBlank(this.model.get(this.property))) {
       if (this.options.allowBlank === undefined && (this.options.is || this.options.minimum)) {
-        this.model.errors.add(this.property, this.allowBlankOptions.message);
+        this.errors.pushObject(this.allowBlankOptions.message);
         return reject();
       }
     } else {
@@ -66,7 +66,7 @@ Ember.Validations.validators.local.Length = Ember.Validations.validators.Base.ex
 
         fn = new Function('return ' + this.tokenizedLength(this.model.get(this.property)) + ' ' + operator + ' ' + this.options[check]);
         if (!fn()) {
-          this.model.errors.add(this.property, this.options.messages[this.MESSAGES[check]]);
+          this.errors.pushObject(this.options.messages[this.MESSAGES[check]]);
           return reject();
         }
       }

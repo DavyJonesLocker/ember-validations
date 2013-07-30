@@ -2,7 +2,7 @@ var user, User, profile, Profile, ageValidator;
 
 module('Compostite validators test', {
   setup: function() {
-    ageValidator = {
+    ageValidator = Ember.Object.create({
       validate: function() {
         var _this = this;
         return Ember.RSVP.Promise(function(resolve, reject) {
@@ -13,7 +13,7 @@ module('Compostite validators test', {
           }
         });
       }
-    };
+    });
 
     Profile = Ember.Object.extend(Ember.Validations.Mixin, {
       validations: {
@@ -22,7 +22,10 @@ module('Compostite validators test', {
         }
       }
     });
-    profile = Profile.create();
+    Ember.run(function() {
+      profile = Profile.create();
+    });
+
     User = Ember.Object.extend(Ember.Validations.Mixin, {
       validations: [{
         name: {
@@ -30,7 +33,10 @@ module('Compostite validators test', {
         }
       }, profile, ageValidator]
     });
-    user = User.create();
+    Ember.run(function() {
+      user = User.create();
+    });
+
     ageValidator.model = user;
   }
 });
