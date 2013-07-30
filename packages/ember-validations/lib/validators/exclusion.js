@@ -15,12 +15,12 @@ Ember.Validations.validators.local.Exclusion = Ember.Validations.validators.Base
 
     if (Ember.Validations.Utilities.isBlank(this.model.get(this.property))) {
       if (this.options.allowBlank === undefined) {
-        this.model.errors.add(this.property, this.options.message);
+        this.errors.pushObject(this.options.message);
         return reject();
       }
     } else if (this.options['in']) {
       if (Ember.$.inArray(this.model.get(this.property), this.options['in']) !== -1) {
-        this.model.errors.add(this.property, this.options.message);
+        this.errors.pushObject(this.options.message);
         return reject();
       }
     } else if (this.options.range) {
@@ -28,7 +28,7 @@ Ember.Validations.validators.local.Exclusion = Ember.Validations.validators.Base
       upper = this.options.range[1];
 
       if (this.model.get(this.property) >= lower && this.model.get(this.property) <= upper) {
-        this.model.errors.add(this.property, this.options.message);
+        this.errors.pushObject(this.options.message);
         return reject();
       }
     }

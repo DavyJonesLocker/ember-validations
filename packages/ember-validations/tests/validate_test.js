@@ -13,7 +13,9 @@ module('Validate test', {
         }
       }
     });
-    user = User.create();
+    Ember.run(function() {
+      user = User.create();
+    });
   }
 });
 
@@ -49,8 +51,8 @@ asyncTest('works with objects that rely on stateManager for isValid', function()
     })
   });
 
-  user = User.create();
   Ember.run(function(){
+    user = User.create();
     user.validate().then(null, function(){
       equal(user.get('isValid'), false);
       start();
@@ -89,8 +91,8 @@ asyncTest('does not change the state when is not dirty and does not have errors'
     })
   });
 
-  user = User.create({firstName: 'Abcde', lastName: 'Xyz'});
   Ember.run(function(){
+    user = User.create({firstName: 'Abcde', lastName: 'Xyz'});
     user.validate().then(function(){
       equal(user.get('stateManager.currentState.name'), 'saved');
       start();
@@ -118,22 +120,6 @@ asyncTest('runs all validations', function() {
           equal(user.get('isValid'), true);
           start();
         });
-      });
-    });
-  });
-});
-
-asyncTest('runs a single validation', function() {
-  Ember.run(function(){
-    user.validate('firstName').then(null, function(){
-      deepEqual(user.errors.get('firstName'), ["can't be blank", 'is the wrong length (should be 5 characters)']);
-      equal(user.errors.get('lastName'), undefined);
-      equal(user.get('isValid'), false);
-      user.set('firstName', 'Bob');
-      user.validate('firstName').then(null, function(){
-        deepEqual(user.errors.get('firstName'), ['is the wrong length (should be 5 characters)']);
-        equal(user.get('isValid'), false);
-        start();
       });
     });
   });

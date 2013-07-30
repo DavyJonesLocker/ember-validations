@@ -5,6 +5,26 @@ Ember.Validations.Mixin = Ember.Mixin.create({
     if (this.get('validations') === undefined) {
       this.set('validations', {});
     }
+    this.buildValidators();
+    this.addObserver('validators.@each.isValid', this, function(sender, key, value, context, rev) {
+      if (this.validators.filterProperty('isValid', false).get('length') > 0) {
+        this.set('isValid', false);
+      } else {
+        this.set('isValid', true);
+      }
+    });
+    this.validators.forEach(function(validator) {
+      validator.addObserver('errors.[]', this, function(sender, key, value, context, rev) {
+        var errors = Ember.makeArray();
+        this.validators.forEach(function(validator) {
+          if (validator.property === sender.property) {
+            errors = errors.concat(validator.errors);
+          }
+        }, this);
+        this.set('errors.' + sender.property, errors);
+      });
+    }, this);
+    this.validate();
   },
   buildValidators: function() {
     this.set('validators', Ember.A([]));
@@ -45,19 +65,11 @@ Ember.Validations.Mixin = Ember.Mixin.create({
       }
     }
   },
-  validate: function(property) {
+  validate: function() {
     var model = this, promises;
-    this.buildValidators();
-    model.errors.clear();
 
     promises = this.validators.map(function(validator) {
-      if (property) {
-        if (validator.property === property) {
-          return validator.validate();
-        }
-      } else {
-        return validator.validate();
-      }
+      return validator.validate();
     }).without(undefined);
 
     return Ember.RSVP.all(promises).then(function(x) {
