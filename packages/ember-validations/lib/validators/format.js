@@ -9,19 +9,15 @@ Ember.Validations.validators.local.Format = Ember.Validations.validators.Base.ex
       this.set('options.message',  Ember.Validations.messages.render('invalid', this.options));
     }
    },
-   call: function(resolve, reject) {
+   call: function() {
     if (Ember.Validations.Utilities.isBlank(this.model.get(this.property))) {
       if (this.options.allowBlank === undefined) {
         this.errors.pushObject(this.options.message);
-        return reject();
       }
     } else if (this.options['with'] && !this.options['with'].test(this.model.get(this.property))) {
       this.errors.pushObject(this.options.message);
-      return reject();
     } else if (this.options.without && this.options.without.test(this.model.get(this.property))) {
       this.errors.pushObject(this.options.message);
-      return reject();
     }
-    return resolve();
   }
 });

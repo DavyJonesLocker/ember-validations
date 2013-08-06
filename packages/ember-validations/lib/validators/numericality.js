@@ -42,26 +42,21 @@ Ember.Validations.validators.local.Numericality = Ember.Validations.validators.B
     lessThan             : '<',
     lessThanOrEqualTo    : '<='
   },
-  call: function(resolve, reject) {
+  call: function() {
     var check, checkValue, fn, form, operator, val;
 
     if (Ember.Validations.Utilities.isBlank(this.model.get(this.property))) {
       if (this.options.allowBlank === undefined) {
         this.errors.pushObject(this.options.messages.numericality);
-        return reject();
       }
     } else if (!Ember.Validations.patterns.numericality.test(this.model.get(this.property))) {
       this.errors.pushObject(this.options.messages.numericality);
-      return reject();
     } else if (this.options.onlyInteger === true && !(/^[+\-]?\d+$/.test(this.model.get(this.property)))) {
       this.errors.pushObject(this.options.messages.onlyInteger);
-      return reject();
     } else if (this.options.odd  && parseInt(this.model.get(this.property), 10) % 2 === 0) {
       this.errors.pushObject(this.options.messages.odd);
-      return reject();
     } else if (this.options.even && parseInt(this.model.get(this.property), 10) % 2 !== 0) {
       this.errors.pushObject(this.options.messages.even);
-      return reject();
     } else {
       for (check in this.CHECKS) {
         operator = this.CHECKS[check];
@@ -74,18 +69,14 @@ Ember.Validations.validators.local.Numericality = Ember.Validations.validators.B
           checkValue = this.options[check];
         } else if (this.model.get(this.options[check]) !== undefined) {
           checkValue = this.model.get(this.options[check]);
-        } else {
-          return resolve();
         }
 
         fn = new Function('return ' + this.model.get(this.property) + ' ' + operator + ' ' + checkValue);
 
         if (!fn()) {
           this.errors.pushObject(this.options.messages[check]);
-          return reject();
         }
       }
     }
-    return resolve();
   }
 });

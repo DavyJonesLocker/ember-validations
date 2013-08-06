@@ -17,26 +17,24 @@ Ember.Validations.validators.Base = Ember.Object.extend({
     }
   },
   validate: function() {
-    var _this = this;
     if (this.canValidate()) {
-      return Ember.RSVP.Promise(function(resolve, reject) {
-        _this.errors.clear();
-        _this.call(resolve, reject);
-      }).then(function() {
-        if (_this.get('isValid') === true) {
-          _this.notifyPropertyChange('isValid');
+      this.errors.clear();
+      this.call();
+      if (this.errors.length > 0) {
+        if (this.get('isValid') === false) {
+          this.notifyPropertyChange('isValid');
         } else {
-          _this.set('isValid', true);
-        }
-        return Ember.RSVP.resolve();
-      }, function() {
-        if (_this.get('isValid') === false) {
-          _this.notifyPropertyChange('isValid');
-        } else {
-          _this.set('isValid', false);
+          this.set('isValid', false);
         }
         return Ember.RSVP.reject();
-      });
+      } else {
+        if (this.get('isValid') === true) {
+          this.notifyPropertyChange('isValid');
+        } else {
+          this.set('isValid', true);
+        }
+        return Ember.RSVP.resolve();
+      }
     }
   },
   canValidate: function() {
