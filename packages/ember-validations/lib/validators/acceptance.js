@@ -10,16 +10,13 @@ Ember.Validations.validators.local.Acceptance = Ember.Validations.validators.Bas
       this.set('options.message', Ember.Validations.messages.render('accepted', this.options));
     }
   },
-  call: function(resolve, reject) {
+  call: function() {
     if (this.options.accept) {
       if (this.model.get(this.property) !== this.options.accept) {
         this.errors.pushObject(this.options.message);
-        return reject();
       }
     } else if (this.model.get(this.property) !== '1' && this.model.get(this.property) !== 1 && this.model.get(this.property) !== true) {
       this.errors.pushObject(this.options.message);
-      return reject();
     }
-    return resolve();
   }
 });

@@ -5,11 +5,10 @@ module('Compostite validators', {
     AgeValidator = Ember.Validations.validators.Base.extend({
       property: 'age',
       options: {},
-      call: function(resolve, reject) {
-        if (this.model.get('age') > 21) {
-          return resolve();
-        } else {
-          return reject();
+      errors: Ember.makeArray(),
+      call: function() {
+        if ((this.model.get('age') || 0) < 21) {
+          this.errors.pushObject('cannot buy beer');
         }
       }
     });

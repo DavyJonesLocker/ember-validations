@@ -10,11 +10,9 @@ Ember.Validations.validators.local.Presence = Ember.Validations.validators.Base.
       this.options.message = Ember.Validations.messages.render('blank', this.options);
     }
   },
-  call: function(resolve, reject) {
+  call: function() {
     if (Ember.Validations.Utilities.isBlank(this.model.get(this.property))) {
       this.errors.pushObject(this.options.message);
-      return reject();
     }
-    return resolve();
   }
 });

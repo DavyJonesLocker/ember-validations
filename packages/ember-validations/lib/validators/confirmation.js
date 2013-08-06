@@ -10,12 +10,9 @@ Ember.Validations.validators.local.Confirmation = Ember.Validations.validators.B
       this.set('options', { message: Ember.Validations.messages.render('confirmation', this.options) });
     }
   },
-  call: function(resolve, reject) {
+  call: function() {
     if (this.model.get(this.originalProperty) !== this.model.get(this.property)) {
       this.errors.pushObject(this.options.message);
-      return reject();
-    } else {
-      return resolve();
     }
   }
 });
