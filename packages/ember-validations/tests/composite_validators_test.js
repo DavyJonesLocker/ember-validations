@@ -1,17 +1,16 @@
-var user, User, profile, Profile, ageValidator;
+var user, User, profile, Profile, AgeValidator;
 
-module('Compostite validators test', {
+module('Compostite validators', {
   setup: function() {
-    ageValidator = Ember.Object.create({
-      validate: function() {
-        var _this = this;
-        return Ember.RSVP.Promise(function(resolve, reject) {
-          if (_this.model.get('age') > 21) {
-            return resolve();
-          } else {
-            return reject();
-          }
-        });
+    AgeValidator = Ember.Validations.validators.Base.extend({
+      property: 'age',
+      options: {},
+      call: function(resolve, reject) {
+        if (this.model.get('age') > 21) {
+          return resolve();
+        } else {
+          return reject();
+        }
       }
     });
 
@@ -22,54 +21,88 @@ module('Compostite validators test', {
         }
       }
     });
+
     Ember.run(function() {
       profile = Profile.create();
     });
 
-    User = Ember.Object.extend(Ember.Validations.Mixin, {
-      validations: [{
-        name: {
-          presence: true
-        }
-      }, profile, ageValidator]
-    });
-    Ember.run(function() {
-      user = User.create();
-    });
-
-    ageValidator.model = user;
+    User = Ember.Object.extend(Ember.Validations.Mixin);
   }
 });
 
-asyncTest('validates other objects', function() {
-  Ember.run(function(){
-    user.validate().then(function(){
-      ok(false, 'expected validation failed');
-    }, function() {
-      equal(user.get('isValid'), false);
-      user.set('name', 'Brian');
-      user.validate().then(function() {
-        ok(false, 'expected validation failed');
-        start();
-      }, function() {
-        equal(user.get('isValid'), false);
-        profile.set('title', 'Developer');
-        user.validate().then(function() {
-          ok(false, 'expected validation failed');
-          start();
-        }, function() {
-          equal(user.get('isValid'), false);
-          user.set('age', 33);
-          user.validate().then(function() {
-            equal(user.get('isValid'), true);
-            start();
-          }, function() {
-            ok(false, 'expected validation failed');
-            start();
-          });
-        });
-      });
+test('validates other validatable property', function() {
+  Ember.run(function() {
+    user = User.create({
+      profile: profile,
+      validations: ['profile']
     });
   });
+  equal(user.get('isValid'), false);
+  Ember.run(function() {
+    profile.set('title', 'Developer');
+  });
+  equal(user.get('isValid'), true);
 });
 
+test('validates custom validator', function() {
+  Ember.run(function() {
+    user = User.create({
+      profile: profile,
+      validations: [AgeValidator]
+    });
+  });
+  equal(user.get('isValid'), false);
+  Ember.run(function() {
+    user.set('age', 22);
+  });
+  equal(user.get('isValid'), true);
+});
+
+test('validates array of validable objects', function() {
+  var friend1, friend2;
+
+  Ember.run(function() {
+    user = User.create({
+      friends: Ember.makeArray(),
+      validations: ['friends']
+    });
+  });
+
+  equal(user.get('isValid'), true);
+
+  Ember.run(function() {
+    friend1 = User.create({
+      validations: {
+        name: {
+          presence: true
+        }
+      }
+    });
+  });
+
+  Ember.run(function() {
+    user.friends.pushObject(friend1);
+  });
+
+  equal(user.get('isValid'), false);
+
+  Ember.run(function() {
+    friend1.set('name', 'Stephanie');
+  });
+
+  equal(user.get('isValid'), true);
+
+  Ember.run(function() {
+    friend2 = User.create({
+      validations: {
+        name: {
+          presence: true
+        }
+      }
+    });
+
+    user.friends.pushObject(friend2);
+  });
+
+  equal(user.get('isValid'), false);
+});

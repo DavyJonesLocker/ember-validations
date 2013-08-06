@@ -22,7 +22,20 @@ Ember.Validations.validators.Base = Ember.Object.extend({
       return Ember.RSVP.Promise(function(resolve, reject) {
         _this.errors.clear();
         _this.call(resolve, reject);
-        _this.set('isValid', !_this.errors.length);
+      }).then(function() {
+        if (_this.get('isValid') === true) {
+          _this.notifyPropertyChange('isValid');
+        } else {
+          _this.set('isValid', true);
+        }
+        return Ember.RSVP.resolve();
+      }, function() {
+        if (_this.get('isValid') === false) {
+          _this.notifyPropertyChange('isValid');
+        } else {
+          _this.set('isValid', false);
+        }
+        return Ember.RSVP.reject();
       });
     }
   },
