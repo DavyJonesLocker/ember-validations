@@ -53,6 +53,9 @@ Ember.Validations.Mixin = Ember.Mixin.create({
     }, this);
     this.validate();
   },
+  isInvalid: function() {
+    return !this.get('isValid');
+  }.property('isValid'),
   buildValidators: function() {
     this.set('validators', Ember.A([]));
     if (this.validations.constructor === Array) {

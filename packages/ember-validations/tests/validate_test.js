@@ -30,6 +30,14 @@ asyncTest('returns a promise', function() {
   });
 });
 
+test('isInvalid tracks isValid', function() {
+  equal(user.get('isInvalid'), true);
+  Ember.run(function() {
+    user.setProperties({firstName: 'Brian', lastName: 'Cardarella'});
+  });
+  equal(user.get('isInvalid'), false);
+});
+
 asyncTest('runs all validations', function() {
   Ember.run(function(){
     user.validate().then(null, function(){
