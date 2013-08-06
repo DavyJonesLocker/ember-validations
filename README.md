@@ -267,7 +267,7 @@ firstName: {
 Simply call `.validate()` on the object. `isValid` will be set to `true`
 or `false`. All validations are run as deferred objects, so the validations will 
 not be completed when `validate` is done. So `validate` returns a promise, call `then` 
-wih a function containing the code you want to run after the validations have
+with a function containing the code you want to run after the validations have
 completed.
 
 ```javascript
