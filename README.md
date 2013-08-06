@@ -4,13 +4,6 @@
 
 Validation support for Ember Objects
 
-**Note: This is an implementation of ActiveModel::Validations from
-Ruby on Rails**
-
-_Eventually framework specific validation rules will have to be written.
-Currently only Rails is supported. In future versions the validation
-framework will be configurable._
-
 Development on this library will be on-going until `1.0`. We follow
 `Semantic Versioning` so expect backwards incompatible changes between
 minor version bumps. Patch version bumps will not introduce backwards
@@ -39,10 +32,7 @@ The builds will be in the `dist/` directory.
 ## Looking for help? ##
 
 If it is a bug [please open an issue on
-GitHub](https://github.com/dockyard/ember-validations/issues). If you need help using
-the gem please ask the question on
-[Stack Overflow](http://stackoverflow.com). Be sure to tag the
-question with `DockYard` so we can find it.
+GitHub](https://github.com/dockyard/ember-validations/issues).
 
 ## Usage ##
 
