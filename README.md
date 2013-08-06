@@ -43,8 +43,8 @@ validations to:
 var App.User = Ember.Object.extend(Ember.Validations.Mixin);
 ```
 
-You can add validations to an object by defining the `validations`
-object. The keys in the object should map to properties. The values of
+There are two ways to define validations. The first style allows you to
+pass an `Object`. The keys in the object should map to properties. The values of
 the keys should be an object of validations. The keys will be the
 validation name followed by the options:
 
@@ -60,6 +60,26 @@ App.User.reopen({
     }
   }
 }); 
+```
+
+The second style is more verbose but will allow you to add custom
+validators and paths to other validatable objects (like relationships,
+sub-controllers, etc...). You pass an array to `validations` with each
+member of the collection having the potential to become validatable
+objects.
+
+```javascript
+App.User.reopn({
+  validations: [
+    {
+      firstName: {
+        presence: true
+      }
+    },
+    'profile',
+    AgeValidator
+  ]
+});
 ```
 
 ## Validators ##
@@ -254,7 +274,11 @@ firstName: {
 
 ## Running Validations
 
-Simply call `.validate()` on the object. `isValid` will be set to `true`
+Validations will automatically run when the object is created and when
+each property changes. `isValid` states bubble up and help define the
+direct parent's validation state.
+
+If you want to force all validations to run simply call `.validate()` on the object. `isValid` will be set to `true`
 or `false`. All validations are run as deferred objects, so the validations will 
 not be completed when `validate` is done. So `validate` returns a promise, call `then` 
 with a function containing the code you want to run after the validations have
@@ -271,7 +295,7 @@ user.validate().then(function() {
 
 After mixing in `Ember.Validations.Mixin` into your object it will now have a
 `.errors` object. All validation error messages will be placed in there
-for the corresponding property.
+for the corresponding property. Errors messages will always be an array.
 
 ```javascript
 App.User = Ember.Object.extend(Ember.Validations.Mixin,
@@ -283,11 +307,11 @@ App.User = Ember.Object.extend(Ember.Validations.Mixin,
 user = App.User.create();
 user.validate().then(function() {
   user.get('isValid'); // false
-  user.errors.get('firstName'); // "can't be blank"
+  user.errors.get('firstName'); // ["can't be blank"]
   user.set('firstName', 'Brian');
   user.validate().then(function() {
     user.get('isValid'); // true
-    user.errors.get('firstName'); // undefined
+    user.errors.get('firstName'); // []
   })  
 })
 
