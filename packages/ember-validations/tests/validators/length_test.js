@@ -168,3 +168,118 @@ test('when allowed length maximum is 3, value length is 4 and no message is set'
   });
   deepEqual(validator.errors, ['is too long (maximum is 3 characters)']);
 });
+
+
+test('when passed a model property as maximum value, value is 2 and maximum is 4', function() {
+  model.set('attribute', 'ab');
+  model.set('validationProperty', 4);
+  options = { maximum: 'validationProperty' };
+  validator = Ember.Validations.validators.local.Length.create({model: model, property: 'attribute', options: options});
+  validator.call(pass, fail);
+  equal(model.errors.get('attribute'), undefined);
+});
+
+test('when passed a model property as maximum value, value is 2 and maximum is 2', function() {
+  model.set('attribute', 'ab');
+  model.set('validationProperty', 2);
+  options = { maximum: 'validationProperty'};
+  validator = Ember.Validations.validators.local.Length.create({model: model, property: 'attribute', options: options});
+  validator.call(pass, fail);
+  equal(model.errors.get('attribute'), undefined);
+});
+
+test('when passed a model property as maximum value, value is 2 and maximum is 1', function() {
+  model.set('attribute', 'ab');
+  model.set('validationProperty', 1);
+  options = { maximum: 'validationProperty'};
+  validator = Ember.Validations.validators.local.Length.create({model: model, property: 'attribute', options: options});
+  validator.call(fail, pass);
+  deepEqual(model.errors.get('attribute'), ['is too long (maximum is 1 characters)']);
+});
+
+test('when passed a model property as minimum value, value is 1 and minimum is 1', function() {
+  model.set('attribute', 'a');
+  model.set('validationProperty', 1);
+  options = { minimum: 'validationProperty' };
+  validator = Ember.Validations.validators.local.Length.create({model: model, property: 'attribute', options: options});
+  validator.call(pass, fail);
+  equal(model.errors.get('attribute'), undefined);
+});
+
+test('when passed a model attribute as minimum value, value is 1 and minimum is 0', function() {
+  model.set('attribute', 'a');
+  model.set('validationProperty', 0);
+  options = { minimum: 'validationProperty' };
+  validator = Ember.Validations.validators.local.Length.create({model: model, property: 'attribute', options: options});
+  validator.call(pass, fail);
+  equal(model.errors.get('attribute'), undefined);
+});
+
+test('when passed a model attribute as minimum value, value is 1 and minimum is 2', function() {
+  model.set('attribute', 'a');
+  model.set('validationProperty', 2);
+  options = { minimum: 'validationProperty' };
+  validator = Ember.Validations.validators.local.Length.create({model: model, property: 'attribute', options: options});
+  validator.call(fail, pass);
+  deepEqual(model.errors.get('attribute'), ['is too short (minimum is 2 characters)']);
+});
+
+test('when passed a model attribute as a number value, value is 1 and number value is 1', function() {
+  model.set('attribute', 'a');
+  model.set('validationProperty', 1);
+  options = { is: 'validationProperty' };
+  validator = Ember.Validations.validators.local.Length.create({model: model, property: 'attribute', options: options});
+  validator.call(pass, fail);
+  equal(model.errors.get('attribute'), undefined);
+});
+
+test('when passed a model attribute as a number value, value is 1 and number value is 2', function() {
+  model.set('attribute', 'a');
+  model.set('validationProperty', 2);
+  options = { is: 'validationProperty' };
+  validator = Ember.Validations.validators.local.Length.create({model: model, property: 'attribute', options: options});
+  validator.call(fail, pass);
+  deepEqual(model.errors.get('attribute'), ['is the wrong length (should be 2 characters)']);
+});
+
+test('when passed a model attribute as a number value, value is 3 and number value is 2', function() {
+  model.set('attribute', 'abc');
+  model.set('validationProperty', 2);
+  options = { is: 'validationProperty' };
+  validator = Ember.Validations.validators.local.Length.create({model: model, property: 'attribute', options: options});
+  validator.call(fail, pass);
+  deepEqual(model.errors.get('attribute'), ['is the wrong length (should be 2 characters)']);
+});
+
+test('when passed a model attribute as a number value, value is 3 and number value is 2', function() {
+  model.set('attribute', 'abc');
+  model.set('validationProperty', 2);
+  options = { is: 'validationProperty' };
+  validator = Ember.Validations.validators.local.Length.create({model: model, property: 'attribute', options: options});
+  validator.call(fail, pass);
+  deepEqual(model.errors.get('attribute'), ['is the wrong length (should be 2 characters)']);
+});
+
+test('when passed an undefined model attribute as minimum value, value is 1', function() {
+  model.set('attribute', 'a');
+  options = {minimum: 'validationProperty'};
+  validator = Ember.Validations.validators.local.Length.create({model: model, property: 'attribute', options: options});
+  validator.call(fail, pass);
+  deepEqual(model.errors.get('attribute'), undefined);
+});
+
+test('when passed an undefined model attribute as maximum value, value is 1', function() {
+  model.set('attribute', 'a');
+  options = {maximum: 'validationProperty'};
+  validator = Ember.Validations.validators.local.Length.create({model: model, property: 'attribute', options: options});
+  validator.call(fail, pass);
+  deepEqual(model.errors.get('attribute'), undefined);
+});
+
+test('when passed an undefined model attribute as number value, value is 1', function() {
+  model.set('attribute', 'a');
+  options = {is: 'validationProperty'};
+  validator = Ember.Validations.validators.local.Length.create({model: model, property: 'attribute', options: options});
+  validator.call(fail, pass);
+  deepEqual(model.errors.get('attribute'), undefined);
+});
