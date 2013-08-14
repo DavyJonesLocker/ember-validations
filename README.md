@@ -59,7 +59,7 @@ App.User.reopen({
       numericality: true
     }
   }
-}); 
+});
 ```
 
 The second style is more verbose but will allow you to add custom
@@ -92,7 +92,7 @@ Validates the property has a value that is `null`, `undefined`, or `''`
 #### Options ####
   * `true` - Passing just `true` will activate validation and use default message
   * `message` - Any string you wish to be the error message. Overrides `i18n`.
- 
+
 ```javascript
 // Examples
 absence: true
@@ -106,7 +106,7 @@ By default the values `'1'`, `1`, and `true` are the acceptable values
   * `true` - Passing just `true` will activate validation and use default message
   * `message` - Any string you wish to be the error message. Overrides `i18n`.
   * `accept` - the value for acceptance
- 
+
 ```javascript
 // Examples
 acceptance: true
@@ -120,7 +120,7 @@ Expects a `propertyConfirmation` to have the same value as
 #### Options ####
   * `true` - Passing just `true` will activate validation and use default message
   * `message` - Any string you wish to be the error message. Overrides `i18n`.
- 
+
 ```javascript
 // Examples
 confirmation: true
@@ -182,7 +182,7 @@ Define the lengths that are allowed
   * `maximum` - The maximum length of the value allowed
   * `is` - The exact length of the value allowed
   * `tokenizer` - A function that should return a object that responds to `length`
-  
+
 ##### Messages #####
   * `tooShort` - the message used when the `minimum` validation fails. Overrides `i18n`
   * `tooLong` - the message used when the `maximum` validation fails. Overrides `i18n`
@@ -192,8 +192,8 @@ Define the lengths that are allowed
 // Examples
 length: 5
 length: [3, 5]
-length: { is: 10, allowBlank: true } 
-length: { minimum: 3, maximum: 5, messages { tooShort: 'should be more than 3 characters', tooLong: 'should be less than 5 characters' } }
+length: { is: 10, allowBlank: true }
+length: { minimum: 3, maximum: 5, messages: { tooShort: 'should be more than 3 characters', tooLong: 'should be less than 5 characters' } }
 length: { is: 5, tokenizer: function(value) { return value.split(''); } }
 ```
 
@@ -234,7 +234,7 @@ Validates the property has a value that is not `null`, `undefined`, or `''`
 #### Options ####
   * `true` - Passing just `true` will activate validation and use default message
   * `message` - Any string you wish to be the error message. Overrides `i18n`.
- 
+
 ```javascript
 // Examples
 presence: true
@@ -279,8 +279,8 @@ each property changes. `isValid` states bubble up and help define the
 direct parent's validation state.
 
 If you want to force all validations to run simply call `.validate()` on the object. `isValid` will be set to `true`
-or `false`. All validations are run as deferred objects, so the validations will 
-not be completed when `validate` is done. So `validate` returns a promise, call `then` 
+or `false`. All validations are run as deferred objects, so the validations will
+not be completed when `validate` is done. So `validate` returns a promise, call `then`
 with a function containing the code you want to run after the validations have
 completed.
 
@@ -312,7 +312,7 @@ user.validate().then(function() {
   user.validate().then(function() {
     user.get('isValid'); // true
     user.errors.get('firstName'); // []
-  })  
+  })
 })
 
 ```
