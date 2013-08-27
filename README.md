@@ -69,7 +69,7 @@ member of the collection having the potential to become validatable
 objects.
 
 ```javascript
-App.User.reopn({
+App.User.reopen({
   validations: [
     {
       firstName: {
