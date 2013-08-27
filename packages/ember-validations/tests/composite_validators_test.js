@@ -105,3 +105,20 @@ test('validates array of validable objects', function() {
 
   equal(user.get('isValid'), false);
 });
+
+test('eventually validates other validatable property when that property is not yet set', function() {
+  Ember.run(function() {
+    user = User.create({
+      validations: ['profile']
+    });
+  });
+  equal(user.get('isValid'), true);
+  Ember.run(function() {
+    user.set('profile', profile);
+  });
+  equal(user.get('isValid', false), false);
+  Ember.run(function() {
+    profile.set('title', 'Developer');
+  });
+  equal(user.get('isValid'), true);
+});
