@@ -58,3 +58,28 @@ asyncTest('runs all validations', function() {
     });
   });
 });
+
+test('can be mixed into an object controller', function() {
+  var Controller, controller, user;
+  Controller = Ember.ObjectController.extend(Ember.Validations.Mixin, {
+    validations: {
+      name: {
+        presence: true
+      }
+    }
+  });
+
+  Ember.run(function() {
+    controller = Controller.create();
+  });
+  equal(controller.get('isValid'), false);
+  user = Ember.Object.create();
+  Ember.run(function() {
+    controller.set('content', user);
+  });
+  equal(controller.get('isValid'), false);
+  Ember.run(function() {
+    user.set('name', 'Brian');
+  });
+  equal(controller.get('isValid'), true);
+});

@@ -31,12 +31,23 @@ var ArrayValidator = Ember.Object.extend({
   }
 });
 
+var eventualValidator = function(sender, validator) {
+  if (this.get(validator).constructor === Array) {
+    this.removeObserver(validator, this);
+    this.validators.pushObject(ArrayValidator.create({model: this, property: validator, validators: this.get(validator)}));
+  } else if (this.get(validator).validate) {
+    this.removeObserver(validator, this);
+    this.validators.pushObject(this.get(validator));
+  }
+};
+
 Ember.Validations.Mixin = Ember.Mixin.create({
   init: function() {
     this._super();
-    this.set('errors', Ember.Validations.Errors.create());
+    this.errors = Ember.Validations.Errors.create();
+    this.isValid = undefined;
     if (this.get('validations') === undefined) {
-      this.set('validations', {});
+      this.validations = {};
     }
     this.buildValidators();
     this.addObserver('validators.@each.isValid', this, setValidity);
@@ -57,7 +68,7 @@ Ember.Validations.Mixin = Ember.Mixin.create({
     return !this.get('isValid');
   }.property('isValid'),
   buildValidators: function() {
-    this.set('validators', Ember.A([]));
+    this.validators = Ember.makeArray();
     if (this.validations.constructor === Array) {
       this.buildCompositeValidators(this.validations);
     } else {
@@ -73,7 +84,9 @@ Ember.Validations.Mixin = Ember.Mixin.create({
       if (validator.constructor === Object) {
         this.buildPropertyValidators(validator);
       } else if (validator.constructor === String) {
-        if (this.get(validator).constructor === Array) {
+        if (this.get(validator) === undefined) {
+          this.addObserver(validator, this, eventualValidator);
+        } else if (this.get(validator).constructor === Array) {
           this.validators.pushObject(ArrayValidator.create({model: this, property: validator, validators: this.get(validator)}));
         } else {
           this.validators.pushObject(this.get(validator));
