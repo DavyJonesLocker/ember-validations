@@ -30,18 +30,17 @@ module('Compostite validators', {
 });
 
 test('validates other validatable property', function() {
-  ok(!profile.get('isValid'));
-  // Ember.run(function() {
-    // user = User.create({
-      // profile: profile,
-      // validations: ['profile']
-    // });
-  // });
-  // equal(user.get('isValid'), false);
-  // Ember.run(function() {
-    // profile.set('title', 'Developer');
-  // });
-  // equal(user.get('isValid'), true);
+  Ember.run(function() {
+    user = User.create({
+      profile: profile,
+      validations: ['profile']
+    });
+  });
+  equal(user.get('isValid'), false);
+  Ember.run(function() {
+    profile.set('title', 'Developer');
+  });
+  equal(user.get('isValid'), true);
 });
 
 test('validates custom validator', function() {
