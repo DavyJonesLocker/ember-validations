@@ -1,6 +1,7 @@
 Ember.Validations.validators.Base = Ember.Object.extend({
   init: function() {
     this.set('errors', Ember.makeArray());
+    this.isValid = undefined;
     this.conditionals = {
       'if': this.get('options.if'),
       unless: this.get('options.unless')
@@ -36,7 +37,7 @@ Ember.Validations.validators.Base = Ember.Object.extend({
         return Ember.RSVP.resolve();
       }
     }
-  },
+  }.on('init'),
   canValidate: function() {
     if (typeof(this.conditionals) === 'object') {
       if (this.conditionals['if']) {

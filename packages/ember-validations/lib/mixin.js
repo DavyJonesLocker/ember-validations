@@ -1,24 +1,26 @@
-var setValidity = function(sender, key, value, context, rev) {
-  if (this.get('validators').filterProperty('isValid', false).get('length') > 0) {
-    if (this.get('isValid') === false) {
-      this.notifyPropertyChange('isValid');
+var setValidityMixin = Ember.Mixin.create({
+  setValidity: function() {
+    if (this.get('validators').filterProperty('isValid', false).get('length') > 0) {
+      if (this.get('isValid') === false) {
+        this.notifyPropertyChange('isValid');
+      } else {
+        this.set('isValid', false);
+      }
     } else {
-      this.set('isValid', false);
+      if (this.get('isValid') === true) {
+        this.notifyPropertyChange('isValid');
+      } else {
+        this.set('isValid', true);
+      }
     }
-  } else {
-    if (this.get('isValid') === true) {
-      this.notifyPropertyChange('isValid');
-    } else {
-      this.set('isValid', true);
-    }
-  }
-};
+  }.on('init')
+});
 
-var ArrayValidator = Ember.Object.extend({
+var ArrayValidator = Ember.Object.extend(setValidityMixin, {
   init: function() {
     this._super();
-    this.addObserver('validators.@each.isValid', this, setValidity);
-    this.model.addObserver(''+this.property+'.[]', this, setValidity);
+    this.addObserver('validators.@each.isValid', this, this.setValidity);
+    this.model.addObserver(''+this.property+'.[]', this, this.setValidity);
   },
   validate: function() {
     var promises;
@@ -28,7 +30,7 @@ var ArrayValidator = Ember.Object.extend({
     }).without(undefined);
 
     return Ember.RSVP.all(promises);
-  }
+  }.on('init')
 });
 
 var eventualValidator = function(sender, validator) {
@@ -41,7 +43,7 @@ var eventualValidator = function(sender, validator) {
   }
 };
 
-Ember.Validations.Mixin = Ember.Mixin.create({
+Ember.Validations.Mixin = Ember.Mixin.create(setValidityMixin, {
   init: function() {
     this._super();
     this.errors = Ember.Validations.Errors.create();
@@ -50,7 +52,7 @@ Ember.Validations.Mixin = Ember.Mixin.create({
       this.validations = {};
     }
     this.buildValidators();
-    this.addObserver('validators.@each.isValid', this, setValidity);
+    this.addObserver('validators.@each.isValid', this, this.setValidity);
     this.validators.forEach(function(validator) {
       validator.addObserver('errors.[]', this, function(sender, key, value, context, rev) {
         var errors = Ember.makeArray();
@@ -62,7 +64,6 @@ Ember.Validations.Mixin = Ember.Mixin.create({
         this.set('errors.' + sender.property, errors);
       });
     }, this);
-    this.validate();
   },
   isInvalid: function() {
     return !this.get('isValid');
@@ -127,5 +128,5 @@ Ember.Validations.Mixin = Ember.Mixin.create({
     }).without(undefined);
 
     return Ember.RSVP.all(promises);
-  }
+  }.on('init')
 });
