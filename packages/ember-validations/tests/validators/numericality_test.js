@@ -87,6 +87,24 @@ test('when only allowing integers and value is not integer', function() {
   deepEqual(validator.errors, ['failed integer validation']);
 });
 
+test('when only integer and no message is passed', function() {
+  options = { onlyInteger: true };
+  Ember.run(function() {
+    validator = Ember.Validations.validators.local.Numericality.create({model: model, property: 'attribute', options: options});
+    model.set('attribute', 1.1);
+  });
+  deepEqual(validator.errors, ['must be an integer']);
+});
+
+test('when only integer is passed directly', function() {
+  options = 'onlyInteger';
+  Ember.run(function() {
+    validator = Ember.Validations.validators.local.Numericality.create({model: model, property: 'attribute', options: options});
+    model.set('attribute', 1.1);
+  });
+  deepEqual(validator.errors, ['must be an integer']);
+});
+
 test('when only allowing values greater than 10 and value is greater than 10', function() {
   options = { messages: { greaterThan: 'failed validation', numericality: 'failed validation' }, greaterThan: 10 };
   Ember.run(function() {
@@ -244,15 +262,6 @@ test('when options is true', function() {
     model.set('attribute', '');
   });
   deepEqual(validator.errors, ['is not a number']);
-});
-
-test('when only integer and no message is passed', function() {
-  options = { onlyInteger: true };
-  Ember.run(function() {
-    validator = Ember.Validations.validators.local.Numericality.create({model: model, property: 'attribute', options: options});
-    model.set('attribute', 1.1);
-  });
-  deepEqual(validator.errors, ['must be an integer']);
 });
 
 test('when equal to  and no message is passed', function() {
