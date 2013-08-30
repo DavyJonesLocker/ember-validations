@@ -6,6 +6,10 @@ Ember.Validations.validators.local.Numericality = Ember.Validations.validators.B
 
     if (this.options === true) {
       this.options = {};
+    } else if (this.options.constructor === String) {
+      key = this.options;
+      this.options = {};
+      this.options[key] = true;
     }
 
     if (this.options.messages === undefined) {
