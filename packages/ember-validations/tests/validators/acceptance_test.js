@@ -17,8 +17,8 @@ module('Acceptance Validator', {
 
 test('when attribute is true', function() {
   options = { message: 'failed validation' };
-  validator = Ember.Validations.validators.local.Acceptance.create({model: model, property: 'attribute', options: options});
   Ember.run(function() {
+    validator = Ember.Validations.validators.local.Acceptance.create({model: model, property: 'attribute', options: options});
     model.set('attribute', true);
   });
   deepEqual(validator.errors, []);
@@ -26,8 +26,8 @@ test('when attribute is true', function() {
 
 test('when attribute is not true', function() {
   options = { message: 'failed validation' };
-  validator = Ember.Validations.validators.local.Acceptance.create({model: model, property: 'attribute', options: options});
   Ember.run(function() {
+    validator = Ember.Validations.validators.local.Acceptance.create({model: model, property: 'attribute', options: options});
     model.set('attribute', false);
   });
   deepEqual(validator.errors, ['failed validation']);
@@ -35,8 +35,8 @@ test('when attribute is not true', function() {
 
 test('when attribute is value of 1', function() {
   options = { message: 'failed validation' };
-  validator = Ember.Validations.validators.local.Acceptance.create({model: model, property: 'attribute', options: options});
   Ember.run(function() {
+    validator = Ember.Validations.validators.local.Acceptance.create({model: model, property: 'attribute', options: options});
     model.set('attribute', 1);
   });
   deepEqual(validator.errors, []);
@@ -44,8 +44,8 @@ test('when attribute is value of 1', function() {
 
 test('when attribute value is 2 and accept value is 2', function() {
   options = { message: 'failed validation', accept: 2 };
-  validator = Ember.Validations.validators.local.Acceptance.create({model: model, property: 'attribute', options: options});
   Ember.run(function() {
+    validator = Ember.Validations.validators.local.Acceptance.create({model: model, property: 'attribute', options: options});
     model.set('attribute', 2);
   });
   deepEqual(validator.errors, []);
@@ -53,8 +53,8 @@ test('when attribute value is 2 and accept value is 2', function() {
 
 test('when attribute value is 1 and accept value is 2', function() {
   options = { message: 'failed validation', accept: 2 };
-  validator = Ember.Validations.validators.local.Acceptance.create({model: model, property: 'attribute', options: options});
   Ember.run(function() {
+    validator = Ember.Validations.validators.local.Acceptance.create({model: model, property: 'attribute', options: options});
     model.set('attribute', 1);
   });
   deepEqual(validator.errors, ['failed validation']);
@@ -62,8 +62,8 @@ test('when attribute value is 1 and accept value is 2', function() {
 
 test('when options is true', function() {
   options = true;
-  validator = Ember.Validations.validators.local.Acceptance.create({model: model, property: 'attribute', options: options});
   Ember.run(function() {
+    validator = Ember.Validations.validators.local.Acceptance.create({model: model, property: 'attribute', options: options});
     model.set('attribute', false);
   });
   deepEqual(validator.errors, ['must be accepted']);
@@ -71,8 +71,8 @@ test('when options is true', function() {
 
 test('when no message is passed', function() {
   options = { accept: 2 };
-  validator = Ember.Validations.validators.local.Acceptance.create({model: model, property: 'attribute', options: options});
   Ember.run(function() {
+    validator = Ember.Validations.validators.local.Acceptance.create({model: model, property: 'attribute', options: options});
     model.set('attribute', false);
   });
   deepEqual(validator.errors, ['must be accepted']);

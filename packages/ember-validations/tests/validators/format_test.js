@@ -17,8 +17,8 @@ module('Format Validator', {
 
 test('when matching format', function() {
   options = { 'message': 'failed validation', 'with': /\d+/ };
-  validator = Ember.Validations.validators.local.Format.create({model: model, property: 'attribute', options: options});
   Ember.run(function() {
+    validator = Ember.Validations.validators.local.Format.create({model: model, property: 'attribute', options: options});
     model.set('attribute',  '123');
   });
   deepEqual(validator.errors, []);
@@ -26,8 +26,8 @@ test('when matching format', function() {
 
 test('when not matching format', function() {
   options = { 'message': 'failed validation', 'with': /\d+/ };
-  validator = Ember.Validations.validators.local.Format.create({model: model, property: 'attribute', options: options});
   Ember.run(function() {
+    validator = Ember.Validations.validators.local.Format.create({model: model, property: 'attribute', options: options});
     model.set('attribute', 'abc');
   });
   deepEqual(validator.errors, ['failed validation']);
@@ -35,8 +35,8 @@ test('when not matching format', function() {
 
 test('when allowing blank', function() {
   options = { 'message': 'failed validation', 'with': /\d+/, 'allowBlank': true };
-  validator = Ember.Validations.validators.local.Format.create({model: model, property: 'attribute', options: options});
   Ember.run(function() {
+    validator = Ember.Validations.validators.local.Format.create({model: model, property: 'attribute', options: options});
     model.set('attribute', '');
   });
   deepEqual(validator.errors, []);
@@ -44,8 +44,8 @@ test('when allowing blank', function() {
 
 test('when not allowing blank', function() {
   options = { 'message': 'failed validation', 'with': /\d+/ };
-  validator = Ember.Validations.validators.local.Format.create({model: model, property: 'attribute', options: options});
   Ember.run(function() {
+    validator = Ember.Validations.validators.local.Format.create({model: model, property: 'attribute', options: options});
     model.set('attribute', '');
   });
   deepEqual(validator.errors, ['failed validation']);
@@ -53,8 +53,8 @@ test('when not allowing blank', function() {
 
 test('when options is regexp', function() {
   options = /\d+/;
-  validator = Ember.Validations.validators.local.Format.create({model: model, property: 'attribute', options: options});
   Ember.run(function() {
+    validator = Ember.Validations.validators.local.Format.create({model: model, property: 'attribute', options: options});
     model.set('attribute', '');
   });
   deepEqual(validator.errors, ['is invalid']);
@@ -62,8 +62,8 @@ test('when options is regexp', function() {
 
 test('when no message is passed', function() {
   options = { 'with': /\d+/ };
-  validator = Ember.Validations.validators.local.Format.create({model: model, property: 'attribute', options: options});
   Ember.run(function() {
+    validator = Ember.Validations.validators.local.Format.create({model: model, property: 'attribute', options: options});
     model.set('attribute', '');
   });
   deepEqual(validator.errors, ['is invalid']);

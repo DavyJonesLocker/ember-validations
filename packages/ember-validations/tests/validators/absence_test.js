@@ -17,7 +17,9 @@ module('Absence Validator', {
 
 test('when value is not empty', function() {
   options = { message: 'failed validation' };
-  validator = Ember.Validations.validators.local.Absence.create({model: model, property: 'attribute', options: options});
+  Ember.run(function(){
+    validator = Ember.Validations.validators.local.Absence.create({model: model, property: 'attribute', options: options});
+  });
   deepEqual(validator.errors, []);
   Ember.run(function() {
     model.set('attribute', 'not empty');
@@ -28,8 +30,8 @@ test('when value is not empty', function() {
 test('when value is made empty', function() {
   model.set('attribute', 'not empty');
   options = { message: 'failed validation' };
-  validator = Ember.Validations.validators.local.Absence.create({model: model, property: 'attribute', options: options});
-  Ember.run(function() {
+  Ember.run(function(){
+    validator = Ember.Validations.validators.local.Absence.create({model: model, property: 'attribute', options: options});
     model.set('attribute', undefined);
   });
   deepEqual(validator.errors, []);
@@ -37,8 +39,8 @@ test('when value is made empty', function() {
 
 test('when options is true', function() {
   options = true;
-  validator = Ember.Validations.validators.local.Absence.create({model: model, property: 'attribute', options: options});
-  Ember.run(function() {
+  Ember.run(function(){
+    validator = Ember.Validations.validators.local.Absence.create({model: model, property: 'attribute', options: options});
     model.set('attribute', 'not empty');
   });
   deepEqual(validator.errors, ["must be blank"]);
