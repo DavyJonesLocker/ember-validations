@@ -1,18 +1,18 @@
-Ember.Validations.validators.local.reopen({
-  absence: function(model, property, options, deferredObject) {
+Ember.Validations.validators.local.Absence = Ember.Validations.validators.Base.extend({
+  init: function() {
+    this._super();
     /*jshint expr:true*/
-    if (options === true) {
-      options = {};
+    if (this.options === true) {
+      this.set('options', {});
     }
 
-    if (options.message === undefined) {
-      options.message = Ember.Validations.messages.render('present', options);
+    if (this.options.message === undefined) {
+      this.set('options.message', Ember.Validations.messages.render('present', this.options));
     }
-
-    if (!Ember.Validations.Utilities.isBlank(model.get(property))) {
-      model.errors.add(property, options.message);
+  },
+  call: function() {
+    if (!Ember.Validations.Utilities.isBlank(this.model.get(this.property))) {
+      this.errors.pushObject(this.options.message);
     }
-
-    deferredObject && deferredObject.resolve();
   }
 });

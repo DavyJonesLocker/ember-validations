@@ -1,85 +1,132 @@
-Ember.Validations.Mixin = Ember.Mixin.create({
+var setValidityMixin = Ember.Mixin.create({
+  setValidity: function() {
+    if (this.get('validators').filterProperty('isValid', false).get('length') > 0) {
+      if (this.get('isValid') === false) {
+        this.notifyPropertyChange('isValid');
+      } else {
+        this.set('isValid', false);
+      }
+    } else {
+      if (this.get('isValid') === true) {
+        this.notifyPropertyChange('isValid');
+      } else {
+        this.set('isValid', true);
+      }
+    }
+  }.on('init')
+});
+
+var ArrayValidator = Ember.Object.extend(setValidityMixin, {
   init: function() {
     this._super();
-    this.set('errors', Ember.Validations.Errors.create());
+    this.addObserver('validators.@each.isValid', this, this.setValidity);
+    this.model.addObserver(''+this.property+'.[]', this, this.setValidity);
+  },
+  validate: function() {
+    var promises;
+
+    promises = this.get('validators').map(function(validator) {
+      return validator.validate();
+    }).without(undefined);
+
+    return Ember.RSVP.all(promises);
+  }.on('init')
+});
+
+var eventualValidator = function(sender, validator) {
+  if (this.get(validator).constructor === Array) {
+    this.removeObserver(validator, this);
+    this.validators.pushObject(ArrayValidator.create({model: this, property: validator, validators: this.get(validator)}));
+  } else if (this.get(validator).validate) {
+    this.removeObserver(validator, this);
+    this.validators.pushObject(this.get(validator));
+  }
+};
+
+Ember.Validations.Mixin = Ember.Mixin.create(setValidityMixin, {
+  init: function() {
+    this._super();
+    this.errors = Ember.Validations.Errors.create();
+    this.isValid = undefined;
     if (this.get('validations') === undefined) {
-      this.set('validations', {});
+      this.validations = {};
+    }
+    this.buildValidators();
+    this.addObserver('validators.@each.isValid', this, this.setValidity);
+    this.validators.forEach(function(validator) {
+      validator.addObserver('errors.[]', this, function(sender, key, value, context, rev) {
+        var errors = Ember.makeArray();
+        this.validators.forEach(function(validator) {
+          if (validator.property === sender.property) {
+            errors = errors.concat(validator.errors);
+          }
+        }, this);
+        this.set('errors.' + sender.property, errors);
+      });
+    }, this);
+  },
+  isInvalid: function() {
+    return !this.get('isValid');
+  }.property('isValid'),
+  buildValidators: function() {
+    this.validators = Ember.makeArray();
+    if (this.validations.constructor === Array) {
+      this.buildCompositeValidators(this.validations);
+    } else {
+      this.buildPropertyValidators(this.validations);
     }
   },
-  validate: function(filter) {
-    var options, message, property, validator, toRun, value, index1, index2, valid = true, deferreds = [];
-    var object = this;
-    var canValidate = function(options, validator) {
-      if (typeof(options) === 'object') {
-        if (options['if']) {
-          if (typeof(options['if']) === 'function') {
-            return options['if'](object, validator);
-          } else if (typeof(options['if']) === 'string') {
-            if (typeof(object[options['if']]) === 'function') {
-              return object[options['if']]();
-            } else {
-              return object.get(options['if']);
-            }
-          }
-        } else if (options.unless) {
-          if (typeof(options.unless) === 'function') {
-            return !options.unless(object, validator);
-          } else if (typeof(options.unless) === 'string') {
-            if (typeof(object[options.unless]) === 'function') {
-              return !object[options.unless]();
-            } else {
-              return !object.get(options.unless);
-            }
-          }
+  buildCompositeValidators: function(validations) {
+    var i, validator;
+
+    for (i = 0; i < validations.length; i++) {
+      validator = validations[i];
+
+      if (validator.constructor === Object) {
+        this.buildPropertyValidators(validator);
+      } else if (validator.constructor === String) {
+        if (this.get(validator) === undefined) {
+          this.addObserver(validator, this, eventualValidator);
+        } else if (this.get(validator).constructor === Array) {
+          this.validators.pushObject(ArrayValidator.create({model: this, property: validator, validators: this.get(validator)}));
         } else {
-          return true;
+          this.validators.pushObject(this.get(validator));
         }
+      } else if (validator.validate === undefined) {
+        this.validators.pushObject(validator.create({model: this}));
       } else {
-        return true;
+        this.validators.pushObject(validator);
       }
+    }
+  },
+  buildPropertyValidators: function(validations) {
+    var findValidator, property, validator;
+
+    findValidator = function(validator) {
+      var klass = validator.classify();
+      return Ember.Validations.validators.local[klass] || Ember.Validations.validators.remote[klass];
     };
-    if (filter !== undefined) {
-      toRun = [filter];
-    } else {
-      toRun = Object.keys(object.validations);
-    }
-    for(index1 = 0; index1 < toRun.length; index1++) {
-      property = toRun[index1];
-      this.errors.set(property, undefined);
-      delete this.errors[property];
 
-      for(validator in object.validations[property]) {
-        value = object.validations[property][validator];
-        if (typeof(value) !== 'object' || (typeof(value) === 'object' && value.constructor !== Array)) {
-          value = [value];
-        }
-
-        for(index2 = 0; index2 < value.length; index2++) {
-          if (canValidate(value[index2], validator)) {
-            var deferredObject = new Ember.Deferred();
-            deferreds = deferreds.concat(deferredObject);
-            if (!Ember.isNone(Ember.Validations.validators.local[validator])) {
-              Ember.Validations.validators.local[validator](object, property, value[index2], deferredObject);
-            } else if (!Ember.isNone(Ember.Validations.validators.remote[validator])) {
-              Ember.Validations.validators.remote[validator](object, property, value[index2], deferredObject);
-            }
+    for (property in validations) {
+      if (validations.hasOwnProperty(property)) {
+        for (validator in validations[property]) {
+          if (validations[property].hasOwnProperty(validator)) {
+            this.validators.pushObject(findValidator(validator).create({model: this, property: property, options: validations[property][validator]}));
           }
         }
       }
     }
+  },
+  validate: function() {
+    var promises;
 
-    return Ember.RSVP.all(deferreds).then(function() {
-      if (object.get('stateManager')) {
-        if (Object.keys(object.errors).length === 0) {
-          if (object.get('isDirty')) {
-            object.get('stateManager').transitionTo('uncommitted');
-          }
-        } else {
-          object.get('stateManager').transitionTo('invalid');
-        }
-      } else {
-        object.set('isValid', Object.keys(object.errors).length === 0);
-      }
-    });
-  }
+    // this is not ideal
+    this.set('isValid', true);
+
+    promises = this.validators.map(function(validator) {
+      return validator.validate();
+    }).without(undefined);
+
+    return Ember.RSVP.all(promises);
+  }.on('init')
 });

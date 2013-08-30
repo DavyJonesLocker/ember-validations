@@ -1,37 +1,70 @@
-var model, Model, options;
+var model, Model, options, validator;
+var pass = function() {
+  ok(true, 'validation is working');
+};
+var fail = function() {
+  ok(false, 'validation is not working');
+};
 
 module('Confirmation Validator', {
   setup: function() {
     Model = Ember.Object.extend(Ember.Validations.Mixin);
-    model = Model.create();
+    Ember.run(function() {
+      model = Model.create();
+    });
   }
 });
 
 test('when values match', function() {
-  model.set('attribute', 'test');
-  model.set('attributeConfirmation', 'test');
   options = { message: 'failed validation' };
-  Ember.Validations.validators.local.confirmation(model, 'attribute', options);
-  equal(model.errors.get('attribute'), undefined);
+  Ember.run(function() {
+    validator = Ember.Validations.validators.local.Confirmation.create({model: model, property: 'attribute', options: options});
+    model.set('attribute', 'test');
+    model.set('attributeConfirmation', 'test');
+  });
+  deepEqual(validator.errors, []);
+  Ember.run(function() {
+    model.set('attributeConfirmation', 'newTest');
+  });
+  deepEqual(validator.errors, ['failed validation']);
+  Ember.run(function() {
+    model.set('attribute', 'newTest');
+  });
+  deepEqual(validator.errors, []);
 });
 
 test('when values do not match', function() {
-  model.set('attribute', 'test');
   options = { message: 'failed validation' };
-  Ember.Validations.validators.local.confirmation(model, 'attribute', options);
-  deepEqual(model.errors.get('attribute'), ['failed validation']);
+  Ember.run(function() {
+    validator = Ember.Validations.validators.local.Confirmation.create({model: model, property: 'attribute', options: options});
+    model.set('attribute', 'test');
+  });
+  deepEqual(validator.errors, ['failed validation']);
 });
 
 test('when options is true', function() {
-  model.set('attribute', 'test');
   options = true;
-  Ember.Validations.validators.local.confirmation(model, 'attribute', options);
-  deepEqual(model.errors.get('attribute'), ["doesn't match attribute"]);
+  Ember.run(function() {
+    validator = Ember.Validations.validators.local.Confirmation.create({model: model, property: 'attribute', options: options});
+    model.set('attribute', 'test');
+  });
+  deepEqual(validator.errors, ["doesn't match attribute"]);
 });
 
-test('when deferred object is passed', function() {
-  options = true;
-  var deferredObject = new Ember.$.Deferred();
-  Ember.Validations.validators.local.confirmation(model, 'attribute', options, deferredObject);
-  equal(deferredObject.state(), 'resolved');
+test('message integration on model, prints message on Confirmation property', function() {
+  var otherModel, OtherModel = Model.extend({
+    validations: {
+      attribute: {
+        confirmation: true
+      }
+    }
+  });
+
+  Ember.run(function() {
+    otherModel = OtherModel.create();
+    otherModel.set('attribute', 'test');
+  });
+
+  deepEqual(otherModel.get('errors.attributeConfirmation'), ["doesn't match attribute"]);
+  deepEqual(otherModel.get('errors.attribute'), []);
 });

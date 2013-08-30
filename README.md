@@ -4,13 +4,6 @@
 
 Validation support for Ember Objects
 
-**Note: This is an implementation of ActiveModel::Validations from
-Ruby on Rails**
-
-_Eventually framework specific validation rules will have to be written.
-Currently only Rails is supported. In future versions the validation
-framework will be configurable._
-
 Development on this library will be on-going until `1.0`. We follow
 `Semantic Versioning` so expect backwards incompatible changes between
 minor version bumps. Patch version bumps will not introduce backwards
@@ -39,10 +32,7 @@ The builds will be in the `dist/` directory.
 ## Looking for help? ##
 
 If it is a bug [please open an issue on
-GitHub](https://github.com/dockyard/ember-validations/issues). If you need help using
-the gem please ask the question on
-[Stack Overflow](http://stackoverflow.com). Be sure to tag the
-question with `DockYard` so we can find it.
+GitHub](https://github.com/dockyard/ember-validations/issues).
 
 ## Usage ##
 
@@ -53,8 +43,8 @@ validations to:
 var App.User = Ember.Object.extend(Ember.Validations.Mixin);
 ```
 
-You can add validations to an object by defining the `validations`
-object. The keys in the object should map to properties. The values of
+There are two ways to define validations. The first style allows you to
+pass an `Object`. The keys in the object should map to properties. The values of
 the keys should be an object of validations. The keys will be the
 validation name followed by the options:
 
@@ -69,7 +59,27 @@ App.User.reopen({
       numericality: true
     }
   }
-}); 
+});
+```
+
+The second style is more verbose but will allow you to add custom
+validators and paths to other validatable objects (like relationships,
+sub-controllers, etc...). You pass an array to `validations` with each
+member of the collection having the potential to become validatable
+objects.
+
+```javascript
+App.User.reopen({
+  validations: [
+    {
+      firstName: {
+        presence: true
+      }
+    },
+    'profile',
+    AgeValidator
+  ]
+});
 ```
 
 ## Validators ##
@@ -82,7 +92,7 @@ Validates the property has a value that is `null`, `undefined`, or `''`
 #### Options ####
   * `true` - Passing just `true` will activate validation and use default message
   * `message` - Any string you wish to be the error message. Overrides `i18n`.
- 
+
 ```javascript
 // Examples
 absence: true
@@ -96,7 +106,7 @@ By default the values `'1'`, `1`, and `true` are the acceptable values
   * `true` - Passing just `true` will activate validation and use default message
   * `message` - Any string you wish to be the error message. Overrides `i18n`.
   * `accept` - the value for acceptance
- 
+
 ```javascript
 // Examples
 acceptance: true
@@ -110,7 +120,7 @@ Expects a `propertyConfirmation` to have the same value as
 #### Options ####
   * `true` - Passing just `true` will activate validation and use default message
   * `message` - Any string you wish to be the error message. Overrides `i18n`.
- 
+
 ```javascript
 // Examples
 confirmation: true
@@ -172,7 +182,7 @@ Define the lengths that are allowed
   * `maximum` - The maximum length of the value allowed
   * `is` - The exact length of the value allowed
   * `tokenizer` - A function that should return a object that responds to `length`
-  
+
 ##### Messages #####
   * `tooShort` - the message used when the `minimum` validation fails. Overrides `i18n`
   * `tooLong` - the message used when the `maximum` validation fails. Overrides `i18n`
@@ -182,8 +192,8 @@ Define the lengths that are allowed
 // Examples
 length: 5
 length: [3, 5]
-length: { is: 10, allowBlank: true } 
-length: { minimum: 3, maximum: 5, messages { tooShort: 'should be more than 3 characters', tooLong: 'should be less than 5 characters' } }
+length: { is: 10, allowBlank: true }
+length: { minimum: 3, maximum: 5, messages: { tooShort: 'should be more than 3 characters', tooLong: 'should be less than 5 characters' } }
 length: { is: 5, tokenizer: function(value) { return value.split(''); } }
 ```
 
@@ -224,7 +234,7 @@ Validates the property has a value that is not `null`, `undefined`, or `''`
 #### Options ####
   * `true` - Passing just `true` will activate validation and use default message
   * `message` - Any string you wish to be the error message. Overrides `i18n`.
- 
+
 ```javascript
 // Examples
 presence: true
@@ -264,10 +274,14 @@ firstName: {
 
 ## Running Validations
 
-Simply call `.validate()` on the object. `isValid` will be set to `true`
-or `false`. All validations are run as deferred objects, so the validations will 
-not be completed when `validate` is done. So `validate` returns a promise, call `then` 
-wih a function containing the code you want to run after the validations have
+Validations will automatically run when the object is created and when
+each property changes. `isValid` states bubble up and help define the
+direct parent's validation state.
+
+If you want to force all validations to run simply call `.validate()` on the object. `isValid` will be set to `true`
+or `false`. All validations are run as deferred objects, so the validations will
+not be completed when `validate` is done. So `validate` returns a promise, call `then`
+with a function containing the code you want to run after the validations have
 completed.
 
 ```javascript
@@ -281,7 +295,7 @@ user.validate().then(function() {
 
 After mixing in `Ember.Validations.Mixin` into your object it will now have a
 `.errors` object. All validation error messages will be placed in there
-for the corresponding property.
+for the corresponding property. Errors messages will always be an array.
 
 ```javascript
 App.User = Ember.Object.extend(Ember.Validations.Mixin,
@@ -293,12 +307,12 @@ App.User = Ember.Object.extend(Ember.Validations.Mixin,
 user = App.User.create();
 user.validate().then(function() {
   user.get('isValid'); // false
-  user.errors.get('firstName'); // "can't be blank"
+  user.errors.get('firstName'); // ["can't be blank"]
   user.set('firstName', 'Brian');
   user.validate().then(function() {
     user.get('isValid'); // true
-    user.errors.get('firstName'); // undefined
-  })  
+    user.errors.get('firstName'); // []
+  })
 })
 
 ```

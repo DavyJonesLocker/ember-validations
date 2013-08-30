@@ -1,34 +1,37 @@
-var model, Model, options;
+var model, Model, options, validator;
 
 module('Presence Validator', {
   setup: function() {
     Model = Ember.Object.extend(Ember.Validations.Mixin);
-    model = Model.create();
+    Ember.run(function() {
+      model = Model.create();
+    });
   }
 });
 
 test('when value is not empty', function() {
-  model.set('attribute', 'not empty');
   options = { message: 'failed validation' };
-  Ember.Validations.validators.local.presence(model, 'attribute', options);
-  equal(model.errors.get('attribute'), undefined);
+  Ember.run(function() {
+    validator = Ember.Validations.validators.local.Presence.create({model: model, property: 'attribute', options: options});
+    model.set('attribute', 'not empty');
+  });
+  deepEqual(validator.errors, []);
 });
 
 test('when value is empty', function() {
   options = { message: 'failed validation' };
-  Ember.Validations.validators.local.presence(model, 'attribute', options);
-  deepEqual(model.errors.get('attribute'), ['failed validation']);
+  Ember.run(function() {
+    validator = Ember.Validations.validators.local.Presence.create({model: model, property: 'attribute', options: options});
+    model.set('attribute', '');
+  });
+  deepEqual(validator.errors, ['failed validation']);
 });
 
 test('when options is true', function() {
   options = true;
-  Ember.Validations.validators.local.presence(model, 'attribute', options);
-  deepEqual(model.errors.get('attribute'), ["can't be blank"]);
-});
-
-test('when deferred object is passed', function() {
-  options = true;
-  var deferredObject = new Ember.$.Deferred();
-  Ember.Validations.validators.local.presence(model, 'attribute', options, deferredObject);
-  equal(deferredObject.state(), 'resolved');
+  Ember.run(function() {
+    validator = Ember.Validations.validators.local.Presence.create({model: model, property: 'attribute', options: options});
+    model.set('attribute', '');
+  });
+  deepEqual(validator.errors, ["can't be blank"]);
 });
