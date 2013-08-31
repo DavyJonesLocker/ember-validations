@@ -1,6 +1,6 @@
 Ember.Validations.validators.local.Length = Ember.Validations.validators.Base.extend({
   init: function() {
-    var index, key;
+    var index, key, validationProperty;
     this._super();
     /*jshint expr:true*/
     if (typeof(this.options) === 'number') {
@@ -12,10 +12,20 @@ Ember.Validations.validators.local.Length = Ember.Validations.validators.Base.ex
     }
 
     for (index = 0; index < this.messageKeys().length; index++) {
-      key = this.messageKeys()[index];
-      if (this.options[key] !== undefined && this.options.messages[this.MESSAGES[key]] === undefined) {
+      key = this.messageKeys()[index],
+      validationProperty = this.options[key];
+
+      if (isNaN(validationProperty)) {
+        this.model.addObserver(validationProperty, this, this.validate);
+      }
+
+      if (validationProperty !== undefined && this.options.messages[this.MESSAGES[key]] === undefined) {
         if (Ember.$.inArray(key, this.checkKeys()) !== -1) {
-          this.options.count = this.options[key];
+          if (isNaN(parseFloat(validationProperty)) && typeof this.model.get(validationProperty) !== "undefined") {
+            this.options.count = this.model.get(validationProperty);
+          } else {
+            this.options.count = validationProperty;
+          }
         }
         this.options.messages[this.MESSAGES[key]] = Ember.Validations.messages.render(this.MESSAGES[key], this.options);
         if (this.options.count !== undefined) {
@@ -58,14 +68,23 @@ Ember.Validations.validators.local.Length = Ember.Validations.validators.Base.ex
       }
     } else {
       for (check in this.CHECKS) {
+        var checkValue;
         operator = this.CHECKS[check];
         if (!this.options[check]) {
           continue;
         }
 
-        fn = new Function('return ' + this.tokenizedLength(this.model.get(this.property)) + ' ' + operator + ' ' + this.options[check]);
-        if (!fn()) {
-          this.errors.pushObject(this.options.messages[this.MESSAGES[check]]);
+        if (!isNaN(parseFloat(this.options[check])) && isFinite(this.options[check])) {
+          checkValue = this.options[check];
+        } else if (this.model.get(this.options[check]) !== undefined) {
+          checkValue = this.model.get(this.options[check]);
+        }
+
+        if (checkValue !== undefined) {
+          fn = new Function('return ' + this.tokenizedLength(this.model.get(this.property)) + ' ' + operator + ' ' + checkValue);
+          if (!fn()) {
+            this.errors.pushObject(this.options.messages[this.MESSAGES[check]]);
+          }
         }
       }
     }
