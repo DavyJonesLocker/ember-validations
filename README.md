@@ -317,56 +317,6 @@ user.validate().then(function() {
 
 ```
 
-## Bootstrapping With Server Side Validations ##
-
-You may want to bootstrap Ember objects that correspond to server-side
-models with the validation rules that are already defined on the server.
-
-`Ember-Validations` has the following interface for bootstrapping:
-
-```javascript
-App.bootstrapValidations(validations);
-```
-
-`Ember-Validations` assumes the rules are emitted in a similar JSON
-format as
-[ActiveModel::Serializers](https://github.com/rails-api/active_model_serializers).
-This means the root keys should correspond to a snake case
-representation of the object names. For example, if your app has a model
-named `App.UserProfile` then the emitted validation rules should look
-like:
-
-```javascript
-{
-  'user_profile' : {
-    'first_name' : {
-      'presence' : true,
-    }, {
-    'age' : {
-      'numericality' : {
-        'messages' : {
-          'greater_than' : 10
-        }
-      }
-    }
-  }
-}
-```
-
-Notice how the keys are all snake case. `Ember-Validations` will
-camelize all of the keys appropriately. The bootstrapping will attempt
-to find an object of the name taken from the root keys under your
-application namespace. If any validation rules exist on the object
-already those rules will take presedence if any conflicts occur from the
-bootstrapped rules.
-
-### Libraries for packaging and extracting from server ###
-
-* Ruby on Rails - [ClientSideValidations-Ember](https://github.com/dockyard/client_side_validations-ember)
-
-We will list solutions for other backend frameworks as they become
-available.
-
 ## Authors ##
 
 * [Brian Cardarella](http://twitter.com/bcardarella)
