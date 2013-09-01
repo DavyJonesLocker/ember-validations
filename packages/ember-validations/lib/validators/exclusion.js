@@ -13,7 +13,7 @@ Ember.Validations.validators.local.Exclusion = Ember.Validations.validators.Base
     /*jshint expr:true*/
     var message, lower, upper;
 
-    if (Ember.Validations.Utilities.isBlank(this.model.get(this.property))) {
+    if (Ember.isBlank(this.model.get(this.property))) {
       if (this.options.allowBlank === undefined) {
         this.errors.pushObject(this.options.message);
       }

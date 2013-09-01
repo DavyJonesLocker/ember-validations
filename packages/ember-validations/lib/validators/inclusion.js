@@ -11,7 +11,7 @@ Ember.Validations.validators.local.Inclusion = Ember.Validations.validators.Base
   },
   call: function() {
     var message, lower, upper;
-    if (Ember.Validations.Utilities.isBlank(this.model.get(this.property))) {
+    if (Ember.isBlank(this.model.get(this.property))) {
       if (this.options.allowBlank === undefined) {
         this.errors.pushObject(this.options.message);
       }
