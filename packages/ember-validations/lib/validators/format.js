@@ -10,7 +10,7 @@ Ember.Validations.validators.local.Format = Ember.Validations.validators.Base.ex
     }
    },
    call: function() {
-    if (Ember.isBlank(this.model.get(this.property))) {
+    if (Ember.isEmpty(this.model.get(this.property))) {
       if (this.options.allowBlank === undefined) {
         this.errors.pushObject(this.options.message);
       }

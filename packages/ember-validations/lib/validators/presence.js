@@ -11,7 +11,7 @@ Ember.Validations.validators.local.Presence = Ember.Validations.validators.Base.
     }
   },
   call: function() {
-    if (Ember.isBlank(this.model.get(this.property))) {
+    if (Ember.isEmpty(this.model.get(this.property))) {
       this.errors.pushObject(this.options.message);
     }
   }

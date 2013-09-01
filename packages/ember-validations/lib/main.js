@@ -1,5 +1,4 @@
 require('ember-validations/core');
-require('ember-validations/bootstrap');
 require('ember-validations/defaultMessages');
 require('ember-validations/errors');
 require('ember-validations/mixin');

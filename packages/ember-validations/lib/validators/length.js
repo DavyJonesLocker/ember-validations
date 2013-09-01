@@ -61,7 +61,7 @@ Ember.Validations.validators.local.Length = Ember.Validations.validators.Base.ex
   call: function() {
     var check, fn, message, operator, key;
 
-    if (Ember.isBlank(this.model.get(this.property))) {
+    if (Ember.isEmpty(this.model.get(this.property))) {
       if (this.options.allowBlank === undefined && (this.options.is || this.options.minimum)) {
         this.errors.pushObject(this.renderBlankMessage());
       }

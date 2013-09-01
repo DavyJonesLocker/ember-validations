@@ -49,7 +49,7 @@ Ember.Validations.validators.local.Numericality = Ember.Validations.validators.B
   call: function() {
     var check, checkValue, fn, form, operator, val;
 
-    if (Ember.isBlank(this.model.get(this.property))) {
+    if (Ember.isEmpty(this.model.get(this.property))) {
       if (this.options.allowBlank === undefined) {
         this.errors.pushObject(this.options.messages.numericality);
       }
