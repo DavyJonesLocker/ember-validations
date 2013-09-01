@@ -168,3 +168,20 @@ test('when allowed length maximum is 3, value length is 4 and no message is set'
   });
   deepEqual(validator.errors, ['is too long (maximum is 3 characters)']);
 });
+
+test('when using a property instead of a number', function() {
+  options = { is: 'countProperty' };
+  Ember.run(function() {
+    validator = Ember.Validations.validators.local.Length.create({model: model, property: 'attribute', options: options});
+    model.set('attribute', '123');
+  });
+  deepEqual(validator.errors, ['is the wrong length (should be 0 characters)']);
+  Ember.run(function() {
+    model.set('countProperty', 3);
+  });
+  deepEqual(validator.errors, []);
+  Ember.run(function() {
+    model.set('countProperty', 5);
+  });
+  deepEqual(validator.errors, ['is the wrong length (should be 5 characters)']);
+});

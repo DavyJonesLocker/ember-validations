@@ -13,22 +13,9 @@ Ember.Validations.validators.local.Length = Ember.Validations.validators.Base.ex
 
     for (index = 0; index < this.messageKeys().length; index++) {
       key = this.messageKeys()[index];
-      if (this.options[key] !== undefined && this.options.messages[this.MESSAGES[key]] === undefined) {
-        if (Ember.$.inArray(key, this.checkKeys()) !== -1) {
-          this.options.count = this.options[key];
-        }
-        this.options.messages[this.MESSAGES[key]] = Ember.Validations.messages.render(this.MESSAGES[key], this.options);
-        if (this.options.count !== undefined) {
-          delete this.options.count;
-        }
+      if (this.options[key] !== undefined && this.options[key].constructor === String) {
+        this.model.addObserver(this.options[key], this, this.validate);
       }
-    }
-
-    this.allowBlankOptions = {};
-    if (this.options.is) {
-      this.allowBlankOptions.message = this.options.messages.wrongLength;
-    } else if (this.options.minimum) {
-      this.allowBlankOptions.message = this.options.messages.tooShort;
     }
 
     this.tokenizedLength = new Function('value', 'return (value || "").' + (this.options.tokenizer || 'split("")') + '.length');
@@ -43,29 +30,51 @@ Ember.Validations.validators.local.Length = Ember.Validations.validators.Base.ex
     'minimum' : 'tooShort',
     'maximum' : 'tooLong'
   },
+  getValue: function(key) {
+    if (this.options[key].constructor === String) {
+      return this.model.get(this.options[key]) || 0;
+    } else {
+      return this.options[key];
+    }
+  },
   messageKeys: function() {
     return Object.keys(this.MESSAGES);
   },
   checkKeys: function() {
     return Object.keys(this.CHECKS);
   },
+  renderMessageFor: function(key) {
+    var options = {count: this.getValue(key)}, _key;
+    for (_key in this.options) {
+      options[_key] = this.options[_key];
+    }
+
+    return this.options.messages[this.MESSAGES[key]] || Ember.Validations.messages.render(this.MESSAGES[key], options);
+  },
+  renderBlankMessage: function() {
+    if (this.options.is) {
+      return this.renderMessageFor('is');
+    } else if (this.options.minimum) {
+      return this.renderMessageFor('minimum');
+    }
+  },
   call: function() {
-    var check, fn, message, operator;
+    var check, fn, message, operator, key;
 
     if (Ember.Validations.Utilities.isBlank(this.model.get(this.property))) {
       if (this.options.allowBlank === undefined && (this.options.is || this.options.minimum)) {
-        this.errors.pushObject(this.allowBlankOptions.message);
+        this.errors.pushObject(this.renderBlankMessage());
       }
     } else {
-      for (check in this.CHECKS) {
-        operator = this.CHECKS[check];
-        if (!this.options[check]) {
+      for (key in this.CHECKS) {
+        operator = this.CHECKS[key];
+        if (!this.options[key]) {
           continue;
         }
 
-        fn = new Function('return ' + this.tokenizedLength(this.model.get(this.property)) + ' ' + operator + ' ' + this.options[check]);
+        fn = new Function('return ' + this.tokenizedLength(this.model.get(this.property)) + ' ' + operator + ' ' + this.getValue(key));
         if (!fn()) {
-          this.errors.pushObject(this.options.messages[this.MESSAGES[check]]);
+          this.errors.pushObject(this.renderMessageFor(key));
         }
       }
     }
