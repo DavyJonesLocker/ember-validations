@@ -16,37 +16,43 @@ var setValidityMixin = Ember.Mixin.create({
   }.on('init')
 });
 
-var ArrayValidator = Ember.Object.extend(setValidityMixin, {
+var pushValidatableObject = function(model, property) {
+  model.removeObserver(property, pushValidatableObject);
+  if (model.get(property).constructor === Array) {
+    this.validators.pushObject(ArrayValidatorProxy.create({model: this, property: property, content: this.get(property)}));
+  } else {
+    model.validators.pushObject(model.get(property));
+  }
+};
+
+var findValidator = function(validator) {
+  var klass = validator.classify();
+  return Ember.Validations.validators.local[klass] || Ember.Validations.validators.remote[klass];
+};
+
+var ArrayValidatorProxy = Ember.ArrayProxy.extend(setValidityMixin, {
   init: function() {
     this._super();
-    this.addObserver('validators.@each.isValid', this, this.setValidity);
+    this.addObserver('@each.isValid', this, this.setValidity);
     this.model.addObserver(''+this.property+'.[]', this, this.setValidity);
   },
   validate: function() {
     var promises;
 
-    promises = this.get('validators').map(function(validator) {
+    promises = this.get('content').map(function(validator) {
       return validator.validate();
     }).without(undefined);
 
     return Ember.RSVP.all(promises);
-  }.on('init')
+  }.on('init'),
+  validators: Ember.computed.alias('content')
 });
-
-var eventualValidator = function(sender, validator) {
-  if (this.get(validator).constructor === Array) {
-    this.removeObserver(validator, this);
-    this.validators.pushObject(ArrayValidator.create({model: this, property: validator, validators: this.get(validator)}));
-  } else if (this.get(validator).validate) {
-    this.removeObserver(validator, this);
-    this.validators.pushObject(this.get(validator));
-  }
-};
 
 Ember.Validations.Mixin = Ember.Mixin.create(setValidityMixin, {
   init: function() {
     this._super();
     this.errors = Ember.Validations.Errors.create();
+    this.validators = Ember.makeArray();
     this.isValid = undefined;
     if (this.get('validations') === undefined) {
       this.validations = {};
@@ -69,61 +75,33 @@ Ember.Validations.Mixin = Ember.Mixin.create(setValidityMixin, {
     return !this.get('isValid');
   }.property('isValid'),
   buildValidators: function() {
-    this.validators = Ember.makeArray();
-    if (this.validations.constructor === Array) {
-      this.buildCompositeValidators(this.validations);
-    } else {
-      this.buildPropertyValidators(this.validations);
-    }
-  },
-  buildCompositeValidators: function(validations) {
-    var i, validator;
+    var property, validator;
 
-    for (i = 0; i < validations.length; i++) {
-      validator = validations[i];
-
-      if (validator.constructor === Object) {
-        this.buildPropertyValidators(validator);
-      } else if (validator.constructor === String) {
-        if (this.get(validator) === undefined) {
-          this.addObserver(validator, this, eventualValidator);
-        } else if (this.get(validator).constructor === Array) {
-          this.validators.pushObject(ArrayValidator.create({model: this, property: validator, validators: this.get(validator)}));
-        } else {
-          this.validators.pushObject(this.get(validator));
-        }
-      } else if (validator.validate === undefined) {
-        this.validators.pushObject(validator.create({model: this}));
+    for (property in this.validations) {
+      if (this.validations[property].constructor === Object) {
+        this.buildRuleValidator(property);
       } else {
-        this.validators.pushObject(validator);
+        this.buildObjectValidator(property);
       }
     }
   },
-  buildPropertyValidators: function(validations) {
-    var findValidator, property, validator;
-
-    findValidator = function(validator) {
-      var klass = validator.classify();
-      return Ember.Validations.validators.local[klass] || Ember.Validations.validators.remote[klass];
-    };
-
-    for (property in validations) {
-      if (validations.hasOwnProperty(property)) {
-        for (validator in validations[property]) {
-          if (validations[property].hasOwnProperty(validator)) {
-            this.validators.pushObject(findValidator(validator).create({model: this, property: property, options: validations[property][validator]}));
-          }
-        }
+  buildRuleValidator: function(property) {
+    var validator;
+    for (validator in this.validations[property]) {
+      if (this.validations[property].hasOwnProperty(validator)) {
+        this.validators.pushObject(findValidator(validator).create({model: this, property: property, options: this.validations[property][validator]}));
       }
+    }
+  },
+  buildObjectValidator: function(property) {
+    if (this.get(property) === undefined) {
+      this.addObserver(property, this, pushValidatableObject);
+    } else {
+      pushValidatableObject(this, property);
     }
   },
   validate: function() {
-    var promises;
-
-    // this is not ideal
-    this.set('isValid', true);
-
-    promises = this.validators.map(function(validator) {
+    var promises = this.validators.map(function(validator) {
       return validator.validate();
     }).without(undefined);
 
