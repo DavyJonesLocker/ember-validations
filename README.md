@@ -2,14 +2,6 @@
 
 [![Build Status](https://secure.travis-ci.org/dockyard/ember-validations.png?branch=master)](http://travis-ci.org/dockyard/ember-validations)
 
-Validation support for Ember Objects
-
-Development on this library will be on-going until `1.0`. We follow
-`Semantic Versioning` so expect backwards incompatible changes between
-minor version bumps. Patch version bumps will not introduce backwards
-incompatible changes but older minor version will not be actively
-supported.
-
 ## Getting a build ##
 
 [Please choose from our list of builds for Ember-Validations](https://github.com/dockyard/ember-builds/tree/master/validations)
@@ -31,8 +23,7 @@ The builds will be in the `dist/` directory.
 
 ## Looking for help? ##
 
-If it is a bug [please open an issue on
-GitHub](https://github.com/dockyard/ember-validations/issues).
+If it is a bug [please open an issue on GitHub](https://github.com/dockyard/ember-validations/issues).
 
 ## Usage ##
 
@@ -43,10 +34,11 @@ validations to:
 var App.User = Ember.Object.extend(Ember.Validations.Mixin);
 ```
 
-There are two ways to define validations. The first style allows you to
-pass an `Object`. The keys in the object should map to properties. The values of
-the keys should be an object of validations. The keys will be the
-validation name followed by the options:
+You define your validations as a JSON object on the object you want to
+validate. The keys in the object should map to properties. If you pass a
+JSON object as the value this will be seen as validation rules to apply
+to the property. If you pass `true` then the property itself will be
+seen as a validatable object.
 
 ```javascript
 App.User.reopen({
@@ -57,28 +49,9 @@ App.User.reopen({
     },
     age: {
       numericality: true
-    }
-  }
-});
-```
-
-The second style is more verbose but will allow you to add custom
-validators and paths to other validatable objects (like relationships,
-sub-controllers, etc...). You pass an array to `validations` with each
-member of the collection having the potential to become validatable
-objects.
-
-```javascript
-App.User.reopen({
-  validations: [
-    {
-      firstName: {
-        presence: true
-      }
     },
-    'profile',
-    AgeValidator
-  ]
+    profile: true
+  }
 });
 ```
 
