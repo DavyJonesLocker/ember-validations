@@ -84,6 +84,50 @@ test('can be mixed into an object controller', function() {
   equal(controller.get('isValid'), true);
 });
 
+module('Array controller');
+
+test('can be mixed into an array controller', function() {
+  var Controller, controller, container, user, UserController;
+  container = new Ember.Container();
+  UserController = Ember.ObjectController.extend(Ember.Validations.Mixin, {
+    validations: {
+      name: {
+        presence: true
+      }
+    }
+  });
+  container.register('controller:User', UserController);
+  Controller = Ember.ArrayController.extend(Ember.Validations.Mixin, {
+    itemController: 'User',
+    container: container,
+    validations: {
+      childControllers: true
+    }
+  });
+
+  Ember.run(function() {
+    controller = Controller.create();
+  });
+  equal(controller.get('isValid'), true);
+  user = Ember.Object.create();
+  Ember.run(function() {
+    controller.pushObject(user);
+  });
+  equal(controller.get('isValid'), false);
+  Ember.run(function() {
+    user.set('name', 'Brian');
+  });
+  equal(controller.get('isValid'), true);
+  Ember.run(function() {
+    user.set('name', undefined);
+  });
+  equal(controller.get('isValid'), false);
+  Ember.run(function() {
+    controller.get('content').removeObject(user);
+  });
+  equal(controller.get('isValid'), true);
+});
+
 var Profile, profile;
 
 module('Relationship validators', {
@@ -202,4 +246,10 @@ test('validates array of validable objects', function() {
   });
 
   equal(user.get('isValid'), false);
+
+  Ember.run(function() {
+    user.friends.removeObject(friend2);
+  });
+
+  equal(user.get('isValid'), true);
 });

@@ -1,6 +1,6 @@
 var setValidityMixin = Ember.Mixin.create({
   setValidity: function() {
-    if (this.get('validators').filterProperty('isValid', false).get('length') > 0) {
+    if (this.get('validators').compact().filterProperty('isValid', false).get('length') > 0) {
       if (this.get('isValid') === false) {
         this.notifyPropertyChange('isValid');
       } else {
@@ -19,7 +19,7 @@ var setValidityMixin = Ember.Mixin.create({
 var pushValidatableObject = function(model, property) {
   model.removeObserver(property, pushValidatableObject);
   if (model.get(property).constructor === Array) {
-    this.validators.pushObject(ArrayValidatorProxy.create({model: this, property: property, content: this.get(property)}));
+    model.validators.pushObject(ArrayValidatorProxy.create({model: model, property: property, content: model.get(property)}));
   } else {
     model.validators.pushObject(model.get(property));
   }
