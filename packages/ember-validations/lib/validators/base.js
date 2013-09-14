@@ -2,13 +2,13 @@ Ember.Validations.validators.Base = Ember.Object.extend({
   init: function() {
     this.set('errors', Ember.makeArray());
     this.isValid = undefined;
+    this._dependentValidationKeys = Ember.makeArray();
     this.conditionals = {
       'if': this.get('options.if'),
       unless: this.get('options.unless')
     };
     this.model.addObserver(this.property, this, this.validate);
   },
-  _dependentValidationKeys: Ember.makeArray(),
   addObserversForDependentValidationKeys: function() {
     this._dependentValidationKeys.forEach(function(key) {
       this.model.addObserver(key, this, this.validate);
@@ -17,7 +17,7 @@ Ember.Validations.validators.Base = Ember.Object.extend({
   pushDependentValidaionKeyToModel: function() {
     var model = this.get('model');
     if (model._dependentValidationKeys[this.property] === undefined) {
-      model._dependentValidationKeys[this.property] = Ember.A();
+      model._dependentValidationKeys[this.property] = Ember.makeArray();
     }
     model._dependentValidationKeys[this.property].addObjects(this._dependentValidationKeys);
   }.on('init'),

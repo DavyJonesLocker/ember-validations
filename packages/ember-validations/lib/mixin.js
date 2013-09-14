@@ -52,6 +52,7 @@ Ember.Validations.Mixin = Ember.Mixin.create(setValidityMixin, {
   init: function() {
     this._super();
     this.errors = Ember.Validations.Errors.create();
+    this._dependentValidationKeys = {};
     this.validators = Ember.makeArray();
     this.isValid = undefined;
     if (this.get('validations') === undefined) {
@@ -71,7 +72,6 @@ Ember.Validations.Mixin = Ember.Mixin.create(setValidityMixin, {
       });
     }, this);
   },
-  _dependentValidationKeys: {},
   isInvalid: function() {
     return !this.get('isValid');
   }.property('isValid'),
