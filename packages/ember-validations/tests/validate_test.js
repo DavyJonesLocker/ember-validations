@@ -132,17 +132,6 @@ var Profile, profile;
 
 module('Relationship validators', {
   setup: function() {
-    // AgeValidator = Ember.Validations.validators.Base.extend({
-      // property: 'age',
-      // options: {},
-      // errors: Ember.makeArray(),
-      // call: function() {
-        // if ((this.model.get('age') || 0) < 21) {
-          // this.errors.pushObject('cannot buy beer');
-        // }
-      // }
-    // });
-
     Profile = Ember.Object.extend(Ember.Validations.Mixin, {
       validations: {
         title: {

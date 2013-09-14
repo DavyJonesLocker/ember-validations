@@ -3,7 +3,7 @@ Ember.Validations.validators.local.Confirmation = Ember.Validations.validators.B
     this.originalProperty = this.property;
     this.property = this.property + 'Confirmation';
     this._super();
-    this.model.addObserver(this.originalProperty, this, this.validate);
+    this._dependentValidationKeys.pushObject(this.originalProperty);
     /*jshint expr:true*/
     if (this.options === true) {
       this.set('options', { attribute: this.originalProperty });
