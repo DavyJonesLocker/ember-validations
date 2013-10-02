@@ -1,6 +1,11 @@
 Ember.Validations.messages = {
   render: function(attribute, context) {
-    return Handlebars.compile(Ember.Validations.messages.defaults[attribute])(context);
+    var regex = new RegExp("{{(.*?)}}"),
+        attributeName = "";
+    if (regex.test(this.defaults[attribute])) {
+      attributeName = regex.exec(this.defaults[attribute])[1];
+    }
+    return this.defaults[attribute].replace(regex, context[attributeName]);
   },
   defaults: {
     inclusion: "is not included in the list",
