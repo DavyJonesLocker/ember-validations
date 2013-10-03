@@ -5,10 +5,6 @@
         "./dist/ember-validations.js",
         "./dist/ember-validations.min.js"
     ],
-    "ignore": [
-        ".jshintrc",
-        "**/*.txt"
-    ],
     "dependencies": {
         "ember": "~1.0.0"
     }
