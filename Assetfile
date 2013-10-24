@@ -17,6 +17,7 @@ distros.each do |name, modules|
 
     match "#{name}.js" do
       filter VersionInfo
+      filter EmberLicenseFilter
     end
 
     # Strip dev code
