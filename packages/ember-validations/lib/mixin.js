@@ -95,7 +95,7 @@ Ember.Validations.Mixin = Ember.Mixin.create(setValidityMixin, {
     }
   },
   buildObjectValidator: function(property) {
-    if (this.get(property) === undefined) {
+    if (Ember.isNone(this.get(property))) {
       this.addObserver(property, this, pushValidatableObject);
     } else {
       pushValidatableObject(this, property);
