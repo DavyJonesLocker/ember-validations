@@ -4,5 +4,9 @@ assetfile: 'Assetfile'
 testing_suites:
   default:
     - "package=all&jquery=1.7.2&extendprototypes=true"
+  all:
+    - "package=all&jquery=1.7.2&extendprototypes=true&emberchannel=release"
+    - "package=all&jquery=1.7.2&extendprototypes=true&emberchannel=beta"
+    - "package=all&jquery=1.7.2&extendprototypes=true&emberchannel=canary"
 testing_packages:
   - ember-validations
