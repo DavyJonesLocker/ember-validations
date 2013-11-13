@@ -40,17 +40,19 @@ test('isInvalid tracks isValid', function() {
 
 asyncTest('runs all validations', function() {
   Ember.run(function(){
-    user.validate().then(null, function(){
-      deepEqual(user.errors.get('firstName'), ["can't be blank", 'is the wrong length (should be 5 characters)']);
-      deepEqual(user.errors.get('lastName'), ["is invalid"]);
+    user.validate().then(null, function(errors){
+      deepEqual(errors.get('firstName'), ["can't be blank", 'is the wrong length (should be 5 characters)']);
+      deepEqual(errors.get('lastName'), ["is invalid"]);
       equal(user.get('isValid'), false);
       user.set('firstName', 'Bob');
-      user.validate('firstName').then(null, function(){
-        deepEqual(user.errors.get('firstName'), ['is the wrong length (should be 5 characters)']);
+      user.validate('firstName').then(null, function(errors){
+        deepEqual(errors.get('firstName'), ['is the wrong length (should be 5 characters)']);
         equal(user.get('isValid'), false);
         user.set('firstName', 'Brian');
         user.set('lastName', 'Cardarella');
-        user.validate().then(function(){
+        user.validate().then(function(errors){
+          deepEqual(errors.get('firstName'), []);
+          deepEqual(errors.get('lastName'), []);
           equal(user.get('isValid'), true);
           start();
         });

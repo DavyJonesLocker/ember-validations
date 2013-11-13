@@ -278,13 +278,13 @@ App.User = Ember.Object.extend(Ember.Validations.Mixin,
 });
 
 user = App.User.create();
-user.validate().then(function() {
+user.validate().then(null, function(errors) {
   user.get('isValid'); // false
-  user.errors.get('firstName'); // ["can't be blank"]
+  errors.get('firstName'); // ["can't be blank"]
   user.set('firstName', 'Brian');
-  user.validate().then(function() {
+  user.validate().then(function(errors) {
     user.get('isValid'); // true
-    user.errors.get('firstName'); // []
+    errors.get('firstName'); // []
   })
 })
 

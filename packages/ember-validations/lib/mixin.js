@@ -102,10 +102,13 @@ Ember.Validations.Mixin = Ember.Mixin.create(setValidityMixin, {
     }
   },
   validate: function() {
-    var promises = this.validators.map(function(validator) {
+    var self = this,
+        promises = this.validators.map(function(validator) {
       return validator.validate();
     }).without(undefined);
 
-    return Ember.RSVP.all(promises);
+    return Ember.RSVP.all(promises).then(function(){
+      return self.get('errors');
+    });
   }.on('init')
 });
