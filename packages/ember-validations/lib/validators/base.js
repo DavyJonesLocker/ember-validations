@@ -40,14 +40,14 @@ Ember.Validations.validators.Base = Ember.Object.extend({
         } else {
           this.set('isValid', false);
         }
-        return Ember.RSVP.reject();
+        return Ember.RSVP.reject(this.get('model.errors'));
       } else {
         if (this.get('isValid') === true) {
           this.notifyPropertyChange('isValid');
         } else {
           this.set('isValid', true);
         }
-        return Ember.RSVP.resolve();
+        return Ember.RSVP.resolve(this.get('model.errors'));
       }
     }
   }.on('init'),
