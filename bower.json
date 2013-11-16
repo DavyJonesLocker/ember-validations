@@ -1,0 +1,11 @@
+{
+    "name": "ember-validations-dockyard",
+    "version": "1.0.0.beta.1",
+    "main": [
+        "./dist/ember-validations.js",
+        "./dist/ember-validations.min.js"
+    ],
+    "dependencies": {
+        "ember": "~1.0.0"
+    }
+}
