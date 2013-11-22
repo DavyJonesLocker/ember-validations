@@ -271,20 +271,20 @@ After mixing in `Ember.Validations.Mixin` into your object it will now have a
 for the corresponding property. Errors messages will always be an array.
 
 ```javascript
-App.User = Ember.Object.extend(Ember.Validations.Mixin,
-  validations:
+App.User = Ember.Object.extend(Ember.Validations.Mixin, {
+  validations: {
     firstName: { presence: true }
   }
 });
 
 user = App.User.create();
-user.validate().then(null, function(errors) {
+user.validate().then(null, function() {
   user.get('isValid'); // false
-  errors.get('firstName'); // ["can't be blank"]
+  user.get('errors.firstName'); // ["can't be blank"]
   user.set('firstName', 'Brian');
-  user.validate().then(function(errors) {
+  user.validate().then(function() {
     user.get('isValid'); // true
-    errors.get('firstName'); // []
+    user.get('errors.firstName'); // []
   })
 })
 
