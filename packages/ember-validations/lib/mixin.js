@@ -17,11 +17,13 @@ var setValidityMixin = Ember.Mixin.create({
 });
 
 var pushValidatableObject = function(model, property) {
+  var content = model.get(property);
+
   model.removeObserver(property, pushValidatableObject);
-  if (model.get(property).constructor === Array) {
-    model.validators.pushObject(ArrayValidatorProxy.create({model: model, property: property, content: model.get(property)}));
+  if (Ember.isArray(content)) {
+    model.validators.pushObject(ArrayValidatorProxy.create({model: model, property: property, content: content}));
   } else {
-    model.validators.pushObject(model.get(property));
+    model.validators.pushObject(content);
   }
 };
 
