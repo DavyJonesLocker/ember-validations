@@ -33,22 +33,34 @@ Ember.Validations.validators.Base = Ember.Object.extend({
   validate: function() {
     if (this.canValidate()) {
       this.errors.clear();
-      this.call();
-      if (this.errors.length > 0) {
-        if (this.get('isValid') === false) {
-          this.notifyPropertyChange('isValid');
-        } else {
-          this.set('isValid', false);
-        }
-        return Ember.RSVP.reject(this.get('model.errors'));
+      var validation_result = this.call();
+      var validation_promise;      
+      if (validation_result && typeof validation_result === 'object' && validation_result.constructor === Ember.RSVP.Promise) {
+        validation_promise = validation_result;
       } else {
-        if (this.get('isValid') === true) {
-          this.notifyPropertyChange('isValid');
-        } else {
-          this.set('isValid', true);
-        }
-        return Ember.RSVP.resolve(this.get('model.errors'));
+        validation_promise = Ember.RSVP.Promise(function(resolve) {
+          resolve(validation_result);
+        });
       }
+      var self = this;
+      return validation_promise.then(function() {
+        if (self.errors.length > 0) {
+          if (self.get('isValid') === false) {
+            self.notifyPropertyChange('isValid');
+          } else {
+            self.set('isValid', false);
+          }
+          return Ember.RSVP.reject(self.get('model.errors'));
+        } else {
+          if (self.get('isValid') === true) {
+            self.notifyPropertyChange('isValid');
+          } else {
+            self.set('isValid', true);
+          }
+          return Ember.RSVP.resolve(self.get('model.errors'));
+        }
+        
+      });
     }
   }.on('init'),
   canValidate: function() {
