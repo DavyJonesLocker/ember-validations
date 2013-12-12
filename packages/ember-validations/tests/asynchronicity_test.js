@@ -6,18 +6,33 @@ var readable = function(s) {
   return "\n\n"+s.join("\n")+"\n\n";
 };
 
-QUnit.assert.occursAfter = function(second, first){
+QUnit.assert.occursAfter = function(second, first, optional){
   var ix_second = sequence.indexOf(second);
-  var ix_first = sequence.indexOf(first);
+  var ix_first = -1;
+  first = [].concat(first);
+  first.forEach(function(event) {
+    ix_first = Math.max(sequence.indexOf(event));
+  })
   var message;
-  if(ix_second < 0) {
-    message = second + " never occurred";
-  } else if(ix_first < 0) {
-    message = first + " never occurred";    
+  if(!optional && (ix_second < 0)) {
+    message = "'" + second + "' never occurred";
+  } else if(!optional && (ix_first < 0)) {
+    message = "'" + first + "' never occurred";    
   } else if(ix_second < ix_first) {
-    message = second + " occurs before " + first;
+    message = "'" + second + "' occurs before " + "'" + first + "'";
   }
-  QUnit.push( !message, message, second + " occurs after " + first, readable(sequence) );
+  QUnit.push( !message, message, 
+    "'" + second + "' to occur after " + "'" + first + "'", 
+    "in the sequence:" + readable(sequence) );
+};
+
+QUnit.assert.validSequence = function(){
+  QUnit.assert.occursAfter(s.test_end, s.test_start);
+  QUnit.assert.occursAfter(s.sync_end, s.sync_start);
+  QUnit.assert.occursAfter(s.set_isValid, 
+    [s.sync_validator_call_valid, s.sync_validator_call_invalid], true);
+  QUnit.assert.occursAfter(s.get_isValid, 
+    [s.sync_validator_call_valid, s.sync_validator_call_invalid], true);
 };
 
 var s = {
@@ -43,8 +58,6 @@ module('Validate test', {
        }
     }
 
-    
-    
     User = Ember.Object.extend(Ember.Validations.Mixin, {
       _isValid: true,
       isValid: function(key, value) {
@@ -101,7 +114,7 @@ module('Validate test', {
   }
 });
 
-asyncTest('work after validate is async when valid', function(assert) {
+asyncTest('work after validate is async', function(assert) {
   semaphore = 'valid';
   sequence.push(s.test_start);
   stop();
@@ -115,7 +128,59 @@ asyncTest('work after validate is async when valid', function(assert) {
     start();
   });
   sequence.push(s.test_end);
+  assert.validSequence();
   assert.occursAfter(
     s.work_after_valid, s.sync_end
   );
 });
+
+asyncTest('settling isValid after validate is async', function(assert) {
+  semaphore = 'valid';
+  sequence.push(s.test_start);
+  stop();
+  Ember.run(function(){
+    user.set('_isValid', false);
+    sequence.push(s.sync_start);
+    sequence.push(s.get_validate_promise);
+    var p = user.validate();
+    sequence.push(s.add_work_to_promise);
+    p.then(user.validWork, user.invalidWork);
+    sequence.push(s.sync_end);
+    start();
+  });
+  sequence.push(s.test_end);
+
+  assert.validSequence();
+
+  assert.occursAfter(
+    s.set_isValid, s.sync_end
+  );
+  
+});
+
+asyncTest('validator work is async', function(assert) {
+  semaphore = 'valid';
+  sequence.push(s.test_start);
+  stop();
+  Ember.run(function(){
+    user.set('_isValid', false);
+    sequence.push(s.sync_start);
+    sequence.push(s.get_validate_promise);
+    var p = user.validate();
+    sequence.push(s.add_work_to_promise);
+    p.then(user.validWork, user.invalidWork);
+    sequence.push(s.sync_end);
+    start();
+  });
+  sequence.push(s.test_end);
+
+  assert.validSequence();
+
+  assert.occursAfter(
+    s.sync_validator_call_valid, s.sync_end
+  );
+  
+});
+
+
+
