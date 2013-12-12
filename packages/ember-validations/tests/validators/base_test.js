@@ -29,3 +29,25 @@ test('generates _dependentValidationKeys on the model', function() {
   });
   deepEqual(model.get('_dependentValidationKeys'), {attribute: ['otherAttribute']});
 });
+
+test('inactive validators should be considered valid', function() {
+  var canValidate = true;
+  Ember.run(function() {
+    validator = CustomValidator.createWithMixins({
+      model: model,
+      property: 'attribute',
+      canValidate: function() {
+        return canValidate;
+      },
+      call: function() {
+        this.errors.pushObject("nope");
+      }
+    });
+  });
+  equal(validator.get('isValid'), false);
+  canValidate = false;
+  Ember.run(validator, 'validate');
+  equal(validator.get('isValid'), true);
+});
+
+

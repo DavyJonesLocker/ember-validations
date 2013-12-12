@@ -31,24 +31,24 @@ Ember.Validations.validators.Base = Ember.Object.extend({
     }
   },
   validate: function() {
+    this.errors.clear();
     if (this.canValidate()) {
-      this.errors.clear();
       this.call();
-      if (this.errors.length > 0) {
-        if (this.get('isValid') === false) {
-          this.notifyPropertyChange('isValid');
-        } else {
-          this.set('isValid', false);
-        }
-        return Ember.RSVP.reject(this.get('model.errors'));
+    }
+    if (this.errors.length > 0) {
+      if (this.get('isValid') === false) {
+        this.notifyPropertyChange('isValid');
       } else {
-        if (this.get('isValid') === true) {
-          this.notifyPropertyChange('isValid');
-        } else {
-          this.set('isValid', true);
-        }
-        return Ember.RSVP.resolve(this.get('model.errors'));
+        this.set('isValid', false);
       }
+      return Ember.RSVP.reject(this.get('model.errors'));
+    } else {
+      if (this.get('isValid') === true) {
+        this.notifyPropertyChange('isValid');
+      } else {
+        this.set('isValid', true);
+      }
+      return Ember.RSVP.resolve(this.get('model.errors'));
     }
   }.on('init'),
   canValidate: function() {
