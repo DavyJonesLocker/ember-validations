@@ -55,7 +55,7 @@ Ember.Validations.validators.Base = Ember.Object.extend({
     if (typeof(this.conditionals) === 'object') {
       if (this.conditionals['if']) {
         if (typeof(this.conditionals['if']) === 'function') {
-          return this.conditionals['if'](this.model);
+          return this.conditionals['if'](this.model, this.property);
         } else if (typeof(this.conditionals['if']) === 'string') {
           if (typeof(this.model[this.conditionals['if']]) === 'function') {
             return this.model[this.conditionals['if']]();
@@ -65,7 +65,7 @@ Ember.Validations.validators.Base = Ember.Object.extend({
         }
       } else if (this.conditionals.unless) {
         if (typeof(this.conditionals.unless) === 'function') {
-          return !this.conditionals.unless(this.model);
+          return !this.conditionals.unless(this.model, this.property);
         } else if (typeof(this.conditionals.unless) === 'string') {
           if (typeof(this.model[this.conditionals.unless]) === 'function') {
             return !this.model[this.conditionals.unless]();
