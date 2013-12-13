@@ -7,6 +7,7 @@ module('Conditional validations', {
 });
 
 asyncTest('if with function', function() {
+  expect(4);
   User.reopen({
     validations: {
       firstName: {
@@ -24,7 +25,11 @@ asyncTest('if with function', function() {
     user.validate().then(function(){
       deepEqual(user.errors.get('firstName'), []);
       var validator = user.validators.get('firstObject');
-      validator.conditionals['if'] = function(model) { return true; };
+      validator.conditionals['if'] = function(model, property) {
+        equal(user, model, "the conditional validator is passed the model being validated");
+        equal(property, 'firstName', "the conditional validator is passed the name of the property being validated");
+        return true;
+      };
       user.validate().then(null, function(){
         deepEqual(user.errors.get('firstName'), ["can't be blank"]);
         start();
@@ -90,6 +95,7 @@ asyncTest('if with function reference', function() {
 });
 
 asyncTest('unless with function', function() {
+  expect(4);
   User.reopen({
     validations: {
       firstName: {
@@ -107,7 +113,11 @@ asyncTest('unless with function', function() {
     user.validate().then(function(){
       deepEqual(user.errors.get('firstName'), []);
       var validator = user.validators.get('firstObject');
-      validator.conditionals['unless'] = function(model) { return false; };
+      validator.conditionals['unless'] = function(model, property) {
+        equal(user, model, "the conditional validator is passed the model being validated");
+        equal(property, 'firstName', "the conditional validator is passed the name of the property being validated");
+        return false;
+      };
       user.validate().then(null, function(){
         deepEqual(user.errors.get('firstName'), ["can't be blank"]);
         start();
