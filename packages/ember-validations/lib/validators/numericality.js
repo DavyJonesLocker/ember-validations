@@ -25,7 +25,7 @@ Ember.Validations.validators.local.Numericality = Ember.Validations.validators.B
       key = keys[index];
 
       if (isNaN(this.options[key])) {
-        this.model.addObserver(this.options[key], this, this.validate);
+        this.model.addObserver(this.options[key], this, this._validate);
       }
 
       if (this.options[key] !== undefined && this.options.messages[key] === undefined) {

@@ -23,12 +23,10 @@ var findValidator = function(validator) {
 
 var ArrayValidatorProxy = Ember.ArrayProxy.extend(setValidityMixin, {
   validate: function() {
-    var promises;
-
-    promises = this.get('content').map(function(validator) {
-      return validator.validate();
-    }).without(undefined);
-
+    return this._validate();
+  },
+  _validate: function() {
+    var promises = this.get('content').invoke('_validate').without(undefined);
     return Ember.RSVP.all(promises);
   }.on('init'),
   validators: Ember.computed.alias('content')
@@ -83,13 +81,17 @@ Ember.Validations.Mixin = Ember.Mixin.create(setValidityMixin, {
     }
   },
   validate: function() {
-    var self = this,
-        promises = this.validators.map(function(validator) {
-      return validator.validate();
-    }).without(undefined);
-
-    return Ember.RSVP.all(promises).then(function(){
-      return self.get('errors');
+    var self = this;
+    return this._validate().then(function(vals) {
+      var errors = self.get('errors');
+      if (vals.contains(false)) {
+        return Ember.RSVP.reject(errors);
+      }
+      return errors;
     });
+  },
+  _validate: function() {
+    var promises = this.validators.invoke('_validate').without(undefined);
+    return Ember.RSVP.all(promises);
   }.on('init')
 });

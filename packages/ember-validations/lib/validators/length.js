@@ -14,7 +14,7 @@ Ember.Validations.validators.local.Length = Ember.Validations.validators.Base.ex
     for (index = 0; index < this.messageKeys().length; index++) {
       key = this.messageKeys()[index];
       if (this.options[key] !== undefined && this.options[key].constructor === String) {
-        this.model.addObserver(this.options[key], this, this.validate);
+        this.model.addObserver(this.options[key], this, this._validate);
       }
     }
 

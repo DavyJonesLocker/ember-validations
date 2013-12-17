@@ -6,11 +6,11 @@ Ember.Validations.validators.Base = Ember.Object.extend({
       'if': this.get('options.if'),
       unless: this.get('options.unless')
     };
-    this.model.addObserver(this.property, this, this.validate);
+    this.model.addObserver(this.property, this, this._validate);
   },
   addObserversForDependentValidationKeys: function() {
     this._dependentValidationKeys.forEach(function(key) {
-      this.model.addObserver(key, this, this.validate);
+      this.model.addObserver(key, this, this._validate);
     }, this);
   }.on('init'),
   pushDependentValidaionKeyToModel: function() {
@@ -33,14 +33,26 @@ Ember.Validations.validators.Base = Ember.Object.extend({
     return this.get('errors.length') === 0;
   }.property('errors.length'),
   validate: function() {
+    var self = this;
+    return this._validate().then(function(success) {
+      // Convert validation failures to rejects.
+      var errors = self.get('model.errors');
+      if (success) {
+        return errors;
+      } else {
+        return Ember.RSVP.reject(errors);
+      }
+    });
+  },
+  _validate: function() {
     this.errors.clear();
     if (this.canValidate()) {
       this.call();
     }
     if (this.get('isValid')) {
-      return Ember.RSVP.resolve(this.get('model.errors'));
+      return Ember.RSVP.resolve(true);
     } else {
-      return Ember.RSVP.reject(this.get('model.errors'));
+      return Ember.RSVP.resolve(false);
     }
   }.on('init'),
   canValidate: function() {
