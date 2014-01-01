@@ -1,19 +1,8 @@
 var setValidityMixin = Ember.Mixin.create({
-  setValidity: function() {
-    if (this.get('validators').compact().filterProperty('isValid', false).get('length') > 0) {
-      if (this.get('isValid') === false) {
-        this.notifyPropertyChange('isValid');
-      } else {
-        this.set('isValid', false);
-      }
-    } else {
-      if (this.get('isValid') === true) {
-        this.notifyPropertyChange('isValid');
-      } else {
-        this.set('isValid', true);
-      }
-    }
-  }.on('init')
+  isValid: function() {
+    return this.get('validators').compact().filterProperty('isValid', false).get('length') === 0;
+  }.property('validators.@each.isValid'),
+  isInvalid: Ember.computed.not('isValid')
 });
 
 var pushValidatableObject = function(model, property) {
@@ -33,11 +22,6 @@ var findValidator = function(validator) {
 };
 
 var ArrayValidatorProxy = Ember.ArrayProxy.extend(setValidityMixin, {
-  init: function() {
-    this._super();
-    this.addObserver('@each.isValid', this, this.setValidity);
-    this.model.addObserver(''+this.property+'.[]', this, this.setValidity);
-  },
   validate: function() {
     var promises;
 
@@ -56,12 +40,10 @@ Ember.Validations.Mixin = Ember.Mixin.create(setValidityMixin, {
     this.errors = Ember.Validations.Errors.create();
     this._dependentValidationKeys = {};
     this.validators = Ember.makeArray();
-    this.isValid = undefined;
     if (this.get('validations') === undefined) {
       this.validations = {};
     }
     this.buildValidators();
-    this.addObserver('validators.@each.isValid', this, this.setValidity);
     this.validators.forEach(function(validator) {
       validator.addObserver('errors.[]', this, function(sender, key, value, context, rev) {
         var errors = Ember.makeArray();
@@ -74,9 +56,6 @@ Ember.Validations.Mixin = Ember.Mixin.create(setValidityMixin, {
       });
     }, this);
   },
-  isInvalid: function() {
-    return !this.get('isValid');
-  }.property('isValid'),
   buildValidators: function() {
     var property, validator;
 
