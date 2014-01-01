@@ -244,3 +244,66 @@ test('validates array of validable objects', function() {
 
   equal(user.get('isValid'), true);
 });
+
+
+test('revalidates arrays when they are replaced', function() {
+  var friend1, friend2;
+
+  Ember.run(function() {
+    user = User.create({
+      validations: {
+        friends: true
+      }
+    });
+  });
+
+  equal(user.get('isValid'), true);
+
+  Ember.run(function() {
+    user.set('friends', Ember.makeArray());
+  });
+
+  equal(user.get('isValid'), true);
+
+  Ember.run(function() {
+    friend1 = User.create({
+      validations: {
+        name: {
+          presence: true
+        }
+      }
+    });
+  });
+
+  Ember.run(function() {
+    user.set('friends', [friend1]);
+  });
+
+  equal(user.get('isValid'), false);
+
+  Ember.run(function() {
+    friend1.set('name', 'Stephanie');
+  });
+
+  equal(user.get('isValid'), true);
+
+  Ember.run(function() {
+    friend2 = User.create({
+      validations: {
+        name: {
+          presence: true
+        }
+      }
+    });
+
+    user.set('friends', [friend1, friend2]);
+  });
+
+  equal(user.get('isValid'), false);
+
+  Ember.run(function() {
+    user.friends.removeObject(friend2);
+  });
+
+  equal(user.get('isValid'), true);
+});

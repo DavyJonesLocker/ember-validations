@@ -21,7 +21,7 @@ var pushValidatableObject = function(model, property) {
 
   model.removeObserver(property, pushValidatableObject);
   if (Ember.isArray(content)) {
-    model.validators.pushObject(ArrayValidatorProxy.create({model: model, property: property, content: content}));
+    model.validators.pushObject(ArrayValidatorProxy.create({model: model, property: property, contentBinding: 'model.' + property}));
   } else {
     model.validators.pushObject(content);
   }
