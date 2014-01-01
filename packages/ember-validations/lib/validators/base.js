@@ -1,7 +1,6 @@
 Ember.Validations.validators.Base = Ember.Object.extend({
   init: function() {
     this.set('errors', Ember.makeArray());
-    this.isValid = undefined;
     this._dependentValidationKeys = Ember.makeArray();
     this.conditionals = {
       'if': this.get('options.if'),
@@ -30,25 +29,18 @@ Ember.Validations.validators.Base = Ember.Object.extend({
       return model.get(key);
     }
   },
+  isValid: function() {
+    return this.get('errors.length') === 0;
+  }.property('errors.length'),
   validate: function() {
     this.errors.clear();
     if (this.canValidate()) {
       this.call();
     }
-    if (this.errors.length > 0) {
-      if (this.get('isValid') === false) {
-        this.notifyPropertyChange('isValid');
-      } else {
-        this.set('isValid', false);
-      }
-      return Ember.RSVP.reject(this.get('model.errors'));
-    } else {
-      if (this.get('isValid') === true) {
-        this.notifyPropertyChange('isValid');
-      } else {
-        this.set('isValid', true);
-      }
+    if (this.get('isValid')) {
       return Ember.RSVP.resolve(this.get('model.errors'));
+    } else {
+      return Ember.RSVP.reject(this.get('model.errors'));
     }
   }.on('init'),
   canValidate: function() {
