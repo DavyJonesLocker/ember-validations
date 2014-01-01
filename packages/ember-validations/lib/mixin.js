@@ -1,6 +1,6 @@
 var setValidityMixin = Ember.Mixin.create({
   isValid: function() {
-    return this.get('validators').compact().filterProperty('isValid', false).get('length') === 0;
+    return this.get('validators').compact().filterBy('isValid', false).get('length') === 0;
   }.property('validators.@each.isValid'),
   isInvalid: Ember.computed.not('isValid')
 });
