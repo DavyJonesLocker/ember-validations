@@ -29,9 +29,7 @@ Ember.Validations.validators.Base = Ember.Object.extend({
       return model.get(key);
     }
   },
-  isValid: function() {
-    return this.get('errors.length') === 0;
-  }.property('errors.length'),
+  isValid: Ember.computed.empty('errors.[]'),
   validate: function() {
     var self = this;
     return this._validate().then(function(success) {
