@@ -1,3 +1,3 @@
 language: ruby
 before_script: sudo apt-get update && sudo apt-get install git
-script: rake test[all]
+script: bundle exec rake test[all]
