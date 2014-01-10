@@ -12,7 +12,7 @@ QUnit.assert.occursAfter = function(second, first, optional){
   first = [].concat(first);
   first.forEach(function(event) {
     ix_first = Math.max(sequence.indexOf(event));
-  })
+  });
   var message;
   if(!optional && (ix_second < 0)) {
     message = "'" + second + "' never occurred";
