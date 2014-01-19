@@ -1,0 +1,22 @@
+{
+  "name": "ember-validations",
+  "version": "1.0.0.beta.1",
+  "homepage": "https://github.com/dockyard/ember-validations",
+  "authors": [
+    "Brian Cardarella"
+  ],
+  "description": "Model validations for ember",
+  "main": "dist/ember-validations.js",
+  "keywords": [
+    "ember",
+    "validations"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
