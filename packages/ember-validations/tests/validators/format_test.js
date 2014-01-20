@@ -68,3 +68,39 @@ test('when no message is passed', function() {
   });
   deepEqual(validator.errors, ['is invalid']);
 });
+
+test('when matching dynamic regex', function() {
+  options = { 'with': function(model) { return model.get('regex'); } };
+  Ember.run(function() {
+    validator = Ember.Validations.validators.local.Format.create({model: model, property: 'attribute', options: options});
+    model.set('regex', /^\d{3}$/);
+    model.set('attribute', '123');
+  });
+  deepEqual(validator.errors, []);
+});
+
+test('when not matching dynamic regex', function() {
+  options = { 'with': function(model) { return model.get('regex'); } };
+  Ember.run(function() {
+    validator = Ember.Validations.validators.local.Format.create({model: model, property: 'attribute', options: options});
+    model.set('regex', /^\d{3}$/);
+    model.set('attribute', '12');
+  });
+  deepEqual(validator.errors, ['is invalid']);
+});
+
+test('when matching dynamic regex options are cloned', function() {
+  options = { 'with': function(model) { return model.get('regex'); } };
+  Ember.run(function() {
+    validator = Ember.Validations.validators.local.Format.create({model: model, property: 'attribute', options: options});
+    model.set('regex', /^\d{3}$/);
+    model.set('attribute', '123');
+  });
+  deepEqual(validator.errors, []);
+  Ember.run(function() {
+    validator = Ember.Validations.validators.local.Format.create({model: model, property: 'attribute', options: options});
+    model.set('regex', /^\d{2}$/);
+    model.set('attribute', '12');
+  });
+  deepEqual(validator.errors, []);
+});

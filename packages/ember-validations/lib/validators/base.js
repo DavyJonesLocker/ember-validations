@@ -7,6 +7,79 @@ Ember.Validations.validators.Base = Ember.Object.extend({
       unless: this.get('options.unless')
     };
     this.model.addObserver(this.property, this, this._validate);
+    this.abstractOptions();
+  },
+  abstractOptions: function() {
+    var key, keysToSkip = [];
+    for (key in this.conditionals) {
+      keysToSkip.push(key);
+    }
+    if (this.options && typeof(this.options) === 'object') {
+      // For memory/performance reasons, only clone original object if we have functions on the object
+      if (this.hasDynamic(this.options, keysToSkip)) {
+        // Clone the options object, so any transformations don't effect the original options
+        this.options = this.cloneObject(this.options, keysToSkip);
+        this.bindOptions(this.options);
+      }
+    }
+  },
+  hasDynamic: function(options, keysToSkip) {
+    for(var key in options) {
+      if (keysToSkip.contains(key))
+        continue;
+      var option = options[key];
+      // Dynamic option property
+      if (typeof(option) === 'object' && option.constructor === Object) {
+        if (this.hasDynamic(option, keysToSkip)) return true;
+      }
+      else if (typeof(option) === 'function') {
+        return true;
+      }
+    }
+  },
+  cloneObject: function(entity, keysToSkip) {
+    if (typeof(entity) === 'object' && entity.constructor === Object) {
+      var clone = {};
+      for (var key in entity) {
+        if (keysToSkip.contains(key)) continue; // Don't need to clone conditionals
+        if (entity.hasOwnProperty(key)) clone[key] = this.cloneObject(entity[key], keysToSkip);
+      }
+      return clone;
+    }
+    return entity;
+  },
+  bindOptions: function(options) {
+    for(var key in options) {
+      var option = options[key];
+      if (typeof(option) === 'object' && option.constructor === Object) {
+        this.bindOptions(option);
+      }
+      else if (typeof(option) === 'function') {
+        this.bindOption(options, key);
+      }
+    }
+  },
+  bindOption: function(options, key) {
+    var option = options[key];
+    if (delete options[key]) {
+      var me = this;
+      var getter = function() { 
+        return option(me.model); 
+      };
+      if (Object.defineProperty) {
+        Object.defineProperty(options, key, {
+          get: getter,
+          enumerable: true,
+          configurable: true
+        });
+      }
+      else if (Object.prototype.__defineGetter__) {
+        Object.prototype.__defineGetter__.call(options, key, getter);
+      } else {
+        // Revert, getter/setter not supported
+        options[key] = option;
+      }
+    }
   },
   addObserversForDependentValidationKeys: function() {
     this._dependentValidationKeys.forEach(function(key) {

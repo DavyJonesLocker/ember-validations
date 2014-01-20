@@ -33,6 +33,15 @@ test('when allowed length is 3 and value length is 4', function() {
   deepEqual(validator.errors, ['failed validation']);
 });
 
+test('when allowed length is 3 and value length is 4 with dynamic message', function() {
+  options = { messages: { wrongLength: function(model) { return model.get("attribute") + ' is not valid'; } }, is: 3 };
+  Ember.run(function() {
+    validator = Ember.Validations.validators.local.Length.create({model: model, property: 'attribute', options: options});
+    model.set('attribute', '1234');
+  });
+  deepEqual(validator.errors, ['1234 is not valid']);
+});
+
 test('when allowed length is 3 and value length is 2', function() {
   options = { messages: { wrongLength: 'failed validation' }, is: 3 };
   Ember.run(function() {
