@@ -4,7 +4,7 @@
 
 ## Getting a build ##
 
-[Please choose from our list of builds for Ember-Validations](https://builds.dockyard.com)
+[Please choose from our list of builds for Ember-Validations](http://builds.dockyard.com)
 
 ## Building yourself ##
 
