@@ -13,7 +13,7 @@ Ember.Validations.validators.Base = Ember.Object.extend({
       this.model.addObserver(key, this, this._validate);
     }, this);
   }.on('init'),
-  pushDependentValidaionKeyToModel: function() {
+  pushDependentValidationKeyToModel: function() {
     var model = this.get('model');
     if (model._dependentValidationKeys[this.property] === undefined) {
       model._dependentValidationKeys[this.property] = Ember.makeArray();
