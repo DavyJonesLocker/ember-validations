@@ -3,7 +3,7 @@ Ember.Validations.validators.local.Url = Ember.Validations.validators.Base.exten
     this._super();
 
     if (this.get('options.message') === undefined) {
-      this.set('options.message', Ember.Validations.messages.render('inclusion', this.options));
+      this.set('options.message', Ember.Validations.messages.render('url', this.options));
     }
 
     if (this.get('options.protocols') === undefined) {
