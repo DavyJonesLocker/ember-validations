@@ -1,4 +1,9 @@
 Ember.Validations.validators.local.Url = Ember.Validations.validators.Base.extend({
+  regex_str: '',
+
+  regexp: null,
+  regexp_ip: null,
+
   init: function() {
     this._super();
 
@@ -9,8 +14,8 @@ Ember.Validations.validators.local.Url = Ember.Validations.validators.Base.exten
     if (this.get('options.protocols') === undefined) {
       this.set('options.protocols', ['http', 'https']);
     }
-  },
-  call: function() {
+
+    // Regular Expression Parts
     var dec_octet = '(25[0-5]|2[0-4][0-9]|[0-1][0-9][0-9]|[1-9][0-9]|[0-9])'; // 0-255
     var ipaddress = '(' + dec_octet + '(\\.' + dec_octet + '){3})';
     var hostname = '([a-zA-Z0-9\\-]+\\.)+([a-zA-Z]{2,})';
@@ -18,13 +23,12 @@ Ember.Validations.validators.local.Url = Ember.Validations.validators.Base.exten
     var characters = 'a-zA-Z0-9$\\-_.+!*\'(),;:@&=';
     var segment = '([' + characters + ']|' + encoded + ')*';
 
+    // Build Regular Expression
     var regex_str = '^';
 
-    // Build Regular Expression
     if (this.get('options.domainOnly') === true) {
       regex_str += hostname;
     } else {
-      regex_str += '^';
       regex_str += '(' + this.get('options.protocols').join('|') + '):\\/\\/'; // Protocol
 
       // Username and password
@@ -45,17 +49,20 @@ Ember.Validations.validators.local.Url = Ember.Validations.validators.Base.exten
       }
 
       regex_str += '(\\/';
-      regex_str += '(' + segment + '(\\/' + segment + ')*)?';
-      regex_str += '(\\?' + '([' + characters + '/?]|' + encoded + ')*)?';
-      regex_str += '(\\#' + '([' + characters + '/?]|' + encoded + ')*)?';
+      regex_str += '(' + segment + '(\\/' + segment + ')*)?'; // Path
+      regex_str += '(\\?' + '([' + characters + '/?]|' + encoded + ')*)?'; // Query
+      regex_str += '(\\#' + '([' + characters + '/?]|' + encoded + ')*)?'; // Anchor
       regex_str += ')?';
     }
 
     regex_str += '$';
 
+    // RegExp
+    this.regexp = new RegExp(regex_str);
+    this.regexp_ip = new RegExp(ipaddress);
+  },
+  call: function() {
     var url = this.model.get(this.property);
-    var regexp = new RegExp(regex_str);
-    var regexp_ip = new RegExp(ipaddress);
 
     if (Ember.isEmpty(url)) {
       if (this.get('options.allowBlank') !== true) {
@@ -63,13 +70,13 @@ Ember.Validations.validators.local.Url = Ember.Validations.validators.Base.exten
       }
     } else {
       if (this.get('options.allowIp') !== true) {
-        if (regexp_ip.test(url)) {
+        if (this.regexp_ip.test(url)) {
           this.errors.pushObject(this.get('options.message'));
           return;
         }
       }
 
-      if (!regexp.test(url)) {
+      if (!this.regexp.test(url)) {
         this.errors.pushObject(this.get('options.message'));
       }
     }
