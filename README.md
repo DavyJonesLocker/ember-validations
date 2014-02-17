@@ -218,6 +218,25 @@ presence: { message: 'must not be blank' }
 
 *Not yet implemented.*
 
+### URL ##
+
+Validates the property has a value that is a URL.
+
+#### Options ####
+  * `allowBlank` - If `true` skips validation if value is empty
+  * `allowIp` - Passing `true` will validate URLs using IP address. By default, IP addresses will be invalid.
+  * `allowUserPass` - Passing `true` will validate URLs with username / passwords. By default, usernames and password will be invalid.
+  * `allowPort` - If `true` will validate URLs with ports. By default, URLs with ports will be invalid.
+  * `domainOnly` - If `true` will only allow domains/sub-domains to be valid. URLs with protocols, ports or paths will be invalid.
+  * `protocols` - An array with accepted protocols. Default protocols are `http` and `https`.
+
+```javascript
+// Examples
+url { allowUserPass: true }
+url { allowBlank: true, allowIp: true, allowPort: true, protocols: ['http', 'https', 'ftp'] }
+url { domainOnly: true }
+```
+
 ### Conditional Validators ##
 
 Each validator can take an `if` or an `unless` in its `options` hash.
