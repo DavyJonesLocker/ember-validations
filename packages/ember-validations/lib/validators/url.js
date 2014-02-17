@@ -1,6 +1,4 @@
 Ember.Validations.validators.local.Url = Ember.Validations.validators.Base.extend({
-  regex_str: '',
-
   regexp: null,
   regexp_ip: null,
 
