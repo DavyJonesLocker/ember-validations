@@ -45,9 +45,9 @@ Ember.Validations.validators.local.Url = Ember.Validations.validators.Base.exten
       }
 
       regex_str += '(\\/';
-      regex_str +=    '(' + segment + '(\\/' + segment + ')*)?';
-      regex_str +=    '(\\?' + '([' + characters + '/?]|' + encoded + ')*)?';
-      regex_str +=    '(\\#' + '([' + characters + '/?]|' + encoded + ')*)?';
+      regex_str += '(' + segment + '(\\/' + segment + ')*)?';
+      regex_str += '(\\?' + '([' + characters + '/?]|' + encoded + ')*)?';
+      regex_str += '(\\#' + '([' + characters + '/?]|' + encoded + ')*)?';
       regex_str += ')?';
     }
 
