@@ -11,12 +11,12 @@ Ember.Validations.validators.local.Url = Ember.Validations.validators.Base.exten
     }
   },
   call: function() {
-    var dec_octet = "(25[0-5]|2[0-4][0-9]|[0-1][0-9][0-9]|[1-9][0-9]|[0-9])"; // 0-255
-    var ipaddress = "(" + dec_octet + "(\\." + dec_octet + "){3})";
-    var hostname = "([a-zA-Z0-9\\-]+\\.)+([a-zA-Z]{2,})";
-    var encoded = "%[0-9a-fA-F]{2}";
-    var characters = "a-zA-Z0-9$\\-_.+!*'(),;:@&=";
-    var segment = "([" + characters + "]|" + encoded + ")*";
+    var dec_octet = '(25[0-5]|2[0-4][0-9]|[0-1][0-9][0-9]|[1-9][0-9]|[0-9])'; // 0-255
+    var ipaddress = '(' + dec_octet + '(\\.' + dec_octet + '){3})';
+    var hostname = '([a-zA-Z0-9\\-]+\\.)+([a-zA-Z]{2,})';
+    var encoded = '%[0-9a-fA-F]{2}';
+    var characters = 'a-zA-Z0-9$\\-_.+!*\'(),;:@&=';
+    var segment = '([' + characters + ']|' + encoded + ')*';
 
     var regex_str = '^';
 
@@ -25,33 +25,33 @@ Ember.Validations.validators.local.Url = Ember.Validations.validators.Base.exten
       regex_str += hostname;
     } else {
       regex_str += '^';
-      regex_str += "(" + this.get('options.protocols').join('|') + "):\\/\\/"; // Protocol
+      regex_str += '(' + this.get('options.protocols').join('|') + '):\\/\\/'; // Protocol
 
       // Username and password
       if (this.get('options.allowUserPass') === true) {
-        regex_str += "(([a-zA-Z0-9$\\-_.+!*'(),;:&=]|" + encoded + ")+@)?"; // Username & passwords
+        regex_str += '(([a-zA-Z0-9$\\-_.+!*\'(),;:&=]|' + encoded + ')+@)?'; // Username & passwords
       }
 
       // IP Addresses?
       if (this.get('options.allowIp') === true) {
-        regex_str += "(" + hostname + "|" + ipaddress + ")"; // Hostname OR IP
+        regex_str += '(' + hostname + '|' + ipaddress + ')'; // Hostname OR IP
       } else {
-        regex_str += "(" + hostname + ")"; // Hostname only
+        regex_str += '(' + hostname + ')'; // Hostname only
       }
 
       // Ports
       if (this.get('options.allowPort') === true) {
-        regex_str += "(:[0-9]+)?"; // Port
+        regex_str += '(:[0-9]+)?'; // Port
       }
 
-      regex_str += "(\\/";
-      regex_str +=    "(" + segment + "(\\/" + segment + ")*)?";
-      regex_str +=    "(\\?" + "([" + characters + "/?]|" + encoded + ")*)?";
-      regex_str +=    "(\\#" + "([" + characters + "/?]|" + encoded + ")*)?";
-      regex_str += ")?";
+      regex_str += '(\\/';
+      regex_str +=    '(' + segment + '(\\/' + segment + ')*)?';
+      regex_str +=    '(\\?' + '([' + characters + '/?]|' + encoded + ')*)?';
+      regex_str +=    '(\\#' + '([' + characters + '/?]|' + encoded + ')*)?';
+      regex_str += ')?';
     }
 
-    regex_str += "$";
+    regex_str += '$';
 
     var url = this.model.get(this.property);
     var regexp = new RegExp(regex_str);
