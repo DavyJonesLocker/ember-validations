@@ -100,6 +100,17 @@ confirmation: true
 confirmation: { message: 'you must confirm' }
 ```
 
+### Email ###
+Validates an email address.
+
+#### Options ####
+  * `allowBlank` - If `true` skips validation if value is empty
+
+```javascript
+// Examples
+email: { allowBlank: true }
+```
+
 ### Exclusion ###
 A list of values that are not allowed
 
