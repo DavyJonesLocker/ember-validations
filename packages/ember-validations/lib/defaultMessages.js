@@ -29,6 +29,7 @@ Ember.Validations.messages = {
     otherThan: "must be other than {{count}}",
     odd: "must be odd",
     even: "must be even",
-    url: "is not a valid URL"
+    url: "is not a valid URL",
+    email: "is not a valid email address"
   }
 };
