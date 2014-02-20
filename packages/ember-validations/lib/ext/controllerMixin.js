@@ -1,7 +1,7 @@
 Ember.ControllerMixin.reopen({
   childControllers: Ember.A(),
   setupAsChildController: function() {
-    if (this.parentController) {
+    if (this.parentController && this.parentController.childControllers) {
       this.parentController.childControllers.pushObject(this);
       this.reopen({
         willDestroy: function() {
