@@ -309,6 +309,37 @@ user.validate().then(null, function() {
 
 ```
 
+## Integation with Ember Data ##
+
+Here's an example of how to add validations to an Ember Data model:
+
+```javascript
+App.User = DS.Model.extend(Ember.Validations.Mixin, {
+  firstName: DS.attr('string'),
+  age: DS.attr('number'),
+  
+  validations: {
+    firstName: {
+      presence: true,
+      length: { minimum: 5 }
+    },
+    age: {
+      numericality: true
+    }
+  }
+});
+```
+
+Be aware that errors from Ember Validations don't currently work with Ember Data validations. Templates that include code like this:
+
+```handlebars
+{{#each error in errors.firstName}}
+  {{error.message}}
+{{/each}}
+```
+
+Won't display the errors. This is a known issue, and support for Ember Data errors is under development.
+
 ## Authors ##
 
 * [Brian Cardarella](http://twitter.com/bcardarella)
