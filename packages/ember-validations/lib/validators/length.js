@@ -17,8 +17,12 @@ Ember.Validations.validators.local.Length = Ember.Validations.validators.Base.ex
         this.model.addObserver(this.options[key], this, this._validate);
       }
     }
-
-    this.tokenizedLength = new Function('value', 'return (value || "").' + (this.options.tokenizer || 'split("")') + '.length');
+    
+    if (this.options.tokenizer) {
+      this.tokenizedLength = new Function('value', 'return ' + this.options.tokenizer + '(value || "").length');
+    } else {
+      this.tokenizedLength = new Function('value', 'return (value || "").split("").length');
+    }
   },
   CHECKS: {
     'is'      : '==',
