@@ -38,10 +38,10 @@ Ember.Validations.validators.local.Length = Ember.Validations.validators.Base.ex
     }
   },
   messageKeys: function() {
-    return Object.keys(this.MESSAGES);
+    return Ember.keys(this.MESSAGES);
   },
   checkKeys: function() {
-    return Object.keys(this.CHECKS);
+    return Ember.keys(this.CHECKS);
   },
   renderMessageFor: function(key) {
     var options = {count: this.getValue(key)}, _key;
