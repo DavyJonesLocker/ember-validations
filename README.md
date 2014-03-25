@@ -27,21 +27,22 @@ If it is a bug [please open an issue on GitHub](https://github.com/dockyard/embe
 
 ## Usage ##
 
-You need to mixin `Ember.Validations.Mixin` into any object you want to add
+You need to mixin `Ember.Validations.Mixin` into any controller you want to add
 validations to:
 
 ```javascript
-var App.User = Ember.Object.extend(Ember.Validations.Mixin);
+var App.UserController = Ember.ObjectController.extend(Ember.Validations.Mixin);
 ```
 
-You define your validations as a JSON object on the object you want to
-validate. The keys in the object should map to properties. If you pass a
+You define your validations as a JSON object. They should be added to
+the controller that represents the model in question. 
+The keys in the object should map to properties. If you pass a
 JSON object as the value this will be seen as validation rules to apply
 to the property. If you pass `true` then the property itself will be
 seen as a validatable object.
 
 ```javascript
-App.User.reopen({
+App.UserController.reopen({
   validations: {
     firstName: {
       presence: true,
