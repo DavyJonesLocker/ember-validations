@@ -103,7 +103,7 @@ test('can be mixed into an array controller', function() {
     itemController: 'User',
     container: container,
     validations: {
-      childControllers: true
+      '[]': true
     }
   });
 
