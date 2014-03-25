@@ -18,7 +18,13 @@ Ember.Validations.validators.local.Length = Ember.Validations.validators.Base.ex
       }
     }
 
-    this.tokenizedLength = new Function('value', 'return (value || "").' + (this.options.tokenizer || 'split("")') + '.length');
+    this.options.tokenizer = this.options.tokenizer || function(value) { return value.split(''); };
+    // if (typeof(this.options.tokenizer) === 'function') {
+      // debugger;
+      // // this.tokenizedLength = new Function('value', 'return '
+    // } else {
+      // this.tokenizedLength = new Function('value', 'return (value || "").' + (this.options.tokenizer || 'split("")') + '.length');
+    // }
   },
   CHECKS: {
     'is'      : '==',
@@ -72,7 +78,7 @@ Ember.Validations.validators.local.Length = Ember.Validations.validators.Base.ex
           continue;
         }
 
-        fn = new Function('return ' + this.tokenizedLength(this.model.get(this.property)) + ' ' + operator + ' ' + this.getValue(key));
+        fn = new Function('return ' + this.options.tokenizer(this.model.get(this.property)).length + ' ' + operator + ' ' + this.getValue(key));
         if (!fn()) {
           this.errors.pushObject(this.renderMessageFor(key));
         }
