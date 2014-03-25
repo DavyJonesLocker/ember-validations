@@ -326,3 +326,12 @@ test('when even and no message is passed', function() {
   });
   deepEqual(validator.errors, ['must be even']);
 });
+
+test('when other messages are passed but not a numericality message', function() {
+  options = { messages: { greaterThan: 'failed validation' } };
+  Ember.run(function() {
+    validator = Ember.Validations.validators.local.Numericality.create({model: model, property: 'attribute', options: options});
+    model.set('attribute', 'abc');
+  });
+  deepEqual(validator.errors, ['is not a number']);
+});
