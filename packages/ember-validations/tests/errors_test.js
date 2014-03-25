@@ -13,6 +13,9 @@ module('Errors test', {
         }
       }
     });
+  },
+  teardown: function() {
+    delete Ember.I18n;
   }
 });
 
@@ -94,5 +97,4 @@ test('validations use Ember.I18n.t to render the message if Ember.I18n is presen
   });
   equal(user.get('isValid'), false);
   deepEqual(user.get('errors.age'), ['ist keine Zahl']);
-  delete Ember.I18n;
 });
