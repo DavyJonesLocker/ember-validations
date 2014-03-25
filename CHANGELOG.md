@@ -2,3 +2,4 @@
 
 * Addition of URL validator.
 * Support i18n
+* Fixes tokenized length function
