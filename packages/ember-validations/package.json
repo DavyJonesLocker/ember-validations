@@ -4,7 +4,7 @@
   "description": "Ember Validations provides Validation support for Ember Data",
   "homepage": "https://github.com/dockyar/ember-validations",
   "author": "Brian Cardarella",
-  "version": "1.0.0.beta.1",
+  "version": "1.0.0.beta.2",
 
   "directories": {
     "lib": "lib"
