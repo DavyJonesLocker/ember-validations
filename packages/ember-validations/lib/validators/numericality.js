@@ -16,6 +16,10 @@ Ember.Validations.validators.local.Numericality = Ember.Validations.validators.B
       this.options.messages = { numericality: Ember.Validations.messages.render('notANumber', this.options) };
     }
 
+    if (this.options.messages.numericality === undefined) {
+      this.options.messages.numericality = Ember.Validations.messages.render('notANumber', this.options);
+    }
+
     if (this.options.onlyInteger !== undefined && this.options.messages.onlyInteger === undefined) {
       this.options.messages.onlyInteger = Ember.Validations.messages.render('notAnInteger', this.options);
     }
