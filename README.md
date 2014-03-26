@@ -35,7 +35,7 @@ var App.UserController = Ember.ObjectController.extend(Ember.Validations.Mixin);
 ```
 
 You define your validations as a JSON object. They should be added to
-the controller that represents the model in question. 
+the controller that represents the model in question.
 The keys in the object should map to properties. If you pass a
 JSON object as the value this will be seen as validation rules to apply
 to the property. If you pass `true` then the property itself will be
