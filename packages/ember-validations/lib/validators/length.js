@@ -1,4 +1,4 @@
-Ember.Validations.validators.local.Length = Ember.Validations.validators.Base.extend({
+Ember.Validations.validators.local.Length = Ember.Validations.validators.LocalValidator.extend({
   init: function() {
     var index, key;
     this._super();
