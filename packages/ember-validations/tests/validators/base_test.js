@@ -3,7 +3,7 @@ var model, Model, options, CustomValidator, validator;
 module('Base Validator', {
   setup: function() {
     Model = Ember.Object.extend(Ember.Validations.Mixin);
-    CustomValidator = Ember.Validations.validators.Base.extend({
+    CustomValidator = Ember.Validations.validators.LocalValidator.extend({
       init: function() {
         this._super();
         this._dependentValidationKeys.pushObject('otherAttribute');

@@ -33,6 +33,8 @@ Ember.Validations.messages = {
     otherThan: "must be other than {{count}}",
     odd: "must be odd",
     even: "must be even",
+    defaultRemoteValidation: "failed remote validation",
+    uniqueness: "has already been taken",
     url: "is not a valid URL"
   }
 };

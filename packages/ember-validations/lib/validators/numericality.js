@@ -1,4 +1,4 @@
-Ember.Validations.validators.local.Numericality = Ember.Validations.validators.Base.extend({
+Ember.Validations.validators.local.Numericality = Ember.Validations.validators.LocalValidator.extend({
   init: function() {
     /*jshint expr:true*/
     var index, keys, key;
