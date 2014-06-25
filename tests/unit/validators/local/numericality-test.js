@@ -336,6 +336,15 @@ test('when other messages are passed but not a numericality message', function()
   deepEqual(validator.errors, ['is not a number']);
 });
 
+test('when greaterThan fails and a greaterThan message is passed but not a numericality message', function() {
+  options = { greaterThan: 11, messages: { greaterThan: 'custom message' } };
+  Ember.run(function() {
+    validator = Numericality.create({model: model, property: 'attribute', options: options});
+    model.set('attribute', 10);
+  });
+  deepEqual(validator.errors, ['custom message']);
+});
+
 test("numericality validators don't call addObserver on null props", function() {
   expect(1);
 

@@ -21,7 +21,7 @@ export default Base.extend({
 
     if (this.options.messages === undefined || this.options.messages.numericality === undefined) {
       this.options.messages = this.options.messages || {};
-      this.options.messages = { numericality: Messages.render('notANumber', this.options) };
+      this.options.messages.numericality = Messages.render('notANumber', this.options);
     }
 
     if (this.options.onlyInteger !== undefined && this.options.messages.onlyInteger === undefined) {
