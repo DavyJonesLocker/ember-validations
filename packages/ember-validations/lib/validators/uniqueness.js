@@ -1,4 +1,11 @@
 Ember.Validations.validators.remote.Uniqueness = Ember.Validations.validators.RemoteValidator.extend({
+  init: function(){
+    this._super();
+
+    if (this.options.message === undefined) {
+      this.options.message = Ember.Validations.messages.render('uniqueness', this.options);
+    }    
+  },
   setDefaultOptions: function() {
     var self         = this,
         propertyData = {};
@@ -10,7 +17,6 @@ Ember.Validations.validators.remote.Uniqueness = Ember.Validations.validators.Re
         // Would like some feedback on a good default url endpoint for validation.
         // Was originally thinking something Ember.Router.namespace + this.property + '/uniqueness'
         // url: '/api/v1/' + this.property + '/uniqueness',
-        message: Ember.Validations.messages.defaults.uniqueness,
         debounce: 300,
         errorOnStatus: [404, 422, 500],
         data: {
