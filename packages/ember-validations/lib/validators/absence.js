@@ -1,4 +1,4 @@
-Ember.Validations.validators.local.Absence = Ember.Validations.validators.Base.extend({
+Ember.Validations.validators.local.Absence = Ember.Validations.validators.LocalValidator.extend({
   init: function() {
     this._super();
     /*jshint expr:true*/

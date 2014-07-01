@@ -1,4 +1,4 @@
-Ember.Validations.validators.local.Inclusion = Ember.Validations.validators.Base.extend({
+Ember.Validations.validators.local.Inclusion = Ember.Validations.validators.LocalValidator.extend({
   init: function() {
     this._super();
     if (this.options.constructor === Array) {

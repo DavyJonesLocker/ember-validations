@@ -43,15 +43,11 @@ Ember.Validations.validators.Base = Ember.Object.extend({
     });
   },
   _validate: function() {
-    this.errors.clear();
-    if (this.canValidate()) {
-      this.call();
-    }
-    if (this.get('isValid')) {
-      return Ember.RSVP.resolve(true);
-    } else {
-      return Ember.RSVP.resolve(false);
-    }
+   try {
+     throw '_validate function not implemented';
+   } catch(error) {
+     Ember.Logger.error(error);
+   }
   }.on('init'),
   canValidate: function() {
     if (typeof(this.conditionals) === 'object') {
