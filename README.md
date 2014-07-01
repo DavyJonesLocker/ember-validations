@@ -233,9 +233,10 @@ Validates the property has a value that is a URL.
 
 ```javascript
 // Examples
-url { allowUserPass: true }
-url { allowBlank: true, allowIp: true, allowPort: true, protocols: ['http', 'https', 'ftp'] }
-url { domainOnly: true }
+url: true
+url: { allowUserPass: true }
+url: { allowBlank: true, allowIp: true, allowPort: true, protocols: ['http', 'https', 'ftp'] }
+url: { domainOnly: true }
 ```
 
 ### Conditional Validators ##

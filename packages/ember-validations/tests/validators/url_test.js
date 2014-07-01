@@ -254,3 +254,24 @@ test('when IP not allowed', function() {
   });
   deepEqual(validator.errors, ['failed validation']);
 });
+
+
+// Test without options true
+
+test('when options is true and URL is invalid', function() {
+  options = true;
+  Ember.run(function() {
+    validator = Ember.Validations.validators.local.Url.create({model: model, property: 'attribute', options: options});
+    model.set('attribute', 'invalid URL');
+  });
+  deepEqual(validator.errors, [Ember.Validations.messages.defaults.url]);
+});
+
+test('when options is true and URL is valid', function() {
+  options = true;
+  Ember.run(function() {
+    validator = Ember.Validations.validators.local.Url.create({model: model, property: 'attribute', options: options});
+    model.set('attribute', 'http://example.com');
+  });
+  deepEqual(validator.errors, []);
+});

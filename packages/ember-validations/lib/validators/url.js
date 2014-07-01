@@ -5,6 +5,10 @@ Ember.Validations.validators.local.Url = Ember.Validations.validators.Base.exten
   init: function() {
     this._super();
 
+    if (this.get('options') === true) {
+      this.set('options', {});
+    }
+
     if (this.get('options.message') === undefined) {
       this.set('options.message', Ember.Validations.messages.render('url', this.options));
     }
