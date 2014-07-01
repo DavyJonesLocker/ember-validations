@@ -1,4 +1,4 @@
-Ember.Validations.validators.local.Confirmation = Ember.Validations.validators.Base.extend({
+Ember.Validations.validators.local.Confirmation = Ember.Validations.validators.LocalValidator.extend({
   init: function() {
     this.originalProperty = this.property;
     this.property = this.property + 'Confirmation';
