@@ -25,13 +25,14 @@ Ember.Validations.validators.local.Numericality = Ember.Validations.validators.L
     for(index = 0; index < keys.length; index++) {
       key = keys[index];
 
-      if (isNaN(this.options[key])) {
-        this.model.addObserver(this.options[key], this, this._validate);
+      var prop = this.options[key];
+      if (key in this.options && isNaN(prop)) {
+        this.model.addObserver(prop, this, this._validate);
       }
 
-      if (this.options[key] !== undefined && this.options.messages[key] === undefined) {
+      if (prop !== undefined && this.options.messages[key] === undefined) {
         if (Ember.$.inArray(key, Ember.keys(this.CHECKS)) !== -1) {
-          this.options.count = this.options[key];
+          this.options.count = prop;
         }
         this.options.messages[key] = Ember.Validations.messages.render(key, this.options);
         if (this.options.count !== undefined) {

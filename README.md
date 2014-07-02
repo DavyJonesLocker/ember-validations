@@ -269,7 +269,7 @@ firstName: {
 
 Validations will automatically run when the object is created and when
 each property changes. `isValid` states bubble up and help define the
-direct parent's validation state.
+direct parent's validation state. `isInvalid` is also available for convenience.
 
 If you want to force all validations to run simply call `.validate()` on the object. `isValid` will be set to `true`
 or `false`. All validations are run as deferred objects, so the validations will
@@ -279,8 +279,8 @@ completed.
 
 ```javascript
 user.validate().then(function() {
-  user.get('isValid');
-  // true
+  user.get('isValid'); // true
+  user.get('isInvalid'); // false
 })
 ```
 
