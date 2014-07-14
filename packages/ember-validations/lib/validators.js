@@ -10,3 +10,4 @@ require('ember-validations/validators/length');
 require('ember-validations/validators/numericality');
 require('ember-validations/validators/presence');
 require('ember-validations/validators/url');
+require('ember-validations/validators/custom');
