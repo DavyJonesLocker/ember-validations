@@ -50,7 +50,7 @@ var setNested = function (target, path, value) {
     propValue = newPropValue;
   }
   target.set(propName, propValue);
-}
+};
 
 Ember.Validations.Mixin = Ember.Mixin.create(setValidityMixin, {
   init: function() {
