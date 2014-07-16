@@ -33,23 +33,12 @@ var ArrayValidatorProxy = Ember.ArrayProxy.extend(setValidityMixin, {
 });
 
 var setNested = function (target, path, value) {
-  var parts = path.split('.');
-  for(var i = 0; i < parts.length; i++) {
-    if (!target.get(parts.slice(0, i+1).join("."))) {
-      break;
-    }
+  var base=target,
+      properties = path.split('.');
+  for( var i = 0; i < properties.length-1; i++ ) {
+    base = base[ properties[i] ] = base[ properties[i] ] || {};
   }
-  if (i<parts.length) {
-    i++;
-  }
-  var propName = parts.splice(0,i).join(".");
-  var propValue = value;
-  for(i=parts.length-1; i>=0; i--) {
-    var newPropValue = {};
-    newPropValue[parts[i]]=propValue;
-    propValue = newPropValue;
-  }
-  target.set(propName, propValue);
+  target.set(path, value);
 };
 
 Ember.Validations.Mixin = Ember.Mixin.create(setValidityMixin, {
