@@ -307,3 +307,30 @@ test('revalidates arrays when they are replaced', function() {
 
   equal(user.get('isValid'), true);
 });
+
+test('validates nested properties', function () {
+  Ember.run(function () {
+    user = User.create({
+      card: {},
+      validations: {
+        "card.number": {
+          presence: true,
+          length: 16
+        },
+        "card.cvv": {
+          presence: true,
+          length: 3
+        }
+      }
+    });
+  });
+  equal(user.get('isValid'), false);
+  Ember.run(function () {
+    user.set('card.number', "1111222233334444");
+  });
+  equal(user.get('isValid'), false);
+  Ember.run(function () {
+    user.set('card.cvv', "777");
+  });
+  equal(user.get('isValid'), true);
+});
