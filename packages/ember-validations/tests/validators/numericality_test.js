@@ -79,7 +79,7 @@ test('when only allowing integers and value is integer', function() {
 });
 
 test('when only allowing integers and value is not integer', function() {
-  options = { messages: { onlyInteger: 'failed integer validation', numericality: 'failed validation' }, onlyInteger: true };
+  options = { messages: { onlyInteger: 'failed integer validation' }, onlyInteger: true };
   Ember.run(function() {
     validator = Ember.Validations.validators.local.Numericality.create({model: model, property: 'attribute', options: options});
     model.set('attribute', 123.456);
