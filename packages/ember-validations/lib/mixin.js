@@ -58,7 +58,7 @@ Ember.Validations.Mixin = Ember.Mixin.create(setValidityMixin, {
     var property, validator;
 
     for (property in this.validations) {
-      if (this.validations[property].constructor === Object) {
+      if (this.validations[property].constructor === Function || this.validations[property].constructor === Object) {
         this.buildRuleValidator(property);
       } else {
         this.buildObjectValidator(property);
@@ -67,11 +67,12 @@ Ember.Validations.Mixin = Ember.Mixin.create(setValidityMixin, {
   },
   buildRuleValidator: function(property) {
     var validator;
-    for (validator in this.validations[property]) {
-      if (this.validations[property].hasOwnProperty(validator)) {
-        this.validators.pushObject(findValidator(validator).create({model: this, property: property, options: this.validations[property][validator]}));
+      var validations = this.validations[property].constructor === Function ? this.validations[property].apply(this) : this.validations[property];
+      for (validator in validations) {
+        if (validations.hasOwnProperty(validator)) {
+          this.validators.pushObject(findValidator(validator).create({model: this, property: property, options: validations[validator]}));
+        }
       }
-    }
   },
   buildObjectValidator: function(property) {
     if (Ember.isNone(this.get(property))) {
