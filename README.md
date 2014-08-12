@@ -199,7 +199,7 @@ Will ensure the value is a number
 // Examples
 numericality: true
 numericality: { odd: true, messages: { odd: 'must be an odd number' } }
-numericality: { onlyInteger, greaterThan: 5, lessThanOrEqualTo : 10 }
+numericality: { onlyInteger: true, greaterThan: 5, lessThanOrEqualTo : 10 }
 ```
 
 ### Presence ###
