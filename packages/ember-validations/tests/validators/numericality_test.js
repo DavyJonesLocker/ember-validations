@@ -336,6 +336,15 @@ test('when other messages are passed but not a numericality message', function()
   deepEqual(validator.errors, ['is not a number']);
 });
 
+test("when other messages are passed, but not a numerically message, and one of the passed messages fails", function() {
+  options = { even: true, messages: { even: 'failed validation' } };
+  Ember.run(function() {
+    validator = Ember.Validations.validators.local.Numericality.create({model: model, property: 'attribute', options: options});
+    model.set('attribute', 1);
+  });
+  deepEqual(validator.errors, ['failed validation']);
+});
+
 test("numericality validators don't call addObserver on null props", function() {
   expect(1);
 
