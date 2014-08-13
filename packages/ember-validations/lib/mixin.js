@@ -43,7 +43,7 @@ Ember.Validations.Mixin = Ember.Mixin.create(setValidityMixin, {
     }
     this.buildValidators();
     this.validators.forEach(function(validator) {
-      validator.addObserver('errors.[]', this, function(sender, key, value, context, rev) {
+      validator.addObserver('errors.@each', this, function(sender, key, value, context, rev) {
         var errors = Ember.makeArray();
         this.validators.forEach(function(validator) {
           if (validator.property === sender.property) {
