@@ -31,7 +31,7 @@ You need to mixin `Ember.Validations.Mixin` into any controller you want to add
 validations to:
 
 ```javascript
-var App.UserController = Ember.ObjectController.extend(Ember.Validations.Mixin);
+App.UserController = Ember.ObjectController.extend(Ember.Validations.Mixin);
 ```
 
 You define your validations as a JSON object. They should be added to
