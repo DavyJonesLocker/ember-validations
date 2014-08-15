@@ -32,6 +32,15 @@ var ArrayValidatorProxy = Ember.ArrayProxy.extend(setValidityMixin, {
   validators: Ember.computed.alias('content')
 });
 
+var setNested = function (target, path, value) {
+  var base=target,
+      properties = path.split('.');
+  for( var i = 0; i < properties.length-1; i++ ) {
+    base = base[ properties[i] ] = base[ properties[i] ] || {};
+  }
+  target.set(path, value);
+};
+
 Ember.Validations.Mixin = Ember.Mixin.create(setValidityMixin, {
   init: function() {
     this._super();
@@ -50,7 +59,7 @@ Ember.Validations.Mixin = Ember.Mixin.create(setValidityMixin, {
             errors = errors.concat(validator.errors);
           }
         }, this);
-        this.set('errors.' + sender.property, errors);
+        setNested(this,'errors.' + sender.property, errors);
       });
     }, this);
   },
