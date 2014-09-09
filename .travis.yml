@@ -1,6 +1,6 @@
 language: ruby
 before_script: sudo apt-get update && sudo apt-get install git
-script: bundle exec rake test[all]
+script: bundle exec rake test
 after_success: bundle exec rake publish_build BUILD_TYPE=release
 env:
   global:
