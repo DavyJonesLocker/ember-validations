@@ -1,10 +1,16 @@
-language: ruby
-before_script: sudo apt-get update && sudo apt-get install git
-script: bundle exec rake test
-after_success: bundle exec rake publish_build BUILD_TYPE=release
-env:
-  global:
-  - S3_BUCKET_NAME=builds.dockyard.com
-  - S3_FILE_PREFIX=ember-validations
-  - secure: IkjAmY1NE9YiQI/EPxNI8I+n21CzpGQnVxwfSj7mHdZK7tHOb+AhPfrTH4STbEdBf6gcLA2ccAau3//Pb53oDZeQJF8FQLAsLcPvFU23mPdLX9GqUW/oYAUE+TJvfMPsL3qtpfdjyNfgqbaoGHdW9OrzhiOUVbrdC+3nIHcmC0g=
-  - secure: CgT0v3eIj3WNA8OdZeilcdlqKrAgeGGSBL9EsUghd2vxWiGZinJtoZDFso8r5N6EowbhYj46S5zEPfHmAo7Cn8tDN/UnvY0aUB23kWMAMLV47xQVY19N8xGe5BK8T8eGpxVoUp9v0f/DXluoX2E65ou9vYOQ9RQ7dar5a46DMNw=
+---
+language: node_js
+
+sudo: false
+
+cache:
+  directories:
+    - node_modules
+
+install:
+  - npm install -g bower
+  - npm install
+  - bower install
+
+script:
+  - npm test
