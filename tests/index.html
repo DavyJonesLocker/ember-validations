@@ -7,7 +7,7 @@
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    {{BASE_TAG}}
+    {{content-for 'head'}}
 
     <link rel="stylesheet" href="assets/vendor.css">
     <link rel="stylesheet" href="assets/dummy.css">
@@ -33,16 +33,10 @@
     <div id="qunit"></div>
     <div id="qunit-fixture"></div>
 
-    <script>
-      window.EmberENV = {{EMBER_ENV}};
-    </script>
     <script src="assets/vendor.js"></script>
     <script src="assets/test-support.js"></script>
     <script src="assets/dummy.js"></script>
     <script src="testem.js"></script>
-    <script>
-      require('dummy/tests/test-helper');
-    </script>
     <script src="assets/test-loader.js"></script>
   </body>
 </html>
