@@ -168,8 +168,8 @@ A regular expression to test with the value
 
 #### Options ####
   * `message` - Any string you wish to be the error message. Overrides `i18n`.
-  * `allowBlank` - If `true` skips validation if value is empty
-  * `with` - The regular expression to test with
+  * `allowBlank` - If `true` skips validation if value is empty.
+  * `with` - The regular expression to test with. Also accepts the string representation of a property that returns a regular expression.
 
 ```javascript
 // Examples
