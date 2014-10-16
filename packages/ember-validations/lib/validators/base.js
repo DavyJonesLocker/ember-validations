@@ -4,7 +4,8 @@ Ember.Validations.validators.Base = Ember.Object.extend({
     this._dependentValidationKeys = Ember.makeArray();
     this.conditionals = {
       'if': this.get('options.if'),
-      unless: this.get('options.unless')
+      unless: this.get('options.unless'),
+      tokenizer: this.get('options.tokenizer')
     };
     this.model.addObserver(this.property, this, this._validate);
     this.abstractOptions();
@@ -63,8 +64,8 @@ Ember.Validations.validators.Base = Ember.Object.extend({
     var option = options[key];
     if (delete options[key]) {
       var me = this;
-      var getter = function() { 
-        return option(me.model); 
+      var getter = function() {
+        return option(me.model);
       };
       if (Object.defineProperty) {
         Object.defineProperty(options, key, {
@@ -86,7 +87,7 @@ Ember.Validations.validators.Base = Ember.Object.extend({
       this.model.addObserver(key, this, this._validate);
     }, this);
   }.on('init'),
-  pushDependentValidaionKeyToModel: function() {
+  pushDependentValidationKeyToModel: function() {
     var model = this.get('model');
     if (model._dependentValidationKeys[this.property] === undefined) {
       model._dependentValidationKeys[this.property] = Ember.makeArray();

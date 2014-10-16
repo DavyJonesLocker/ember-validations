@@ -1,11 +1,15 @@
 Ember.Validations.messages = {
   render: function(attribute, context) {
-    var regex = new RegExp("{{(.*?)}}"),
-        attributeName = "";
-    if (regex.test(this.defaults[attribute])) {
-      attributeName = regex.exec(this.defaults[attribute])[1];
+    if (Ember.I18n) {
+      return Ember.I18n.t('errors.' + attribute, context);
+    } else {
+      var regex = new RegExp("{{(.*?)}}"),
+          attributeName = "";
+      if (regex.test(this.defaults[attribute])) {
+        attributeName = regex.exec(this.defaults[attribute])[1];
+      }
+      return this.defaults[attribute].replace(regex, context[attributeName]);
     }
-    return this.defaults[attribute].replace(regex, context[attributeName]);
   },
   defaults: {
     inclusion: "is not included in the list",
@@ -28,6 +32,7 @@ Ember.Validations.messages = {
     lessThanOrEqualTo: "must be less than or equal to {{count}}",
     otherThan: "must be other than {{count}}",
     odd: "must be odd",
-    even: "must be even"
+    even: "must be even",
+    url: "is not a valid URL"
   }
 };

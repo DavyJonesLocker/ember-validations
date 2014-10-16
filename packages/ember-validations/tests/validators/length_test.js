@@ -78,8 +78,8 @@ test('when not allowing blank and allowed length is 3', function() {
   deepEqual(validator.errors, ['failed validation']);
 });
 
-test('when allowed length is 3 and a differnet tokenizer', function() {
-  options = { messages: { wrongLength: 'failed validation' }, is: 3, tokenizer: 'match(/\\w+/g)' };
+test('when allowed length is 3 and a different tokenizer', function() {
+  options = { messages: { wrongLength: 'failed validation' }, is: 3, tokenizer: function(value) { return value.split(' '); } };
   Ember.run(function() {
     validator = Ember.Validations.validators.local.Length.create({model: model, property: 'attribute', options: options});
     model.set('attribute', 'one two three');

@@ -326,3 +326,37 @@ test('when even and no message is passed', function() {
   });
   deepEqual(validator.errors, ['must be even']);
 });
+
+test('when other messages are passed but not a numericality message', function() {
+  options = { messages: { greaterThan: 'failed validation' } };
+  Ember.run(function() {
+    validator = Ember.Validations.validators.local.Numericality.create({model: model, property: 'attribute', options: options});
+    model.set('attribute', 'abc');
+  });
+  deepEqual(validator.errors, ['is not a number']);
+});
+
+test("numericality validators don't call addObserver on null props", function() {
+  expect(1);
+
+  var stubbedObserverCalled = false;
+
+  var realAddObserver = Ember.addObserver;
+  Ember.addObserver = function(_, path) {
+    stubbedObserverCalled = true;
+    if (!path) {
+      ok(false, "shouldn't call addObserver with falsy path");
+    }
+    return realAddObserver.apply(this, arguments);
+  };
+
+  options = { lessThanOrEqualTo: 10 };
+  Ember.run(function() {
+    validator = Ember.Validations.validators.local.Numericality.create({model: model, property: 'attribute', options: options});
+    model.set('attribute', 11);
+  });
+  Ember.addObserver = realAddObserver;
+
+  ok(stubbedObserverCalled, "stubbed addObserver was called");
+});
+

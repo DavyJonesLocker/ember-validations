@@ -4,7 +4,7 @@
 
 ## Getting a build ##
 
-[Please choose from our list of builds for Ember-Validations](https://github.com/dockyard/ember-builds/tree/master/validations)
+[Please choose from our list of builds for Ember-Validations](http://builds.dockyard.com)
 
 ## Building yourself ##
 
@@ -27,21 +27,22 @@ If it is a bug [please open an issue on GitHub](https://github.com/dockyard/embe
 
 ## Usage ##
 
-You need to mixin `Ember.Validations.Mixin` into any object you want to add
+You need to mixin `Ember.Validations.Mixin` into any controller you want to add
 validations to:
 
 ```javascript
-var App.User = Ember.Object.extend(Ember.Validations.Mixin);
+var App.UserController = Ember.ObjectController.extend(Ember.Validations.Mixin);
 ```
 
-You define your validations as a JSON object on the object you want to
-validate. The keys in the object should map to properties. If you pass a
+You define your validations as a JSON object. They should be added to
+the controller that represents the model in question.
+The keys in the object should map to properties. If you pass a
 JSON object as the value this will be seen as validation rules to apply
 to the property. If you pass `true` then the property itself will be
 seen as a validatable object.
 
 ```javascript
-App.User.reopen({
+App.UserController.reopen({
   validations: {
     firstName: {
       presence: true,
@@ -198,7 +199,7 @@ Will ensure the value is a number
 // Examples
 numericality: true
 numericality: { odd: true, messages: { odd: 'must be an odd number' } }
-numericality: { onlyInteger, greaterThan: 5, lessThanOrEqualTo : 10 }
+numericality: { onlyInteger: true, greaterThan: 5, lessThanOrEqualTo : 10 }
 ```
 
 ### Presence ###
@@ -217,6 +218,25 @@ presence: { message: 'must not be blank' }
 ### Uniqueness ###
 
 *Not yet implemented.*
+
+### URL ##
+
+Validates the property has a value that is a URL.
+
+#### Options ####
+  * `allowBlank` - If `true` skips validation if value is empty
+  * `allowIp` - Passing `true` will validate URLs using IP address. By default, IP addresses will be invalid.
+  * `allowUserPass` - Passing `true` will validate URLs with username / passwords. By default, usernames and password will be invalid.
+  * `allowPort` - If `true` will validate URLs with ports. By default, URLs with ports will be invalid.
+  * `domainOnly` - If `true` will only allow domains/sub-domains to be valid. URLs with protocols, ports or paths will be invalid.
+  * `protocols` - An array with accepted protocols. Default protocols are `http` and `https`.
+
+```javascript
+// Examples
+url { allowUserPass: true }
+url { allowBlank: true, allowIp: true, allowPort: true, protocols: ['http', 'https', 'ftp'] }
+url { domainOnly: true }
+```
 
 ### Conditional Validators ##
 
@@ -249,7 +269,7 @@ firstName: {
 
 Validations will automatically run when the object is created and when
 each property changes. `isValid` states bubble up and help define the
-direct parent's validation state.
+direct parent's validation state. `isInvalid` is also available for convenience.
 
 If you want to force all validations to run simply call `.validate()` on the object. `isValid` will be set to `true`
 or `false`. All validations are run as deferred objects, so the validations will
@@ -259,8 +279,8 @@ completed.
 
 ```javascript
 user.validate().then(function() {
-  user.get('isValid');
-  // true
+  user.get('isValid'); // true
+  user.get('isInvalid'); // false
 })
 ```
 
@@ -289,6 +309,37 @@ user.validate().then(null, function() {
 })
 
 ```
+
+## i18n ##
+
+When you use [ember-i18n](https://github.com/jamesarosen/ember-i18n) your `Ember.I18n.translations` object should contain the following keys under the `errors` key:
+
+```javascript
+Ember.I18n.translations = {
+  errors:
+    inclusion: "is not included in the list",
+    exclusion: "is reserved",
+    invalid: "is invalid",
+    confirmation: "doesn't match {{attribute}}",
+    accepted: "must be accepted",
+    empty: "can't be empty",
+    blank: "can't be blank",
+    present: "must be blank",
+    tooLong: "is too long (maximum is {{count}} characters)",
+    tooShort: "is too short (minimum is {{count}} characters)",
+    wrongLength: "is the wrong length (should be {{count}} characters)",
+    notANumber: "is not a number",
+    notAnInteger: "must be an integer",
+    greaterThan: "must be greater than {{count}}",
+    greaterThanOrEqualTo: "must be greater than or equal to {{count}}",
+    equalTo: "must be equal to {{count}}",
+    lessThan: "must be less than {{count}}",
+    lessThanOrEqualTo: "must be less than or equal to {{count}}",
+    otherThan: "must be other than {{count}}",
+    odd: "must be odd",
+    even: "must be even"
+}
+````
 
 ## Authors ##
 

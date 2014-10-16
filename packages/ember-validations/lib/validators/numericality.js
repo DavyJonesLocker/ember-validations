@@ -12,7 +12,8 @@ Ember.Validations.validators.local.Numericality = Ember.Validations.validators.B
       this.options[key] = true;
     }
 
-    if (this.options.messages === undefined) {
+    if (this.options.messages === undefined || this.options.messages.numericality === undefined) {
+      this.options.messages = this.options.messages || {};
       this.options.messages = { numericality: Ember.Validations.messages.render('notANumber', this.options) };
     }
 
@@ -20,17 +21,18 @@ Ember.Validations.validators.local.Numericality = Ember.Validations.validators.B
       this.options.messages.onlyInteger = Ember.Validations.messages.render('notAnInteger', this.options);
     }
 
-    keys = Object.keys(this.CHECKS).concat(['odd', 'even']);
+    keys = Ember.keys(this.CHECKS).concat(['odd', 'even']);
     for(index = 0; index < keys.length; index++) {
       key = keys[index];
 
-      if (isNaN(this.options[key])) {
-        this.model.addObserver(this.options[key], this, this._validate);
+      var prop = this.options[key];
+      if (key in this.options && isNaN(prop)) {
+        this.model.addObserver(prop, this, this._validate);
       }
 
-      if (this.options[key] !== undefined && this.options.messages[key] === undefined) {
-        if (Ember.$.inArray(key, Object.keys(this.CHECKS)) !== -1) {
-          this.options.count = this.options[key];
+      if (prop !== undefined && this.options.messages[key] === undefined) {
+        if (Ember.$.inArray(key, Ember.keys(this.CHECKS)) !== -1) {
+          this.options.count = prop;
         }
         this.options.messages[key] = Ember.Validations.messages.render(key, this.options);
         if (this.options.count !== undefined) {
