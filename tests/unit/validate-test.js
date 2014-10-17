@@ -1,12 +1,12 @@
 import Ember from 'ember';
-import Mixin from 'ember-validations/mixin';
+import EmberValidations from 'ember-validations';
 import { buildContainer } from '../helpers/container';
 
 var user, User;
 
 module('Validate test', {
   setup: function() {
-    User = Ember.Object.extend(Mixin, {
+    User = Ember.Object.extend(EmberValidations.Mixin, {
       container: buildContainer(),
       validations: {
         firstName: {
@@ -68,7 +68,7 @@ asyncTest('runs all validations', function() {
 
 test('can be mixed into an object controller', function() {
   var Controller, controller, user;
-  Controller = Ember.ObjectController.extend(Mixin, {
+  Controller = Ember.ObjectController.extend(EmberValidations.Mixin, {
     container: buildContainer(),
     validations: {
       name: {
@@ -98,7 +98,7 @@ test('can be mixed into an array controller', function() {
   var Controller, controller, user, UserController;
   var container = buildContainer();
 
-  UserController = Ember.ObjectController.extend(Mixin, {
+  UserController = Ember.ObjectController.extend(EmberValidations.Mixin, {
     container: buildContainer(),
     validations: {
       name: {
@@ -107,7 +107,7 @@ test('can be mixed into an array controller', function() {
     }
   });
   container.register('controller:User', UserController);
-  Controller = Ember.ArrayController.extend(Mixin, {
+  Controller = Ember.ArrayController.extend(EmberValidations.Mixin, {
     itemController: 'User',
     container: container,
     validations: {
@@ -142,7 +142,7 @@ var Profile, profile;
 
 module('Relationship validators', {
   setup: function() {
-    Profile = Ember.Object.extend(Mixin, {
+    Profile = Ember.Object.extend(EmberValidations.Mixin, {
       container: buildContainer(),
       validations: {
         title: {
@@ -155,7 +155,7 @@ module('Relationship validators', {
       profile = Profile.create({hey: 'yo'});
     });
 
-    User = Ember.Object.extend(Mixin, {
+    User = Ember.Object.extend(EmberValidations.Mixin, {
       container: buildContainer()
     });
   }
