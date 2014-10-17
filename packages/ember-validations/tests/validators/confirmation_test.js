@@ -42,6 +42,15 @@ test('when values do not match', function() {
   deepEqual(validator.errors, ['failed validation']);
 });
 
+test('when values do not match with dynamic message', function() {
+  options = { message: function(model) { return model.get("attribute") + ' failed validation'; } };
+  Ember.run(function() {
+    validator = Ember.Validations.validators.local.Confirmation.create({model: model, property: 'attribute', options: options});
+    model.set('attribute', 'test');
+  });
+  deepEqual(validator.errors, ['test failed validation']);
+});
+
 test('when options is true', function() {
   options = true;
   Ember.run(function() {
