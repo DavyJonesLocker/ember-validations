@@ -2,24 +2,39 @@
 
 [![Build Status](https://secure.travis-ci.org/dockyard/ember-validations.png?branch=master)](http://travis-ci.org/dockyard/ember-validations)
 
-## Getting a build ##
-
-[Please choose from our list of builds for Ember-Validations](http://builds.dockyard.com)
-
 ## Building yourself ##
 
-You will require Ruby to be installed on your system. If it is please
-run the following:
-
 ```bash
-gem install bundler
-git clone git://github.com/dockyard/ember-validations.git
-cd ember-validations
-bundle install
-bundle exec rake dist
+npm install
+ember build
 ```
 
 The builds will be in the `dist/` directory.
+
+## Installing ##
+
+#### With Ember-CLI ####
+
+If you are using
+[`ember-cli`](https://github.com/stefanpenner/ember-cli) you can add
+`ember-validations` to your `package.json`:
+
+```javascript
+"devDependencies": {
+  ...
+  "ember-validations": "~ 2.0.0"
+}
+```
+
+You may want to be more precise with your version locking.
+
+#### Without Ember-CLI ####
+
+We will continue to build `EmberValidations` to the DockYard build
+server until `ember-cli` is officially recommended by Ember. You can
+select a build version from:
+[http://builds.dockyard.com](http://builds.dockyard.com) for use in
+Bower.
 
 ## Looking for help? ##
 
@@ -27,11 +42,14 @@ If it is a bug [please open an issue on GitHub](https://github.com/dockyard/embe
 
 ## Usage ##
 
-You need to mixin `Ember.Validations.Mixin` into any controller you want to add
+You need to mixin `EmberValidations.Mixin` into any `Ember.Object` you want to add
 validations to:
 
 ```javascript
-var App.UserController = Ember.ObjectController.extend(Ember.Validations.Mixin);
+import Ember from 'ember';
+import EmberValidations from 'ember-validations';
+
+export default Ember.ObjectController.extend(EmberValidations.Mixin);
 ```
 
 You define your validations as a JSON object. They should be added to
@@ -42,7 +60,7 @@ to the property. If you pass `true` then the property itself will be
 seen as a validatable object.
 
 ```javascript
-App.UserController.reopen({
+export default Ember.ObjectController.extend({
   validations: {
     firstName: {
       presence: true,
@@ -219,25 +237,6 @@ presence: { message: 'must not be blank' }
 
 *Not yet implemented.*
 
-### URL ##
-
-Validates the property has a value that is a URL.
-
-#### Options ####
-  * `allowBlank` - If `true` skips validation if value is empty
-  * `allowIp` - Passing `true` will validate URLs using IP address. By default, IP addresses will be invalid.
-  * `allowUserPass` - Passing `true` will validate URLs with username / passwords. By default, usernames and password will be invalid.
-  * `allowPort` - If `true` will validate URLs with ports. By default, URLs with ports will be invalid.
-  * `domainOnly` - If `true` will only allow domains/sub-domains to be valid. URLs with protocols, ports or paths will be invalid.
-  * `protocols` - An array with accepted protocols. Default protocols are `http` and `https`.
-
-```javascript
-// Examples
-url { allowUserPass: true }
-url { allowBlank: true, allowIp: true, allowPort: true, protocols: ['http', 'https', 'ftp'] }
-url { domainOnly: true }
-```
-
 ### Conditional Validators ##
 
 Each validator can take an `if` or an `unless` in its `options` hash.
@@ -286,18 +285,25 @@ user.validate().then(function() {
 
 ## Inspecting Errors ##
 
-After mixing in `Ember.Validations.Mixin` into your object it will now have a
+After mixing in `EmberValidations.Mixin` into your object it will now have a
 `.errors` object. All validation error messages will be placed in there
 for the corresponding property. Errors messages will always be an array.
 
 ```javascript
-App.User = Ember.Object.extend(Ember.Validations.Mixin, {
+import Ember from 'ember';
+import EmberValidations from 'ember-validatinos';
+
+export default Ember.Object.extend(EmberValidations.Mixin, {
   validations: {
     firstName: { presence: true }
   }
 });
+```
 
-user = App.User.create();
+```javascript
+import User from 'my-app/models/user';
+
+user = User.create();
 user.validate().then(null, function() {
   user.get('isValid'); // false
   user.get('errors.firstName'); // ["can't be blank"]
