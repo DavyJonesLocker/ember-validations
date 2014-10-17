@@ -31,6 +31,8 @@ export default Base.extend({
       key = keys[index];
 
       var prop = this.options[key];
+      // I have no idea what the hell is going on here. This seems to do nothing.
+      // The observer's key is being set to the values in the options hash?
       if (key in this.options && isNaN(prop)) {
         this.model.addObserver(prop, this, this._validate);
       }

@@ -338,11 +338,11 @@ test('when other messages are passed but not a numericality message', function()
 test("numericality validators don't call addObserver on null props", function() {
   expect(1);
 
-  var stubbedObserverCalled = false;
+  var stubbedObserverCalls = 0;
 
-  var realAddObserver = Ember.addObserver;
-  Ember.addObserver = function(_, path) {
-    stubbedObserverCalled = true;
+  var realAddObserver = model.addObserver;
+  model.addObserver = function(_, path) {
+    stubbedObserverCalls += 1;
     if (!path) {
       ok(false, "shouldn't call addObserver with falsy path");
     }
@@ -354,7 +354,7 @@ test("numericality validators don't call addObserver on null props", function() 
     validator = Numericality.create({model: model, property: 'attribute', options: options});
     model.set('attribute', 11);
   });
-  Ember.addObserver = realAddObserver;
+  model.addObserver = realAddObserver;
 
-  ok(stubbedObserverCalled, "stubbed addObserver was called");
+  equal(1, stubbedObserverCalls, "stubbed addObserver was called");
 });
