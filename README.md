@@ -76,8 +76,6 @@ export default Ember.ObjectController.extend({
 
 ## Validators ##
 
-The currently supported validators
-
 ### Absence ###
 Validates the property has a value that is `null`, `undefined`, or `''`
 
@@ -263,6 +261,87 @@ firstName: {
   }
 }
 ```
+
+### Custom Validators ###
+
+### With Ember-CLI ###
+
+You can place your custom validators into
+`my-app/app/validators/{local,remote}/<name>`:
+
+```javascript
+import Base from 'ember-validations/validators/base';
+
+export default Base.extend({
+   ...
+});
+```
+
+It is recommended that you separate between `local` and `remote`
+validators. However, if you wish you can place your validator into
+`my-app/app/validators/<name>`. However, any similarly named validator
+in `local/` or `remote/` has a higher lookup presedence over those in
+`validators/`.
+
+### Withoug Ember-CLI ###
+
+You can add your validators to the global object:
+
+```javascript
+EmberValidations.validators.local.<ClassName> =
+EmberValidations.validators.Base.extend({
+ ...
+});
+```
+
+### Creating ###
+
+To create a new validator you need to override the `call` function. When
+the validator is run its `call` function is what handles determining if
+the validator is valid or not. Call has access to `this.model`,
+`this.property`. If the validation fails you **must** push the failing
+message onto the validator's `this.errors` array. A simple example of a
+validator could be:
+
+```javascript
+import Base from 'ember-validations/validators/base';
+
+export default Base.extend({
+  call: function() {
+    if (Ember.isBlank(this.model.get(this.property)) {
+      this.errors.pushObject("cannot be blank");
+    }
+  }
+});
+```
+
+You may want to create a more complex validator that can observer for
+changes on multiple properties. You should override the `init` function
+to accomplish this:
+
+```javascript
+import Base from 'ember-validations/validators/base';
+
+export default Base.extend({
+  init: function() {
+    // this call is necessary, don't forget it!
+    this.super();
+
+    this._dependentValidationKeys.pushObject(this.options.alsoWatch);
+  },
+  call: function() {
+    if (Ember.isBlank(this.model.get(this.property)) {
+      this.errors.pushObject("cannot be blank");
+    }
+  }
+});
+```
+
+The `init` function is given access to the `this.options` wich is simply
+a POJO of the options passed to the validator.
+`_dependentValidationKeys` is the collection of paths relative to
+`this.model` that will be observed for changes. If any changes occur on
+any given path the validator will automatically trigger.
 
 ## Running Validations
 
