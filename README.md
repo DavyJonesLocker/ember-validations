@@ -283,6 +283,9 @@ validators. However, if you wish you can place your validator into
 in `local/` or `remote/` has a higher lookup presedence over those in
 `validators/`.
 
+The "native" validators that come with `ember-validations` have the
+lowest lookup priority.
+
 ### Withoug Ember-CLI ###
 
 You can add your validators to the global object:
@@ -327,7 +330,7 @@ export default Base.extend({
     // this call is necessary, don't forget it!
     this.super();
 
-    this._dependentValidationKeys.pushObject(this.options.alsoWatch);
+    this.dependentValidationKeys.pushObject(this.options.alsoWatch);
   },
   call: function() {
     if (Ember.isBlank(this.model.get(this.property)) {
@@ -339,7 +342,7 @@ export default Base.extend({
 
 The `init` function is given access to the `this.options` wich is simply
 a POJO of the options passed to the validator.
-`_dependentValidationKeys` is the collection of paths relative to
+`dependentValidationKeys` is the collection of paths relative to
 `this.model` that will be observed for changes. If any changes occur on
 any given path the validator will automatically trigger.
 
