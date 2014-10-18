@@ -19,11 +19,23 @@ var pushValidatableObject = function(model, property) {
   }
 };
 
-var lookupValidator = function(validator) {
+var lookupValidator = function(validatorName) {
   var container = this.get('container');
-  return container.lookupFactory('ember-validations@validator:local/'+validator);
+  var local = container.lookupFactory('validator:local/'+validatorName);
+  var remote = container.lookupFactory('validator:remote/'+validatorName);
 
-  // return Ember.Validations.validators.local[klass] || Ember.Validations.validators.remote[klass];
+  if (local || remote) { return [local, remote]; }
+
+  var base = container.lookupFactory('validator:'+validatorName);
+
+  if (base) { return [base]; }
+
+  local = container.lookupFactory('ember-validations@validator:local/'+validatorName);
+  remote = container.lookupFactory('ember-validations@validator:remote/'+validatorName);
+
+  if (local || remote) { return [local, remote]; }
+
+  Ember.warn('Could not the "'+validatorName+'" validator.');
 };
 
 var ArrayValidatorProxy = Ember.ArrayProxy.extend(setValidityMixin, {
@@ -71,10 +83,14 @@ export default Ember.Mixin.create(setValidityMixin, {
     }
   },
   buildRuleValidator: function(property) {
-    var validator;
-    for (validator in this.validations[property]) {
-      if (this.validations[property].hasOwnProperty(validator)) {
-        this.validators.pushObject(lookupValidator.call(this, validator).create({model: this, property: property, options: this.validations[property][validator]}));
+    var pushValidator = function(validator) {
+      if (validator) {
+        this.validators.pushObject(validator.create({model: this, property: property, options: this.validations[property][validatorName]}));
+      }
+    };
+    for (var validatorName in this.validations[property]) {
+      if (this.validations[property].hasOwnProperty(validatorName)) {
+        Ember.EnumerableUtils.forEach(lookupValidator.call(this, validatorName), pushValidator, this);
       }
     }
   },

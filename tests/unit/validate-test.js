@@ -1,6 +1,7 @@
 import Ember from 'ember';
 import EmberValidations from 'ember-validations';
 import { buildContainer } from '../helpers/container';
+import Base from 'ember-validations/validators/base';
 
 var user, User;
 
@@ -317,4 +318,138 @@ test('revalidates arrays when they are replaced', function() {
   });
 
   equal(user.get('isValid'), true);
+});
+
+/*globals define, registry, requirejs*/
+
+requirejs.rollback = function() {
+  for(var entry in this.backupEntries) {
+    this.entries[entry] = this.backupEntries[entry];
+  }
+};
+
+requirejs.backup = function() {
+  this.backupEntries = {};
+
+  for(var entry in this.entries) {
+    this.backupEntries[entry] = this.entries[entry];
+  }
+};
+
+module('validator class lookup order', {
+  setup: function() {
+    requirejs.backup();
+    requirejs.clear();
+    requirejs.rollback();
+
+    User = Ember.Object.extend(EmberValidations.Mixin, {
+      container: buildContainer()
+    });
+  },
+  teardown: function() {
+    requirejs.clear();
+    requirejs.rollback();
+  }
+});
+
+test('should lookup in project namespace first', function() {
+  var dummyValidatorCalled = false;
+  var nativeValidatorCalled = false;
+
+  define('ember-validations/validators/local/presence', [], function() {
+    nativeValidatorCalled = true;
+
+    return Base.extend({
+      call: Ember.K
+    });
+  });
+
+  define('dummy/validators/local/presence', [], function() {
+    dummyValidatorCalled = true;
+
+    return Base.extend({
+      call: Ember.K
+    });
+  });
+
+  Ember.run(function() {
+    user = User.create({
+      validations: {
+        name: {
+          presence: true
+        }
+      }
+    });
+  });
+
+  ok(!nativeValidatorCalled, 'should not have preferred ember-validation\'s presence validator');
+  ok(dummyValidatorCalled, 'should have preferred my applications presence validator');
+});
+
+test('will lookup both local and remote validators of similar name', function() {
+  var localValidatorCalled = false;
+  var remoteValidatorCalled = false;
+
+  define('ember-validations/validators/local/uniqueness', [], function() {
+    localValidatorCalled = true;
+
+    return Base.extend({
+      call: Ember.K
+    });
+  });
+
+  define('ember-validations/validators/remote/uniqueness', [], function() {
+    remoteValidatorCalled = true;
+
+    return Base.extend({
+      call: Ember.K
+    });
+  });
+
+  Ember.run(function() {
+    user = User.create({
+      validations: {
+        name: {
+          uniqueness: true
+        }
+      }
+    });
+  });
+
+  ok(localValidatorCalled, 'should call local uniqueness validator');
+  ok(remoteValidatorCalled, 'should call remote uniqueness validator');
+});
+
+test('should prefer lookup in just "validators" before "native"', function() {
+  var dummyValidatorCalled = false;
+  var nativeValidatorCalled = false;
+
+  define('ember-validations/validators/local/presence', [], function() {
+    nativeValidatorCalled = true;
+
+    return Base.extend({
+      call: Ember.K
+    });
+  });
+
+  define('dummy/validators/presence', [], function() {
+    dummyValidatorCalled = true;
+
+    return Base.extend({
+      call: Ember.K
+    });
+  });
+
+  Ember.run(function() {
+    user = User.create({
+      validations: {
+        name: {
+          presence: true
+        }
+      }
+    });
+  });
+
+  ok(!nativeValidatorCalled, 'should not have preferred ember-validation\'s presence validator');
+  ok(dummyValidatorCalled, 'should have preferred my applications presence validator');
 });
