@@ -97,7 +97,7 @@ export default Ember.Mixin.create(setValidityMixin, {
     var createInlineClass = function(callback) {
       return Base.extend({
         call: function() {
-          var errorMessage = this.callback();
+          var errorMessage = this.callback.call(this);
 
           if (errorMessage) {
             this.errors.pushObject(errorMessage);
