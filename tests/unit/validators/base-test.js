@@ -6,12 +6,12 @@ var model, Model, options, CustomValidator, validator;
 module('Base Validator', {
   setup: function() {
     Model = Ember.Object.extend({
-      _dependentValidationKeys: {}
+      dependentValidationKeys: {}
     });
     CustomValidator = Base.extend({
       init: function() {
         this._super();
-        this._dependentValidationKeys.pushObject('otherAttribute');
+        this.dependentValidationKeys.pushObject('otherAttribute');
       },
       call: function() {}
     });
@@ -28,11 +28,11 @@ test('when value is not empty', function() {
   equal(validator.get('isValid'), true);
 });
 
-test('generates _dependentValidationKeys on the model', function() {
+test('generates dependentValidationKeys on the model', function() {
   Ember.run(function() {
     validator = CustomValidator.create({model: model, property: 'attribute'});
   });
-  deepEqual(model.get('_dependentValidationKeys'), {attribute: ['otherAttribute']});
+  deepEqual(model.get('dependentValidationKeys'), {attribute: ['otherAttribute']});
 });
 
 test('inactive validators should be considered valid', function() {
@@ -54,5 +54,3 @@ test('inactive validators should be considered valid', function() {
   Ember.run(validator, 'validate');
   equal(validator.get('isValid'), true);
 });
-
-

@@ -6,7 +6,7 @@ export default Base.extend({
     this.originalProperty = this.property;
     this.property = this.property + 'Confirmation';
     this._super();
-    this._dependentValidationKeys.pushObject(this.originalProperty);
+    this.dependentValidationKeys.pushObject(this.originalProperty);
     /*jshint expr:true*/
     if (this.options === true) {
       this.set('options', { attribute: this.originalProperty });

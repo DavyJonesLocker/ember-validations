@@ -3,7 +3,7 @@ import Ember from 'ember';
 export default Ember.Object.extend({
   init: function() {
     this.set('errors', Ember.makeArray());
-    this._dependentValidationKeys = Ember.makeArray();
+    this.dependentValidationKeys = Ember.makeArray();
     this.conditionals = {
       'if': this.get('options.if'),
       unless: this.get('options.unless')
@@ -11,16 +11,16 @@ export default Ember.Object.extend({
     this.model.addObserver(this.property, this, this._validate);
   },
   addObserversForDependentValidationKeys: Ember.on('init', function() {
-    this._dependentValidationKeys.forEach(function(key) {
+    this.dependentValidationKeys.forEach(function(key) {
       this.model.addObserver(key, this, this._validate);
     }, this);
   }),
   pushDependentValidationKeyToModel: Ember.on('init', function() {
     var model = this.get('model');
-    if (model._dependentValidationKeys[this.property] === undefined) {
-      model._dependentValidationKeys[this.property] = Ember.makeArray();
+    if (model.dependentValidationKeys[this.property] === undefined) {
+      model.dependentValidationKeys[this.property] = Ember.makeArray();
     }
-    model._dependentValidationKeys[this.property].addObjects(this._dependentValidationKeys);
+    model.dependentValidationKeys[this.property].addObjects(this.dependentValidationKeys);
   }),
   call: function () {
     throw 'Not implemented!';

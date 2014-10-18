@@ -41,7 +41,7 @@ export default Ember.Mixin.create(setValidityMixin, {
   init: function() {
     this._super();
     this.errors = Errors.create();
-    this._dependentValidationKeys = {};
+    this.dependentValidationKeys = {};
     this.validators = Ember.makeArray();
     if (this.get('validations') === undefined) {
       this.validations = {};

@@ -6,7 +6,7 @@ var model, Model, options, validator;
 module('Absence Validator', {
   setup: function() {
     Model = Ember.Object.extend({
-      _dependentValidationKeys: {}
+      dependentValidationKeys: {}
     });
     Ember.run(function() {
       model = Model.create();
