@@ -346,6 +346,45 @@ a POJO of the options passed to the validator.
 `this.model` that will be observed for changes. If any changes occur on
 any given path the validator will automatically trigger.
 
+#### Inline Validators ####
+
+If you want to create validators inline you can use the
+`EmberValidations.validator` function:
+
+```javascript
+User.create({
+  validations: {
+    name: {
+      inline: EmberValidations.validator(function() {
+        if (this.model.get('canNotDoSomething')) {
+          return "you can't do this!"
+        }
+      }) 
+    }
+  }
+});
+```
+
+Inside the `validator` function you have access to `this.model` which is
+a reference to the model. You **must** return an error message that will
+be attached to the errors array for the property it is created on.
+Return nothing for the validator to pass.
+
+Alternatively if the property doesn't have any additional validations
+you can use a more concise syntax:
+
+```javascript
+User.create({
+  validations: {
+    name: EmberValidations.validator(function() {
+      if (this.model.get('canNotDoSomething')) {
+        return "you can't do this!"
+      }
+    }) 
+  }
+});
+```
+
 ## Running Validations
 
 Validations will automatically run when the object is created and when

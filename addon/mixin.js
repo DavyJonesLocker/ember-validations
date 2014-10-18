@@ -1,5 +1,6 @@
 import Ember from 'ember';
 import Errors from 'ember-validations/errors';
+import Base from 'ember-validations/validators/base';
 
 var setValidityMixin = Ember.Mixin.create({
   isValid: Ember.computed('validators.@each.isValid', function() {
@@ -88,8 +89,28 @@ export default Ember.Mixin.create(setValidityMixin, {
         this.validators.pushObject(validator.create({model: this, property: property, options: this.validations[property][validatorName]}));
       }
     };
+
+    if (this.validations[property].callback) {
+      this.validations[property] = { inline: this.validations[property] };
+    }
+
+    var createInlineClass = function(callback) {
+      return Base.extend({
+        call: function() {
+          var errorMessage = this.callback();
+
+          if (errorMessage) {
+            this.errors.pushObject(errorMessage);
+          }
+        },
+        callback: callback
+      });
+    };
+
     for (var validatorName in this.validations[property]) {
-      if (this.validations[property].hasOwnProperty(validatorName)) {
+      if (validatorName === 'inline') {
+        pushValidator.call(this, createInlineClass(this.validations[property][validatorName].callback));
+      } else if (this.validations[property].hasOwnProperty(validatorName)) {
         Ember.EnumerableUtils.forEach(lookupValidator.call(this, validatorName), pushValidator, this);
       }
     }

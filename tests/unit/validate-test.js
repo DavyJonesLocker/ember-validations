@@ -453,3 +453,41 @@ test('should prefer lookup in just "validators" before "native"', function() {
   ok(!nativeValidatorCalled, 'should not have preferred ember-validation\'s presence validator');
   ok(dummyValidatorCalled, 'should have preferred my applications presence validator');
 });
+
+module('inline validations', {
+  setup: function() {
+    User = Ember.Object.extend(EmberValidations.Mixin, {
+      container: buildContainer()
+    });
+  }
+});
+
+test("mixed validation syntax", function() {
+  Ember.run(function() {
+    user = User.create({
+      validations: {
+        name: {
+          inline: EmberValidations.validator(function() {
+            return 'it failed';
+          })
+        }
+      }
+    });
+  });
+
+  deepEqual(['it failed'], user.get('errors.name'));
+});
+
+test("concise validation syntax", function() {
+  Ember.run(function() {
+    user = User.create({
+      validations: {
+        name: EmberValidations.validator(function() {
+          return 'it failed';
+        })
+      }
+    });
+  });
+
+  deepEqual(['it failed'], user.get('errors.name'));
+});
