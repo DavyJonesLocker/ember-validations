@@ -18,8 +18,13 @@ export default Base.extend({
     }
   },
   call: function() {
-    if (get(this.model, this.originalProperty) !== get(this.model, this.property)) {
-      this.errors.pushObject(this.options.message);
+    var original = get(this.model, this.originalProperty);
+    var confirmation = get(this.model, this.property);
+
+    if(!Ember.isEmpty(original) || !Ember.isEmpty(confirmation)) {
+      if (original !== confirmation) {
+        this.errors.pushObject(this.options.message);
+      }
     }
   }
 });
