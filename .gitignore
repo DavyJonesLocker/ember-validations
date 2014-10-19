@@ -1,38 +1,17 @@
-*.bpkg
-*.gem
-*.rbc
-.DS_Store
-.bpm
-.bundle
-.config
-.github-upload-token
-.yardoc
-InstalledFiles
-_site
-_yardoc
-assets
-assets/bpm_libs.js
-assets/bpm_styles.css
-bin/
-coverage
-dist
-docs/build
-docs/node_modules
-lib/*/tests/all.js
-lib/*/tests/qunit*
-lib/bundler/man
-pkg
-rdoc
-spade-boot.js
-spec/reports
-test/tmp
-test/version_tmp
-test_*.html
-/tests/ember-tests.js
-tmp
-tmp*.gem
-tmp.bpm
-tmp.spade
-tests/source
-node_modules
-.vagrant
+# See http://help.github.com/ignore-files/ for more about ignoring files.
+
+# compiled output
+/dist
+/tmp
+
+# dependencies
+/node_modules
+/bower_components/*
+
+# misc
+/.sass-cache
+/connect.lock
+/coverage/*
+/libpeerconnection.log
+npm-debug.log
+testem.log

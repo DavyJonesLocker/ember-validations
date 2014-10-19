@@ -1,0 +1,190 @@
+import Ember from 'ember';
+import Mixin from 'ember-validations/mixin';
+import { buildContainer } from '../helpers/container';
+
+var user, User;
+var get = Ember.get;
+var set = Ember.set;
+
+module('Conditional validations', {
+  setup: function() {
+    User = Ember.Object.extend(Mixin, {
+      container: buildContainer()
+    });
+  }
+});
+
+asyncTest('if with function', function() {
+  expect(4);
+  User.reopen({
+    validations: {
+      firstName: {
+        presence: {
+          if: function(model) {
+            return false;
+          }
+        }
+      }
+    }
+  });
+
+  Ember.run(function(){
+    user = User.create();
+    user.validate().then(function(){
+      ok(Ember.isEmpty(get(user.errors, 'firstName')));
+      var validator = get(user.validators, 'firstObject');
+      validator.conditionals['if'] = function(model, property) {
+        equal(user, model, "the conditional validator is passed the model being validated");
+        equal(property, 'firstName', "the conditional validator is passed the name of the property being validated");
+        return true;
+      };
+      user.validate().then(null, function(){
+        deepEqual(get(user.errors, 'firstName'), ["can't be blank"]);
+        start();
+      });
+    });
+  });
+});
+
+asyncTest('if with property reference', function() {
+  User.reopen({
+    validations: {
+      firstName: {
+        presence: {
+          if: 'canValidate'
+        }
+      }
+    }
+  });
+
+
+  Ember.run(function(){
+    user = User.create();
+    set(user, 'canValidate', false);
+    user.validate().then(function(){
+      ok(Ember.isEmpty(get(user.errors, 'firstName')));
+      set(user, 'canValidate', true);
+      user.validate().then(null, function(){
+        deepEqual(get(user.errors, 'firstName'), ["can't be blank"]);
+        start();
+      });
+    });
+  });
+});
+
+asyncTest('if with function reference', function() {
+  User.reopen({
+    validations: {
+      firstName: {
+        presence: {
+          if: 'canValidate'
+        }
+      }
+    },
+    canValidate: function() {
+      return false;
+    }
+  });
+
+  Ember.run(function(){
+    user = User.create();
+    user.validate().then(function(){
+      ok(Ember.isEmpty(get(user.errors, 'firstName')));
+      set(user, 'canValidate', true);
+      user.canValidate = function() {
+        return true;
+      };
+      user.validate().then(null, function(){
+        deepEqual(get(user.errors, 'firstName'), ["can't be blank"]);
+        start();
+      });
+    });
+  });
+});
+
+asyncTest('unless with function', function() {
+  expect(4);
+  User.reopen({
+    validations: {
+      firstName: {
+        presence: {
+          unless: function(model) {
+            return true;
+          }
+        }
+      }
+    }
+  });
+
+  Ember.run(function(){
+    user = User.create();
+    user.validate().then(function(){
+      ok(Ember.isEmpty(get(user.errors, 'firstName')));
+      var validator = get(user.validators, 'firstObject');
+      validator.conditionals['unless'] = function(model, property) {
+        equal(user, model, "the conditional validator is passed the model being validated");
+        equal(property, 'firstName', "the conditional validator is passed the name of the property being validated");
+        return false;
+      };
+      user.validate().then(null, function(){
+        deepEqual(get(user.errors, 'firstName'), ["can't be blank"]);
+        start();
+      });
+    });
+  });
+});
+
+asyncTest('unless with property reference', function() {
+  User.reopen({
+    validations: {
+      firstName: {
+        presence: {
+          unless: 'canValidate'
+        }
+      }
+    },
+    canValidate: true
+  });
+
+  Ember.run(function(){
+    user = User.create();
+    user.validate().then(function(){
+      ok(Ember.isEmpty(get(user.errors, 'firstName')));
+      set(user, 'canValidate', false);
+      user.validate().then(null, function(){
+        deepEqual(get(user.errors, 'firstName'), ["can't be blank"]);
+        start();
+      });
+    });
+  });
+});
+
+asyncTest('unless with function reference', function() {
+  User.reopen({
+    validations: {
+      firstName: {
+        presence: {
+          unless: 'canValidate'
+        }
+      }
+    },
+    canValidate: function() {
+      return true;
+    }
+  });
+
+  Ember.run(function(){
+    user = User.create();
+    user.validate().then(function(){
+      ok(Ember.isEmpty(get(user.errors, 'firstName')));
+      set(user, 'canValidate', true);
+      user.canValidate = function() {
+        return false;
+      };
+      user.validate().then(null, function(){
+        deepEqual(get(user.errors, 'firstName'), ["can't be blank"]);
+        start();
+      });
+    });
+  });
+});
