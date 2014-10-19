@@ -35,6 +35,7 @@ export default Ember.Object.extend({
     }
   },
   isValid: Ember.computed.empty('errors.[]'),
+  isInvalid: Ember.computed.not('isValid'),
   validate: function() {
     var self = this;
     return this._validate().then(function(success) {
