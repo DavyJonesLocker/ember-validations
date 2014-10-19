@@ -46,6 +46,21 @@ test('isInvalid tracks isValid', function() {
   equal(get(user, 'isInvalid'), false);
 });
 
+test('ensure changes to errors object can be observed', function() {
+  var observerCalled = false;
+
+  user.addObserver('errors', user, function() {
+    observerCalled = true;
+  });
+
+  debugger;
+  Ember.run(function() {
+    set(user, 'firstName', 'Brian');
+  });
+
+  ok(observerCalled, 'errors should be observable');
+});
+
 asyncTest('runs all validations', function() {
   Ember.run(function(){
     user.validate().then(null, function(errors){
