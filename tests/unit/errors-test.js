@@ -35,8 +35,8 @@ test('validations are run on instantiation', function() {
     user = User.create({name: 'Brian', age: 33});
   });
   ok(user.get('isValid'));
-  deepEqual(user.get('errors.name'), []);
-  deepEqual(user.get('errors.age'), []);
+  ok(Ember.isEmpty(user.get('errors.name')));
+  ok(Ember.isEmpty(user.get('errors.age')));
 });
 
 test('when errors are resolved', function() {
@@ -50,20 +50,20 @@ test('when errors are resolved', function() {
     user.set('name', 'Brian');
   });
   equal(user.get('isValid'), false);
-  deepEqual(user.get('errors.name'), []);
+  ok(Ember.isEmpty(user.get('errors.name')));
   deepEqual(user.get('errors.age'), ["can't be blank", 'is not a number']);
   Ember.run(function() {
     user.set('age', 'thirty three');
   });
   equal(user.get('isValid'), false);
-  deepEqual(user.get('errors.name'), []);
+  ok(Ember.isEmpty(user.get('errors.name')));
   deepEqual(user.get('errors.age'), ['is not a number']);
   Ember.run(function() {
     user.set('age', 33);
   });
   ok(user.get('isValid'));
-  deepEqual(user.get('errors.name'), []);
-  deepEqual(user.get('errors.age'), []);
+  ok(Ember.isEmpty(user.get('errors.name')));
+  ok(Ember.isEmpty(user.get('errors.age')));
 });
 
 // test('validations use Ember.I18n.t to render the message if Ember.I18n is present', function() {

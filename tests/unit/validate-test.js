@@ -57,8 +57,8 @@ asyncTest('runs all validations', function() {
         user.set('firstName', 'Brian');
         user.set('lastName', 'Cardarella');
         user.validate().then(function(errors){
-          deepEqual(errors.get('firstName'), []);
-          deepEqual(errors.get('lastName'), []);
+          ok(Ember.isEmpty(errors.get('firstName')));
+          ok(Ember.isEmpty(errors.get('lastName')));
           equal(user.get('isValid'), true);
           start();
         });
@@ -209,7 +209,7 @@ test('validates array of validable objects', function() {
   equal(user.get('isValid'), true);
 
   Ember.run(function() {
-    user.set('friends', Ember.makeArray());
+    user.set('friends', Ember.A());
   });
 
   equal(user.get('isValid'), true);
@@ -272,7 +272,7 @@ test('revalidates arrays when they are replaced', function() {
   equal(user.get('isValid'), true);
 
   Ember.run(function() {
-    user.set('friends', Ember.makeArray());
+    user.set('friends', Ember.A());
   });
 
   equal(user.get('isValid'), true);
@@ -288,7 +288,7 @@ test('revalidates arrays when they are replaced', function() {
   });
 
   Ember.run(function() {
-    user.set('friends', [friend1]);
+    user.set('friends', Ember.A([friend1]));
   });
 
   equal(user.get('isValid'), false);
@@ -308,7 +308,7 @@ test('revalidates arrays when they are replaced', function() {
       }
     });
 
-    user.set('friends', [friend1, friend2]);
+    user.set('friends', Ember.A([friend1, friend2]));
   });
 
   equal(user.get('isValid'), false);

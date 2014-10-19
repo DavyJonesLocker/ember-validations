@@ -2,8 +2,8 @@ import Ember from 'ember';
 
 export default Ember.Object.extend({
   init: function() {
-    this.set('errors', Ember.makeArray());
-    this.dependentValidationKeys = Ember.makeArray();
+    this.set('errors', Ember.A());
+    this.dependentValidationKeys = Ember.A();
     this.conditionals = {
       'if': this.get('options.if'),
       unless: this.get('options.unless')
@@ -18,7 +18,7 @@ export default Ember.Object.extend({
   pushDependentValidationKeyToModel: Ember.on('init', function() {
     var model = this.get('model');
     if (model.dependentValidationKeys[this.property] === undefined) {
-      model.dependentValidationKeys[this.property] = Ember.makeArray();
+      model.dependentValidationKeys[this.property] = Ember.A();
     }
     model.dependentValidationKeys[this.property].addObjects(this.dependentValidationKeys);
   }),

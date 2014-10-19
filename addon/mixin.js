@@ -2,9 +2,16 @@ import Ember from 'ember';
 import Errors from 'ember-validations/errors';
 import Base from 'ember-validations/validators/base';
 
+var get = Ember.get;
+
 var setValidityMixin = Ember.Mixin.create({
   isValid: Ember.computed('validators.@each.isValid', function() {
-    return this.get('validators').compact().filterBy('isValid', false).get('length') === 0;
+    var compactValidators = this.get('validators').compact();
+    var filteredValidators = Ember.EnumerableUtils.filter(compactValidators, function(validator) {
+      return !get(validator, 'isValid');
+    });
+
+    return get(filteredValidators, 'length') === 0;
   }),
   isInvalid: Ember.computed.not('isValid')
 });
@@ -43,10 +50,10 @@ var ArrayValidatorProxy = Ember.ArrayProxy.extend(setValidityMixin, {
   validate: function() {
     return this._validate();
   },
-  _validate: function() {
+  _validate: Ember.on('init', function() {
     var promises = this.get('content').invoke('_validate').without(undefined);
     return Ember.RSVP.all(promises);
-  }.on('init'),
+  }),
   validators: Ember.computed.alias('content')
 });
 
@@ -55,17 +62,17 @@ export default Ember.Mixin.create(setValidityMixin, {
     this._super();
     this.errors = Errors.create();
     this.dependentValidationKeys = {};
-    this.validators = Ember.makeArray();
+    this.validators = Ember.A();
     if (this.get('validations') === undefined) {
       this.validations = {};
     }
     this.buildValidators();
     this.validators.forEach(function(validator) {
       validator.addObserver('errors.[]', this, function(sender) {
-        var errors = Ember.makeArray();
+        var errors = Ember.A();
         this.validators.forEach(function(validator) {
           if (validator.property === sender.property) {
-            errors = errors.concat(validator.errors);
+            errors.addObjects(validator.errors);
           }
         }, this);
         this.set('errors.' + sender.property, errors);
@@ -126,7 +133,7 @@ export default Ember.Mixin.create(setValidityMixin, {
     var self = this;
     return this._validate().then(function(vals) {
       var errors = self.get('errors');
-      if (vals.contains(false)) {
+      if (Ember.EnumerableUtils.indexOf(vals, false) > -1) {
         return Ember.RSVP.reject(errors);
       }
       return errors;
