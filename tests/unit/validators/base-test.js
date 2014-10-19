@@ -29,6 +29,13 @@ test('when value is not empty', function() {
   equal(get(validator, 'isValid'), true);
 });
 
+test('validator has isInvalid flag', function() {
+  Ember.run(function() {
+    validator = CustomValidator.create({model: model, property: 'attribute'});
+  });
+  equal(get(validator, 'isInvalid'), false);
+});
+
 test('generates dependentValidationKeys on the model', function() {
   Ember.run(function() {
     validator = CustomValidator.create({model: model, property: 'attribute'});
