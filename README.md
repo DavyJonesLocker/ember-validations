@@ -242,11 +242,14 @@ The value of the conditional can be an inline function, a string that
 represents a property on the object, or a string that represents a
 function on the object. The result should be a boolean.
 
+**note that `if` is considered a keyword in IE8 and so you should put it
+in quotes**
+
 ```javascript
 // function form
 firstName: {
   presence: {
-    if: function(object, validator) {
+    'if': function(object, validator) {
       return true;
     }
   }
