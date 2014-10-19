@@ -2,6 +2,7 @@ import Ember from 'ember';
 import Base from 'ember-validations/validators/base';
 
 var model, Model, options, CustomValidator, validator;
+var get = Ember.get;
 
 module('Base Validator', {
   setup: function() {
@@ -25,14 +26,14 @@ test('when value is not empty', function() {
   Ember.run(function() {
     validator = CustomValidator.create({model: model, property: 'attribute'});
   });
-  equal(validator.get('isValid'), true);
+  equal(get(validator, 'isValid'), true);
 });
 
 test('generates dependentValidationKeys on the model', function() {
   Ember.run(function() {
     validator = CustomValidator.create({model: model, property: 'attribute'});
   });
-  deepEqual(model.get('dependentValidationKeys'), {attribute: ['otherAttribute']});
+  deepEqual(get(model, 'dependentValidationKeys'), {attribute: ['otherAttribute']});
 });
 
 test('inactive validators should be considered valid', function() {
@@ -49,8 +50,8 @@ test('inactive validators should be considered valid', function() {
       }
     });
   });
-  equal(validator.get('isValid'), false);
+  equal(get(validator, 'isValid'), false);
   canValidate = false;
   Ember.run(validator, 'validate');
-  equal(validator.get('isValid'), true);
+  equal(get(validator, 'isValid'), true);
 });

@@ -4,6 +4,8 @@ import { buildContainer } from '../helpers/container';
 import Base from 'ember-validations/validators/base';
 
 var user, User;
+var get = Ember.get;
+var set = Ember.set;
 
 module('Validate test', {
   setup: function() {
@@ -30,36 +32,36 @@ asyncTest('returns a promise', function() {
     user.validate().then(function(){
       ok(false, 'expected validation failed');
     }, function() {
-      equal(user.get('isValid'), false);
+      equal(get(user, 'isValid'), false);
       start();
     });
   });
 });
 
 test('isInvalid tracks isValid', function() {
-  equal(user.get('isInvalid'), true);
+  equal(get(user, 'isInvalid'), true);
   Ember.run(function() {
     user.setProperties({firstName: 'Brian', lastName: 'Cardarella'});
   });
-  equal(user.get('isInvalid'), false);
+  equal(get(user, 'isInvalid'), false);
 });
 
 asyncTest('runs all validations', function() {
   Ember.run(function(){
     user.validate().then(null, function(errors){
-      deepEqual(errors.get('firstName'), ["can't be blank", 'is the wrong length (should be 5 characters)']);
-      deepEqual(errors.get('lastName'), ["is invalid"]);
-      equal(user.get('isValid'), false);
-      user.set('firstName', 'Bob');
+      deepEqual(get(errors, 'firstName'), ["can't be blank", 'is the wrong length (should be 5 characters)']);
+      deepEqual(get(errors, 'lastName'), ["is invalid"]);
+      equal(get(user, 'isValid'), false);
+      set(user, 'firstName', 'Bob');
       user.validate('firstName').then(null, function(errors){
-        deepEqual(errors.get('firstName'), ['is the wrong length (should be 5 characters)']);
-        equal(user.get('isValid'), false);
-        user.set('firstName', 'Brian');
-        user.set('lastName', 'Cardarella');
+        deepEqual(get(errors, 'firstName'), ['is the wrong length (should be 5 characters)']);
+        equal(get(user, 'isValid'), false);
+        set(user, 'firstName', 'Brian');
+        set(user, 'lastName', 'Cardarella');
         user.validate().then(function(errors){
-          ok(Ember.isEmpty(errors.get('firstName')));
-          ok(Ember.isEmpty(errors.get('lastName')));
-          equal(user.get('isValid'), true);
+          ok(Ember.isEmpty(get(errors, 'firstName')));
+          ok(Ember.isEmpty(get(errors, 'lastName')));
+          equal(get(user, 'isValid'), true);
           start();
         });
       });
@@ -81,16 +83,16 @@ test('can be mixed into an object controller', function() {
   Ember.run(function() {
     controller = Controller.create();
   });
-  equal(controller.get('isValid'), false);
+  equal(get(controller, 'isValid'), false);
   user = Ember.Object.create();
   Ember.run(function() {
-    controller.set('content', user);
+    set(controller, 'content', user);
   });
-  equal(controller.get('isValid'), false);
+  equal(get(controller, 'isValid'), false);
   Ember.run(function() {
-    user.set('name', 'Brian');
+    set(user, 'name', 'Brian');
   });
-  equal(controller.get('isValid'), true);
+  equal(get(controller, 'isValid'), true);
 });
 
 module('Array controller');
@@ -119,24 +121,24 @@ test('can be mixed into an array controller', function() {
   Ember.run(function() {
     controller = Controller.create();
   });
-  equal(controller.get('isValid'), true);
+  equal(get(controller, 'isValid'), true);
   user = Ember.Object.create();
   Ember.run(function() {
     controller.pushObject(user);
   });
-  equal(controller.get('isValid'), false);
+  equal(get(controller, 'isValid'), false);
   Ember.run(function() {
-    user.set('name', 'Brian');
+    set(user, 'name', 'Brian');
   });
-  equal(controller.get('isValid'), true);
+  equal(get(controller, 'isValid'), true);
   Ember.run(function() {
-    user.set('name', undefined);
+    set(user, 'name', undefined);
   });
-  equal(controller.get('isValid'), false);
+  equal(get(controller, 'isValid'), false);
   Ember.run(function() {
-    controller.get('content').removeObject(user);
+    get(controller, 'content').removeObject(user);
   });
-  equal(controller.get('isValid'), true);
+  equal(get(controller, 'isValid'), true);
 });
 
 var Profile, profile;
@@ -170,15 +172,15 @@ test('validates other validatable property', function() {
       }
     });
   });
-  equal(user.get('isValid'), true);
+  equal(get(user, 'isValid'), true);
   Ember.run(function() {
-    user.set('profile', profile);
+    set(user, 'profile', profile);
   });
-  equal(user.get('isValid'), false);
+  equal(get(user, 'isValid'), false);
   Ember.run(function() {
-    profile.set('title', 'Developer');
+    set(profile, 'title', 'Developer');
   });
-  equal(user.get('isValid'), true);
+  equal(get(user, 'isValid'), true);
 });
 
 // test('validates custom validator', function() {
@@ -188,11 +190,11 @@ test('validates other validatable property', function() {
       // validations: [AgeValidator]
     // });
   // });
-  // equal(user.get('isValid'), false);
+  // equal(get(user, 'isValid'), false);
   // Ember.run(function() {
-    // user.set('age', 22);
+    // set(user, 'age', 22);
   // });
-  // equal(user.get('isValid'), true);
+  // equal(get(user, 'isValid'), true);
 // });
 
 test('validates array of validable objects', function() {
@@ -206,13 +208,13 @@ test('validates array of validable objects', function() {
     });
   });
 
-  equal(user.get('isValid'), true);
+  equal(get(user, 'isValid'), true);
 
   Ember.run(function() {
-    user.set('friends', Ember.A());
+    set(user, 'friends', Ember.A());
   });
 
-  equal(user.get('isValid'), true);
+  equal(get(user, 'isValid'), true);
 
   Ember.run(function() {
     friend1 = User.create({
@@ -228,13 +230,13 @@ test('validates array of validable objects', function() {
     user.friends.pushObject(friend1);
   });
 
-  equal(user.get('isValid'), false);
+  equal(get(user, 'isValid'), false);
 
   Ember.run(function() {
-    friend1.set('name', 'Stephanie');
+    set(friend1, 'name', 'Stephanie');
   });
 
-  equal(user.get('isValid'), true);
+  equal(get(user, 'isValid'), true);
 
   Ember.run(function() {
     friend2 = User.create({
@@ -248,13 +250,13 @@ test('validates array of validable objects', function() {
     user.friends.pushObject(friend2);
   });
 
-  equal(user.get('isValid'), false);
+  equal(get(user, 'isValid'), false);
 
   Ember.run(function() {
     user.friends.removeObject(friend2);
   });
 
-  equal(user.get('isValid'), true);
+  equal(get(user, 'isValid'), true);
 });
 
 
@@ -269,13 +271,13 @@ test('revalidates arrays when they are replaced', function() {
     });
   });
 
-  equal(user.get('isValid'), true);
+  equal(get(user, 'isValid'), true);
 
   Ember.run(function() {
-    user.set('friends', Ember.A());
+    set(user, 'friends', Ember.A());
   });
 
-  equal(user.get('isValid'), true);
+  equal(get(user, 'isValid'), true);
 
   Ember.run(function() {
     friend1 = User.create({
@@ -288,16 +290,16 @@ test('revalidates arrays when they are replaced', function() {
   });
 
   Ember.run(function() {
-    user.set('friends', Ember.A([friend1]));
+    set(user, 'friends', Ember.A([friend1]));
   });
 
-  equal(user.get('isValid'), false);
+  equal(get(user, 'isValid'), false);
 
   Ember.run(function() {
-    friend1.set('name', 'Stephanie');
+    set(friend1, 'name', 'Stephanie');
   });
 
-  equal(user.get('isValid'), true);
+  equal(get(user, 'isValid'), true);
 
   Ember.run(function() {
     friend2 = User.create({
@@ -308,16 +310,16 @@ test('revalidates arrays when they are replaced', function() {
       }
     });
 
-    user.set('friends', Ember.A([friend1, friend2]));
+    set(user, 'friends', Ember.A([friend1, friend2]));
   });
 
-  equal(user.get('isValid'), false);
+  equal(get(user, 'isValid'), false);
 
   Ember.run(function() {
     user.friends.removeObject(friend2);
   });
 
-  equal(user.get('isValid'), true);
+  equal(get(user, 'isValid'), true);
 });
 
 /*globals define, registry, requirejs*/
@@ -475,7 +477,7 @@ test("mixed validation syntax", function() {
     });
   });
 
-  deepEqual(['it failed'], user.get('errors.name'));
+  deepEqual(['it failed'], get(user, 'errors.name'));
 });
 
 test("concise validation syntax", function() {
@@ -489,5 +491,5 @@ test("concise validation syntax", function() {
     });
   });
 
-  deepEqual(['it failed'], user.get('errors.name'));
+  deepEqual(['it failed'], get(user, 'errors.name'));
 });

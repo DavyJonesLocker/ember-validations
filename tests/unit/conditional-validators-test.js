@@ -3,6 +3,8 @@ import Mixin from 'ember-validations/mixin';
 import { buildContainer } from '../helpers/container';
 
 var user, User;
+var get = Ember.get;
+var set = Ember.set;
 
 module('Conditional validations', {
   setup: function() {
@@ -29,15 +31,15 @@ asyncTest('if with function', function() {
   Ember.run(function(){
     user = User.create();
     user.validate().then(function(){
-      ok(Ember.isEmpty(user.errors.get('firstName')));
-      var validator = user.validators.get('firstObject');
+      ok(Ember.isEmpty(get(user.errors, 'firstName')));
+      var validator = get(user.validators, 'firstObject');
       validator.conditionals['if'] = function(model, property) {
         equal(user, model, "the conditional validator is passed the model being validated");
         equal(property, 'firstName', "the conditional validator is passed the name of the property being validated");
         return true;
       };
       user.validate().then(null, function(){
-        deepEqual(user.errors.get('firstName'), ["can't be blank"]);
+        deepEqual(get(user.errors, 'firstName'), ["can't be blank"]);
         start();
       });
     });
@@ -58,12 +60,12 @@ asyncTest('if with property reference', function() {
 
   Ember.run(function(){
     user = User.create();
-    user.set('canValidate', false);
+    set(user, 'canValidate', false);
     user.validate().then(function(){
-      ok(Ember.isEmpty(user.errors.get('firstName')));
-      user.set('canValidate', true);
+      ok(Ember.isEmpty(get(user.errors, 'firstName')));
+      set(user, 'canValidate', true);
       user.validate().then(null, function(){
-        deepEqual(user.errors.get('firstName'), ["can't be blank"]);
+        deepEqual(get(user.errors, 'firstName'), ["can't be blank"]);
         start();
       });
     });
@@ -87,13 +89,13 @@ asyncTest('if with function reference', function() {
   Ember.run(function(){
     user = User.create();
     user.validate().then(function(){
-      ok(Ember.isEmpty(user.errors.get('firstName')));
-      user.set('canValidate', true);
+      ok(Ember.isEmpty(get(user.errors, 'firstName')));
+      set(user, 'canValidate', true);
       user.canValidate = function() {
         return true;
       };
       user.validate().then(null, function(){
-        deepEqual(user.errors.get('firstName'), ["can't be blank"]);
+        deepEqual(get(user.errors, 'firstName'), ["can't be blank"]);
         start();
       });
     });
@@ -117,15 +119,15 @@ asyncTest('unless with function', function() {
   Ember.run(function(){
     user = User.create();
     user.validate().then(function(){
-      ok(Ember.isEmpty(user.errors.get('firstName')));
-      var validator = user.validators.get('firstObject');
+      ok(Ember.isEmpty(get(user.errors, 'firstName')));
+      var validator = get(user.validators, 'firstObject');
       validator.conditionals['unless'] = function(model, property) {
         equal(user, model, "the conditional validator is passed the model being validated");
         equal(property, 'firstName', "the conditional validator is passed the name of the property being validated");
         return false;
       };
       user.validate().then(null, function(){
-        deepEqual(user.errors.get('firstName'), ["can't be blank"]);
+        deepEqual(get(user.errors, 'firstName'), ["can't be blank"]);
         start();
       });
     });
@@ -147,10 +149,10 @@ asyncTest('unless with property reference', function() {
   Ember.run(function(){
     user = User.create();
     user.validate().then(function(){
-      ok(Ember.isEmpty(user.errors.get('firstName')));
-      user.set('canValidate', false);
+      ok(Ember.isEmpty(get(user.errors, 'firstName')));
+      set(user, 'canValidate', false);
       user.validate().then(null, function(){
-        deepEqual(user.errors.get('firstName'), ["can't be blank"]);
+        deepEqual(get(user.errors, 'firstName'), ["can't be blank"]);
         start();
       });
     });
@@ -174,13 +176,13 @@ asyncTest('unless with function reference', function() {
   Ember.run(function(){
     user = User.create();
     user.validate().then(function(){
-      ok(Ember.isEmpty(user.errors.get('firstName')));
-      user.set('canValidate', true);
+      ok(Ember.isEmpty(get(user.errors, 'firstName')));
+      set(user, 'canValidate', true);
       user.canValidate = function() {
         return false;
       };
       user.validate().then(null, function(){
-        deepEqual(user.errors.get('firstName'), ["can't be blank"]);
+        deepEqual(get(user.errors, 'firstName'), ["can't be blank"]);
         start();
       });
     });

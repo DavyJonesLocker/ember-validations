@@ -1,5 +1,9 @@
+import Ember from 'ember';
 import Base from 'ember-validations/validators/base';
 import Messages from 'ember-validations/messages';
+
+var get = Ember.get;
+var set = Ember.set;
 
 export default Base.extend({
   init: function() {
@@ -9,12 +13,12 @@ export default Base.extend({
     this.dependentValidationKeys.pushObject(this.originalProperty);
     /*jshint expr:true*/
     if (this.options === true) {
-      this.set('options', { attribute: this.originalProperty });
-      this.set('options', { message: Messages.render('confirmation', this.options) });
+      set(this, 'options', { attribute: this.originalProperty });
+      set(this, 'options', { message: Messages.render('confirmation', this.options) });
     }
   },
   call: function() {
-    if (this.model.get(this.originalProperty) !== this.model.get(this.property)) {
+    if (get(this.model, this.originalProperty) !== get(this.model, this.property)) {
       this.errors.pushObject(this.options.message);
     }
   }

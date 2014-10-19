@@ -4,6 +4,7 @@ import Mixin from 'ember-validations/mixin';
 import { buildContainer } from '../../../helpers/container';
 
 var model, Model, options, validator;
+var set = Ember.set;
 
 module('Exclusion Validator', {
   setup: function() {
@@ -18,7 +19,7 @@ test('when value is not in the list', function() {
   options = { 'message': 'failed validation', 'in': [1, 2, 3] };
   Ember.run(function() {
     validator = Exclusion.create({model: model, property: 'attribute', options: options});
-    model.set('attribute', 4);
+    set(model, 'attribute', 4);
   });
   deepEqual(validator.errors, []);
 });
@@ -27,7 +28,7 @@ test('when value is in the list', function() {
   options = { 'message': 'failed validation', 'in': [1, 2, 3] };
   Ember.run(function() {
     validator = Exclusion.create({model: model, property: 'attribute', options: options});
-    model.set('attribute', 1);
+    set(model, 'attribute', 1);
   });
   deepEqual(validator.errors, ['failed validation']);
 });
@@ -44,7 +45,7 @@ test('when not allowing blank', function() {
   options = { 'message': 'failed validation', 'in': [1, 2, 3] };
   Ember.run(function() {
     validator = Exclusion.create({model: model, property: 'attribute', options: options});
-    model.set('attribute', '');
+    set(model, 'attribute', '');
   });
   deepEqual(validator.errors, ['failed validation']);
 });
@@ -53,7 +54,7 @@ test('when value is not in the range', function() {
   options = { 'message': 'failed validation', 'range': [1, 3] };
   Ember.run(function() {
     validator = Exclusion.create({model: model, property: 'attribute', options: options});
-    model.set('attribute', 4);
+    set(model, 'attribute', 4);
   });
   deepEqual(validator.errors, []);
 });
@@ -62,7 +63,7 @@ test('when value is in the range', function() {
   options = { 'message': 'failed validation', 'range': [1, 3] };
   Ember.run(function() {
     validator = Exclusion.create({model: model, property: 'attribute', options: options});
-    model.set('attribute', 1);
+    set(model, 'attribute', 1);
   });
   deepEqual(validator.errors, ['failed validation']);
 });
@@ -71,7 +72,7 @@ test('when options is an array', function() {
   options = [1, 2, 3];
   Ember.run(function() {
     validator = Exclusion.create({model: model, property: 'attribute', options: options});
-    model.set('attribute', '');
+    set(model, 'attribute', '');
   });
   deepEqual(validator.errors, ['is reserved']);
 });
@@ -80,7 +81,7 @@ test('when no message is passed', function() {
   options = { in: [1, 2, 3] };
   Ember.run(function() {
     validator = Exclusion.create({model: model, property: 'attribute', options: options});
-    model.set('attribute', '');
+    set(model, 'attribute', '');
   });
   deepEqual(validator.errors, ['is reserved']);
 });

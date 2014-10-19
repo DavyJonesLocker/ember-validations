@@ -1,12 +1,15 @@
 import Ember from 'ember';
 
+var get = Ember.get;
+var set = Ember.set;
+
 export default Ember.Object.extend({
   init: function() {
-    this.set('errors', Ember.A());
+    set(this, 'errors', Ember.A());
     this.dependentValidationKeys = Ember.A();
     this.conditionals = {
-      'if': this.get('options.if'),
-      unless: this.get('options.unless')
+      'if': get(this, 'options.if'),
+      unless: get(this, 'options.unless')
     };
     this.model.addObserver(this.property, this, this._validate);
   },
@@ -16,7 +19,7 @@ export default Ember.Object.extend({
     }, this);
   }),
   pushDependentValidationKeyToModel: Ember.on('init', function() {
-    var model = this.get('model');
+    var model = get(this, 'model');
     if (model.dependentValidationKeys[this.property] === undefined) {
       model.dependentValidationKeys[this.property] = Ember.A();
     }
@@ -26,9 +29,9 @@ export default Ember.Object.extend({
     throw 'Not implemented!';
   },
   unknownProperty: function(key) {
-    var model = this.get('model');
+    var model = get(this, 'model');
     if (model) {
-      return model.get(key);
+      return get(model, key);
     }
   },
   isValid: Ember.computed.empty('errors.[]'),
@@ -36,7 +39,7 @@ export default Ember.Object.extend({
     var self = this;
     return this._validate().then(function(success) {
       // Convert validation failures to rejects.
-      var errors = self.get('model.errors');
+      var errors = get(self, 'model.errors');
       if (success) {
         return errors;
       } else {
@@ -49,7 +52,7 @@ export default Ember.Object.extend({
     if (this.canValidate()) {
       this.call();
     }
-    if (this.get('isValid')) {
+    if (get(this, 'isValid')) {
       return Ember.RSVP.resolve(true);
     } else {
       return Ember.RSVP.resolve(false);
@@ -64,7 +67,7 @@ export default Ember.Object.extend({
           if (typeof(this.model[this.conditionals['if']]) === 'function') {
             return this.model[this.conditionals['if']]();
           } else {
-            return this.model.get(this.conditionals['if']);
+            return get(this.model, this.conditionals['if']);
           }
         }
       } else if (this.conditionals.unless) {
@@ -74,7 +77,7 @@ export default Ember.Object.extend({
           if (typeof(this.model[this.conditionals.unless]) === 'function') {
             return !this.model[this.conditionals.unless]();
           } else {
-            return !this.model.get(this.conditionals.unless);
+            return !get(this.model, this.conditionals.unless);
           }
         }
       } else {

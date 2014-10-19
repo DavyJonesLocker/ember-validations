@@ -2,17 +2,20 @@ import Ember from 'ember';
 import Base from 'ember-validations/validators/base';
 import Messages from 'ember-validations/messages';
 
+var get = Ember.get;
+var set = Ember.set;
+
 export default Base.extend({
   init: function() {
     var index, key;
     this._super();
     /*jshint expr:true*/
     if (typeof(this.options) === 'number') {
-      this.set('options', { 'is': this.options });
+      set(this, 'options', { 'is': this.options });
     }
 
     if (this.options.messages === undefined) {
-      this.set('options.messages', {});
+      set(this, 'options.messages', {});
     }
 
     for (index = 0; index < this.messageKeys().length; index++) {
@@ -42,7 +45,7 @@ export default Base.extend({
   },
   getValue: function(key) {
     if (this.options[key].constructor === String) {
-      return this.model.get(this.options[key]) || 0;
+      return get(this.model, this.options[key]) || 0;
     } else {
       return this.options[key];
     }
@@ -71,7 +74,7 @@ export default Base.extend({
   call: function() {
     var fn, operator, key;
 
-    if (Ember.isEmpty(this.model.get(this.property))) {
+    if (Ember.isEmpty(get(this.model, this.property))) {
       if (this.options.allowBlank === undefined && (this.options.is || this.options.minimum)) {
         this.errors.pushObject(this.renderBlankMessage());
       }
@@ -82,7 +85,7 @@ export default Base.extend({
           continue;
         }
 
-        fn = new Function('return ' + this.options.tokenizer(this.model.get(this.property)).length + ' ' + operator + ' ' + this.getValue(key));
+        fn = new Function('return ' + this.options.tokenizer(get(this.model, this.property)).length + ' ' + operator + ' ' + this.getValue(key));
         if (!fn()) {
           this.errors.pushObject(this.renderMessageFor(key));
         }
