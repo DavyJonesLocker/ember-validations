@@ -397,14 +397,21 @@ direct parent's validation state. `isInvalid` is also available for convenience.
 If you want to force all validations to run simply call `.validate()` on the object. `isValid` will be set to `true`
 or `false`. All validations are run as deferred objects, so the validations will
 not be completed when `validate` is done. So `validate` returns a promise, call `then`
-with a function containing the code you want to run after the validations have
+with a function containing the code you want to run after the validations have successfully
 completed.
 
 ```javascript
 user.validate().then(function() {
+  // all validations pass
   user.get('isValid'); // true
-  user.get('isInvalid'); // false
-})
+}).catch(function() {
+  // any validations fail
+  user.get('isValid'); // false
+}).finally(function() {
+  // all validations complete
+  // regardless of isValid state
+ user.get('isValid'); // true || false 
+});
 ```
 
 ## Inspecting Errors ##
