@@ -289,7 +289,7 @@ in `local/` or `remote/` has a higher lookup presedence over those in
 The "native" validators that come with `ember-validations` have the
 lowest lookup priority.
 
-### Withoug Ember-CLI ###
+### Without Ember-CLI ###
 
 You can add your validators to the global object:
 
