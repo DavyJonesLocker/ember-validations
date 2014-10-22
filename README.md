@@ -422,7 +422,7 @@ for the corresponding property. Errors messages will always be an array.
 
 ```javascript
 import Ember from 'ember';
-import EmberValidations from 'ember-validatinos';
+import EmberValidations from 'ember-validations';
 
 export default Ember.Object.extend(EmberValidations.Mixin, {
   validations: {
