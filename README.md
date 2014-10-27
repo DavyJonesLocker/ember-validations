@@ -1,6 +1,6 @@
 # Ember Validations #
 
-[![Build Status](https://secure.travis-ci.org/dockyard/ember-validations.png?branch=master)](http://travis-ci.org/dockyard/ember-validations)
+[![Build Status](https://secure.travis-ci.org/dockyard/ember-validations.svg?branch=master)](http://travis-ci.org/dockyard/ember-validations)
 
 ## Building yourself ##
 
