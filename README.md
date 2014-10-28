@@ -447,6 +447,32 @@ user.validate().then(null, function() {
 
 ```
 
+## Testing ##
+
+#### With Ember QUnit ####
+
+For Ember Validations to work with [Ember QUnit](https://github.com/rwjblue/ember-qunit),
+you must define all your validations in the `needs` property of the `moduleFor`
+call. This will ensure Ember QUnit's isolated container will be able to locate
+the validations during testing.
+
+```javascript
+import { test, moduleFor } from 'ember-qunit';
+
+moduleFor('controller:user/edit', 'UserEditController', {
+  needs: ['ember-validations@validator:local/presence',
+          'ember-validations@validator:local/length',
+          'validator:local/name',
+          'validator:local/email'
+          ]
+});
+
+test('Controller Test', function() { ... });
+```
+
+Where `UserEditController` uses the built-in `presence` and `length` validators,
+and the locally defined `name` and `email` validators.
+
 ## i18n ##
 
 When you use [ember-i18n](https://github.com/jamesarosen/ember-i18n) your `Ember.I18n.translations` object should contain the following keys under the `errors` key:
