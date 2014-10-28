@@ -44,7 +44,7 @@ var lookupValidator = function(validatorName) {
 
   if (local || remote) { return [local, remote]; }
 
-  Ember.warn('Could not the "'+validatorName+'" validator.');
+  Ember.warn('Could not find the "'+validatorName+'" validator.');
 };
 
 var ArrayValidatorProxy = Ember.ArrayProxy.extend(setValidityMixin, {
