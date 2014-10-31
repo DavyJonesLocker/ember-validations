@@ -314,7 +314,7 @@ import Base from 'ember-validations/validators/base';
 
 export default Base.extend({
   call: function() {
-    if (Ember.isBlank(this.model.get(this.property)) {
+    if (Ember.isBlank(this.model.get(this.property))) {
       this.errors.pushObject("cannot be blank");
     }
   }
@@ -336,7 +336,7 @@ export default Base.extend({
     this.dependentValidationKeys.pushObject(this.options.alsoWatch);
   },
   call: function() {
-    if (Ember.isBlank(this.model.get(this.property)) {
+    if (Ember.isBlank(this.model.get(this.property))) {
       this.errors.pushObject("cannot be blank");
     }
   }
