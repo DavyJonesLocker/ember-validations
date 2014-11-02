@@ -30,21 +30,37 @@ var pushValidatableObject = function(model, property) {
 
 var lookupValidator = function(validatorName) {
   var container = get(this, 'container');
-  var local = container.lookupFactory('validator:local/'+validatorName);
-  var remote = container.lookupFactory('validator:remote/'+validatorName);
+  var service = container.lookup('service:validations');
+  var cache = get(service, 'cache');
+  var validators = [];
 
-  if (local || remote) { return [local, remote]; }
+  if (cache[validatorName]) {
+    validators = validators.concat(cache[validatorName]);
+  } else {
+    var local = container.lookupFactory('validator:local/'+validatorName);
+    var remote = container.lookupFactory('validator:remote/'+validatorName);
 
-  var base = container.lookupFactory('validator:'+validatorName);
+    if (local || remote) { validators = validators.concat([local, remote]); }
+    else {
+      var base = container.lookupFactory('validator:'+validatorName);
 
-  if (base) { return [base]; }
+      if (base) { validators = validators.concat([base]); }
+      else {
+        local = container.lookupFactory('ember-validations@validator:local/'+validatorName);
+        remote = container.lookupFactory('ember-validations@validator:remote/'+validatorName);
 
-  local = container.lookupFactory('ember-validations@validator:local/'+validatorName);
-  remote = container.lookupFactory('ember-validations@validator:remote/'+validatorName);
+        if (local || remote) { validators = validators.concat([local, remote]); }
+      }
+    }
 
-  if (local || remote) { return [local, remote]; }
+    cache[validatorName] = validators;
+  }
 
-  Ember.warn('Could not find the "'+validatorName+'" validator.');
+  if (Ember.isEmpty(validators)) {
+    Ember.warn('Could not find the "'+validatorName+'" validator.');
+  }
+
+  return validators;
 };
 
 var ArrayValidatorProxy = Ember.ArrayProxy.extend(setValidityMixin, {

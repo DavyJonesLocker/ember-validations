@@ -456,6 +456,49 @@ test('should prefer lookup in just "validators" before "native"', function() {
   ok(dummyValidatorCalled, 'should have preferred my applications presence validator');
 });
 
+test('should store validators in cache for faster lookup', function() {
+  var validatorResolvedCount = 0;
+
+  var container = buildContainer();
+
+  var oldLookupFactory = container.lookupFactory;
+
+  container.lookupFactory = function(fullName) {
+    validatorResolvedCount += 1;
+    return oldLookupFactory.call(container, fullName);
+  };
+
+  var user2;
+
+  Ember.run(function() {
+    user = User.create({
+      container: container,
+      validations: {
+        name: {
+          presence: true
+        }
+      }
+    });
+
+    validatorResolvedCount = 0;
+
+    user2 = User.create({
+      container: container,
+      validations: {
+        name: {
+          presence: true
+        }
+      }
+    });
+  });
+
+  container.lookupFactory = oldLookupFactory;
+
+  ok(!get(user, 'isValid'));
+  ok(!get(user2, 'isValid'));
+  equal(0, validatorResolvedCount);
+});
+
 module('inline validations', {
   setup: function() {
     User = Ember.Object.extend(EmberValidations.Mixin, {
