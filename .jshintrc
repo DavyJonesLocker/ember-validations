@@ -27,7 +27,6 @@
     ],
 
     "node" : false,
-    "es5" : true,
     "browser" : true,
 
     "boss" : true,
@@ -49,6 +48,7 @@
     "regexp": false,
     "undef": true,
     "sub": true,
+    "esnext": true,
     "strict": false,
     "white": false
 }
