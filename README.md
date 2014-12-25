@@ -74,6 +74,24 @@ export default Ember.ObjectController.extend({
 });
 ```
 
+Though not yet explicitly part of the API, you can also add validators
+to nested objects:
+
+```javascript
+export default Ember.Component.extend({
+  validations: {
+    'user.firstName': {
+      presence: true,
+      length: { minimum: 5 }
+    }
+  }
+});
+```
+
+This is useful for things like Components which don't act as proxies, but
+again, until this is officially built into the project, YMMV.
+
+
 ## Validators ##
 
 ### Absence ###
