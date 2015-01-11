@@ -498,7 +498,7 @@ When you use [ember-i18n](https://github.com/jamesarosen/ember-i18n) your `Ember
 
 ```javascript
 Ember.I18n.translations = {
-  errors:
+  errors: {
     inclusion: "is not included in the list",
     exclusion: "is reserved",
     invalid: "is invalid",
@@ -520,6 +520,7 @@ Ember.I18n.translations = {
     otherThan: "must be other than {{count}}",
     odd: "must be odd",
     even: "must be even"
+  }
 }
 ````
 
