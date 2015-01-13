@@ -60,6 +60,38 @@ test('when allowing digit group separators and value is a number with digit grou
   deepEqual(validator.errors, []);
 }); 
 
+test('when allowing specific digit group separators and value is a number using that separator', function() {
+  options = { messages: { numericality: 'failed validation' }, allowDigitGroupSeparators: "'" };
+  Ember.run(function() {
+    validator = Numericality.create({model: model, property: 'attribute', options: options});
+    set(model, 'attribute', "123'456'789");
+  });
+  deepEqual(validator.errors, []);
+});
+
+test('when allowing specific digit group separators that include regex special characters', function() {
+  options = { messages: { numericality: 'failed validation' }, allowDigitGroupSeparators: '.' };
+  Ember.run(function() {
+    validator = Numericality.create({model: model, property: 'attribute', options: options});
+    set(model, 'attribute', '123.456.789');
+  });
+  deepEqual(validator.errors, []);
+});
+
+test('when specifying a decimal mark', function() {
+  options = { messages: { numericality: 'failed validation' }, decimalMark: ',' };
+  Ember.run(function() {
+    validator = Numericality.create({model: model, property: 'attribute', options: options});
+    set(model, 'attribute', '123,45');
+  });
+  deepEqual(validator.errors, []);
+
+  Ember.run(function() {
+    set(model, 'attribute', '123.45');
+  });
+  deepEqual(validator.errors, ['failed validation']);
+});
+
 test('when no value', function() {
   options = { messages: { numericality: 'failed validation' } };
   Ember.run(function() {
@@ -121,6 +153,54 @@ test('when only integer is passed directly', function() {
     set(model, 'attribute', 1.1);
   });
   deepEqual(validator.errors, ['must be an integer']);
+});
+
+test('when combining integer validation with digit group separator', function() {
+  options = { onlyInteger: true, allowDigitGroupSeparators: true };
+  Ember.run(function() {
+    validator = Numericality.create({model: model, property: 'attribute', options: options});
+    set(model, 'attribute', '123,456');
+  });
+  deepEqual(validator.errors, []);
+
+  Ember.run(function() {
+    set(model, 'attribute', '123456');
+  });
+  deepEqual(validator.errors, []);
+
+  Ember.run(function() {
+    set(model, 'attribute', '123456.78');
+  });
+  deepEqual(validator.errors, ['must be an integer']);
+});
+
+test('when combining decimal mark and digit group separator', function() {
+  options = { messages: { numericality: 'failed validation' }, decimalMark: ',', allowDigitGroupSeparators: '.' };
+  Ember.run(function() {
+    validator = Numericality.create({model: model, property: 'attribute', options: options});
+    set(model, 'attribute', '123.456,78');
+  });
+  deepEqual(validator.errors, []);
+
+  Ember.run(function() {
+    set(model, 'attribute', '123456,78');
+  });
+  deepEqual(validator.errors, []);
+
+  Ember.run(function() {
+    set(model, 'attribute', '123.456.789');
+  });
+  deepEqual(validator.errors, []);
+
+  Ember.run(function() {
+    set(model, 'attribute', '123456');
+  });
+  deepEqual(validator.errors, []);
+
+  Ember.run(function() {
+    set(model, 'attribute', '123,456.78');
+  });
+  deepEqual(validator.errors, ['failed validation']);
 });
 
 test('when only allowing values greater than 10 and value is greater than 10', function() {

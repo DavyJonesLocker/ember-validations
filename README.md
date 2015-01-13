@@ -211,8 +211,9 @@ Will ensure the value is a number
 
 #### Options ####
   * `true` - Passing just `true` will activate validation and use default message
+  * `decimalMark` - The character representing the decimal mark. Defaults to `'.'`
   * `allowBlank` - If `true` skips validation if value is empty
-  * `allowDigitGroupSeparators` - If `true` allows commas every 3 digits, i.e. `123,456`
+  * `allowDigitGroupSeparators` - If `true` allows commas every 3 digits, i.e. `123,456`. You optionally may supply the separator character instead of `true`
   * `onlyInteger` - Will only allow integers
   * `greaterThan` - Ensures the value is greater than
   * `greaterThanOrEqualTo` - Ensures the value is greater than or equal to
