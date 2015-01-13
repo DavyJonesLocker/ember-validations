@@ -212,6 +212,7 @@ Will ensure the value is a number
 #### Options ####
   * `true` - Passing just `true` will activate validation and use default message
   * `allowBlank` - If `true` skips validation if value is empty
+  * `allowDigitGroupSeparators` - If `true` allows commas every 3 digits, i.e. `123,456`
   * `onlyInteger` - Will only allow integers
   * `greaterThan` - Ensures the value is greater than
   * `greaterThanOrEqualTo` - Ensures the value is greater than or equal to

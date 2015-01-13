@@ -42,6 +42,24 @@ test('when value is not a number', function() {
   deepEqual(validator.errors, ['failed validation']);
 });
 
+test('when value is a number with digit group separators', function() {
+  options = { messages: { numericality: 'failed validation' } };
+  Ember.run(function() {
+    validator = Numericality.create({model: model, property: 'attribute', options: options});
+    set(model, 'attribute', '123,456,789');
+  });
+  deepEqual(validator.errors, ['failed validation']);
+});
+
+test('when allowing digit group separators and value is a number with digit group separators', function() {
+  options = { messages: { numericality: 'failed validation' }, allowDigitGroupSeparators: true };
+  Ember.run(function() {
+    validator = Numericality.create({model: model, property: 'attribute', options: options});
+    set(model, 'attribute', '123,456,789');
+  });
+  deepEqual(validator.errors, []);
+}); 
+
 test('when no value', function() {
   options = { messages: { numericality: 'failed validation' } };
   Ember.run(function() {

@@ -59,12 +59,15 @@ export default Base.extend({
   },
   call: function() {
     var check, checkValue, fn, operator;
+    var numberPattern = this.options.allowDigitGroupSeparators ?
+      Patterns.number_with_digit_group_separators :
+      Patterns.number;
 
     if (Ember.isEmpty(get(this.model, this.property))) {
       if (this.options.allowBlank === undefined) {
         this.errors.pushObject(this.options.messages.numericality);
       }
-    } else if (!Patterns.numericality.test(get(this.model, this.property))) {
+    } else if (!numberPattern.test(get(this.model, this.property))) {
       this.errors.pushObject(this.options.messages.numericality);
     } else if (this.options.onlyInteger === true && !(/^[+\-]?\d+$/.test(get(this.model, this.property)))) {
       this.errors.pushObject(this.options.messages.onlyInteger);
