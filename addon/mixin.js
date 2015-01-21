@@ -30,7 +30,7 @@ var pushValidatableObject = function(model, property) {
 
 var lookupValidator = function(validatorName) {
   var container = get(this, 'container');
-  var service = container.lookup('service:validations');
+  var service = container.lookup('service:validations') || {};
   var cache = get(service, 'cache');
   var validators = [];
 
