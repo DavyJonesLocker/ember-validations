@@ -51,14 +51,14 @@ export default Base.extend({
     }
   },
   CHECKS: {
-    equalTo              :'===',
+    equalTo              : '===',
     greaterThan          : '>',
     greaterThanOrEqualTo : '>=',
     lessThan             : '<',
     lessThanOrEqualTo    : '<='
   },
   call: function() {
-    var check, checkValue, fn, operator;
+    var check, checkValue, comparisonResult;
 
     if (Ember.isEmpty(get(this.model, this.property))) {
       if (this.options.allowBlank === undefined) {
@@ -74,8 +74,6 @@ export default Base.extend({
       this.errors.pushObject(this.options.messages.even);
     } else {
       for (check in this.CHECKS) {
-        operator = this.CHECKS[check];
-
         if (this.options[check] === undefined) {
           continue;
         }
@@ -86,9 +84,13 @@ export default Base.extend({
           checkValue = get(this.model, this.options[check]);
         }
 
-        fn = new Function('return ' + get(this.model, this.property) + ' ' + operator + ' ' + checkValue);
+        comparisonResult = this.compare(
+          get(this.model, this.property),
+          checkValue,
+          this.CHECKS[check]
+        );
 
-        if (!fn()) {
+        if (!comparisonResult) {
           this.errors.pushObject(this.options.messages[check]);
         }
       }
