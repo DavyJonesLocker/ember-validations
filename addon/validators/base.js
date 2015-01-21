@@ -87,5 +87,16 @@ export default Ember.Object.extend({
     } else {
       return true;
     }
+  },
+  compare: function (a, b, operator) {
+    switch (operator) {
+      case '==':  return a == b; // jshint ignore:line
+      case '===': return a === b;
+      case '>=':  return a >= b;
+      case '<=':  return a <= b;
+      case '>':   return a > b;
+      case '<':   return a < b;
+      default:    return false;
+    }
   }
 });

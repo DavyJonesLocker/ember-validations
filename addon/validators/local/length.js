@@ -72,7 +72,7 @@ export default Base.extend({
     }
   },
   call: function() {
-    var fn, operator, key;
+    var key, comparisonResult;
 
     if (Ember.isEmpty(get(this.model, this.property))) {
       if (this.options.allowBlank === undefined && (this.options.is || this.options.minimum)) {
@@ -80,13 +80,16 @@ export default Base.extend({
       }
     } else {
       for (key in this.CHECKS) {
-        operator = this.CHECKS[key];
         if (!this.options[key]) {
           continue;
         }
 
-        fn = new Function('return ' + this.options.tokenizer(get(this.model, this.property)).length + ' ' + operator + ' ' + this.getValue(key));
-        if (!fn()) {
+        comparisonResult = this.compare(
+          this.options.tokenizer(get(this.model, this.property)).length,
+          this.getValue(key),
+          this.CHECKS[key]
+        );
+        if (!comparisonResult) {
           this.errors.pushObject(this.renderMessageFor(key));
         }
       }
