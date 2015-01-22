@@ -124,7 +124,7 @@ acceptance: { message: 'you must accept', accept: 'yes' }
 
 ### Confirmation ###
 Expects a `propertyConfirmation` to have the same value as
-`property`
+`property`. The validation must be applied to the `property`, not the `propertyConfirmation` (otherwise it would expect a `propertyConfirmationConfirmation`).
 
 #### Options ####
   * `true` - Passing just `true` will activate validation and use default message
