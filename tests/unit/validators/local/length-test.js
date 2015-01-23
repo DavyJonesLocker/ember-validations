@@ -169,6 +169,15 @@ test('when allowed length maximum is 3, value length is 4 and no message is set'
   deepEqual(validator.errors, ['is too long (maximum is 3 characters)']);
 });
 
+test('when value is non-string, then the value is still checked', function() {
+  options = { maximum: 3 };
+  Ember.run(function() {
+    validator = Length.create({model: model, property: 'attribute', options: options});
+    set(model, 'attribute', 1234);
+  });
+  deepEqual(validator.errors, ['is too long (maximum is 3 characters)']);
+});
+
 test('when using a property instead of a number', function() {
   options = { is: 'countProperty' };
   Ember.run(function() {
