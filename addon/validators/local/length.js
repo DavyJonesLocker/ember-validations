@@ -25,7 +25,7 @@ export default Base.extend({
       }
     }
 
-    this.options.tokenizer = this.options.tokenizer || function(value) { return value.split(''); };
+    this.options.tokenizer = this.options.tokenizer || function(value) { return value.toString().split(''); };
     // if (typeof(this.options.tokenizer) === 'function') {
       // debugger;
       // // this.tokenizedLength = new Function('value', 'return '
