@@ -92,6 +92,18 @@ export default Ember.Component.extend({
 This is useful for things like Components which don't act as proxies, but
 again, until this is officially built into the project, YMMV.
 
+**Note: If you override the init function, you must call _super()**
+
+```javascript
+export default Ember.ObjectController.extend({
+  init: function() {
+    // this call is necessary, don't forget it!
+    this._super();
+
+    // Your init code...
+  }
+});
+```
 
 ## Validators ##
 
