@@ -98,7 +98,7 @@ again, until this is officially built into the project, YMMV.
 export default Ember.ObjectController.extend({
   init: function() {
     // this call is necessary, don't forget it!
-    this._super();
+    this._super.apply(this, arguments);
 
     // Your init code...
   }
