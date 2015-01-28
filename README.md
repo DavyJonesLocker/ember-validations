@@ -43,7 +43,7 @@ If it is a bug [please open an issue on GitHub](https://github.com/dockyard/embe
 
 ## Usage ##
 
-You need to mixin `EmberValidations.Mixin` into any `Ember.Object` you want to add
+You need to mixin `Ember.Validations.Mixin` into any `Ember.Object` you want to add
 validations to:
 
 ```javascript
@@ -447,7 +447,7 @@ user.validate().then(function() {
 
 ## Inspecting Errors ##
 
-After mixing in `EmberValidations.Mixin` into your object it will now have a
+After mixing in `Ember.Validations.Mixin` into your object it will now have a
 `.errors` object. All validation error messages will be placed in there
 for the corresponding property. Errors messages will always be an array.
 
