@@ -43,7 +43,7 @@ If it is a bug [please open an issue on GitHub](https://github.com/dockyard/embe
 
 ## Usage ##
 
-You need to mixin `EmberValidations.Mixin` into any `Ember.Object` you want to add
+You need to mixin `Ember.Validations.Mixin` into any `Ember.Object` you want to add
 validations to:
 
 ```javascript
@@ -325,8 +325,8 @@ lowest lookup priority.
 You can add your validators to the global object:
 
 ```javascript
-EmberValidations.validators.local.<ClassName> =
-EmberValidations.validators.Base.extend({
+Ember.Validations.validators.local.<ClassName> =
+Ember.Validations.validators.Base.extend({
  ...
 });
 ```
@@ -383,17 +383,17 @@ any given path the validator will automatically trigger.
 #### Inline Validators ####
 
 If you want to create validators inline you can use the
-`EmberValidations.validator` function:
+`Ember.Validations.validator` function:
 
 ```javascript
 User.create({
   validations: {
     name: {
-      inline: EmberValidations.validator(function() {
+      inline: Ember.Validations.validator(function() {
         if (this.model.get('canNotDoSomething')) {
           return "you can't do this!"
         }
-      }) 
+      })
     }
   }
 });
@@ -410,11 +410,11 @@ you can use a more concise syntax:
 ```javascript
 User.create({
   validations: {
-    name: EmberValidations.validator(function() {
+    name: Ember.Validations.validator(function() {
       if (this.model.get('canNotDoSomething')) {
         return "you can't do this!"
       }
-    }) 
+    })
   }
 });
 ```
@@ -441,13 +441,13 @@ user.validate().then(function() {
 }).finally(function() {
   // all validations complete
   // regardless of isValid state
- user.get('isValid'); // true || false 
+ user.get('isValid'); // true || false
 });
 ```
 
 ## Inspecting Errors ##
 
-After mixing in `EmberValidations.Mixin` into your object it will now have a
+After mixing in `Ember.Validations.Mixin` into your object it will now have a
 `.errors` object. All validation error messages will be placed in there
 for the corresponding property. Errors messages will always be an array.
 
