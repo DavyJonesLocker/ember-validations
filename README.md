@@ -35,7 +35,8 @@ We will continue to build `EmberValidations` to the DockYard build
 server until `ember-cli` is officially recommended by Ember. You can
 select a build version from:
 [http://builds.dockyard.com](http://builds.dockyard.com) for use in
-Bower.
+Bower. This README reflects the 2.0 version which is only available via
+`ember-cli`, not [http://builds.dockyard.com](http://builds.dockyard.com).
 
 ## Looking for help? ##
 
@@ -393,7 +394,7 @@ User.create({
         if (this.model.get('canNotDoSomething')) {
           return "you can't do this!"
         }
-      }) 
+      })
     }
   }
 });
@@ -414,7 +415,7 @@ User.create({
       if (this.model.get('canNotDoSomething')) {
         return "you can't do this!"
       }
-    }) 
+    })
   }
 });
 ```
@@ -441,7 +442,7 @@ user.validate().then(function() {
 }).finally(function() {
   // all validations complete
   // regardless of isValid state
- user.get('isValid'); // true || false 
+ user.get('isValid'); // true || false
 });
 ```
 
