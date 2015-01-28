@@ -491,7 +491,8 @@ the validations during testing.
 import { test, moduleFor } from 'ember-qunit';
 
 moduleFor('controller:user/edit', 'UserEditController', {
-  needs: ['ember-validations@validator:local/presence',
+  needs: ['service:validations',
+          'ember-validations@validator:local/presence',
           'ember-validations@validator:local/length',
           'validator:local/name',
           'validator:local/email'
