@@ -325,8 +325,8 @@ lowest lookup priority.
 You can add your validators to the global object:
 
 ```javascript
-EmberValidations.validators.local.<ClassName> =
-EmberValidations.validators.Base.extend({
+Ember.Validations.validators.local.<ClassName> =
+Ember.Validations.validators.Base.extend({
  ...
 });
 ```
@@ -383,17 +383,17 @@ any given path the validator will automatically trigger.
 #### Inline Validators ####
 
 If you want to create validators inline you can use the
-`EmberValidations.validator` function:
+`Ember.Validations.validator` function:
 
 ```javascript
 User.create({
   validations: {
     name: {
-      inline: EmberValidations.validator(function() {
+      inline: Ember.Validations.validator(function() {
         if (this.model.get('canNotDoSomething')) {
           return "you can't do this!"
         }
-      }) 
+      })
     }
   }
 });
@@ -410,11 +410,11 @@ you can use a more concise syntax:
 ```javascript
 User.create({
   validations: {
-    name: EmberValidations.validator(function() {
+    name: Ember.Validations.validator(function() {
       if (this.model.get('canNotDoSomething')) {
         return "you can't do this!"
       }
-    }) 
+    })
   }
 });
 ```
@@ -441,7 +441,7 @@ user.validate().then(function() {
 }).finally(function() {
   // all validations complete
   // regardless of isValid state
- user.get('isValid'); // true || false 
+ user.get('isValid'); // true || false
 });
 ```
 
