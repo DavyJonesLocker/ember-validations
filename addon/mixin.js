@@ -99,6 +99,7 @@ export default Ember.Mixin.create(setValidityMixin, {
           }
         }, this);
         set(this, 'errors.' + sender.property, errors);
+        this.propertyDidChange('errors.[]');
       });
     }, this);
   },

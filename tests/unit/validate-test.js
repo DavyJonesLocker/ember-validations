@@ -69,6 +69,30 @@ asyncTest('runs all validations', function() {
   });
 });
 
+asyncTest('triggers observers on errors.[]', function() {
+  Ember.run(function(){
+    user.validate().then(null, function(errors){
+      user.setProperties({firstName: 'Brian', lastName: 'Cardarella'});
+      Ember.defineProperty(user, 'errorsProperty', Ember.computed('errors.[]', function() {
+        if (this.get('errors.firstName.length') > 0) {
+          return "Invalid!";
+        } else {
+          return null;
+        }
+      }));
+      equal(get(user, 'isValid'), true);
+      equal(get(user, 'errors.firstName.length'), 0);
+      equal(get(user, 'errorsProperty'), null);
+
+      user.setProperties({firstName: 'Bri'});
+      equal(get(user, 'isValid'), false);
+      equal(get(user, 'errors.firstName.length'), 1);
+      equal(get(user, 'errorsProperty'), "Invalid!");
+      start();
+    });
+  });
+});
+
 test('can be mixed into an object controller', function() {
   var Controller, controller, user;
   Controller = Ember.ObjectController.extend(EmberValidations.Mixin, {
