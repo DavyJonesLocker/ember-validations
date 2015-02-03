@@ -4,6 +4,7 @@ import Mixin from 'ember-validations/mixin';
 import { buildContainer } from '../../../helpers/container';
 
 var model, Model, options, validator;
+var get = Ember.get;
 var set = Ember.set;
 
 module('Inclusion Validator', {
@@ -31,6 +32,26 @@ test('when value is not in the list', function() {
     set(model, 'attribute', 4);
   });
   deepEqual(validator.errors, ['failed validation']);
+});
+
+test('when list is a computed property reference', function() {
+  options = {
+    'message': 'failed validation',
+    'in': Ember.computed('bar', function() {
+      return [get(this, 'bar')];
+     })
+   }
+  Ember.run(function() {
+    model = FooModel.create({bar: 5, attribute: 4});
+  });
+  Ember.run(function() {
+    validator = Inclusion.create({model: model, property: 'attribute', options: options});
+  });
+  deepEqual(validator.errors, ['failed validation']);
+  Ember.run(function() {
+    set(model, 'bar', 4);
+  });
+  ok(Ember.isEmpty(validator.errors));
 });
 
 test('when allowing blank', function() {
