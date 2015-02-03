@@ -8,7 +8,7 @@ var get = Ember.get;
 export default Base.extend({
   init: function() {
     /*jshint expr:true*/
-    var index, keys, key;
+    var index, keys, key, digitGroupSeparator, decimalMark;
     this._super();
 
     if (this.options === true) {
@@ -49,6 +49,30 @@ export default Base.extend({
         }
       }
     }
+
+    if (this.options.allowDigitGroupSeparators === true) {
+      digitGroupSeparator = ',';
+    } else if (this.options.allowDigitGroupSeparators !== undefined) {
+      digitGroupSeparator = Patterns.escape(this.options.allowDigitGroupSeparators);
+    }
+
+    if (this.options.decimalMark !== undefined) {
+      decimalMark = Patterns.escape(this.options.decimalMark);
+    } else {
+      decimalMark = '\\.';
+    }
+
+    if (this.options.onlyInteger) {
+      if (digitGroupSeparator !== undefined) {
+        this.pattern = new RegExp('^(-|\\+)?(?:\\d+|\\d{1,3}(?:' +digitGroupSeparator+ '\\d{3})+)$');
+      } else {
+        this.pattern = /^(-|\+)?\d+$/;
+      }
+    } else if (digitGroupSeparator !== undefined) {
+      this.pattern = new RegExp('^(-|\\+)?(?:\\d+|\\d{1,3}(?:' +digitGroupSeparator+ '\\d{3})+)(?:' +decimalMark+ '\\d*)?$');
+    } else {
+      this.pattern = new RegExp('^(-|\\+)?\\d+(?:' +decimalMark+ '\\d*)?$');
+    }
   },
   CHECKS: {
     equalTo              : '===',
@@ -64,10 +88,12 @@ export default Base.extend({
       if (this.options.allowBlank === undefined) {
         this.errors.pushObject(this.options.messages.numericality);
       }
-    } else if (!Patterns.numericality.test(get(this.model, this.property))) {
-      this.errors.pushObject(this.options.messages.numericality);
-    } else if (this.options.onlyInteger === true && !(/^[+\-]?\d+$/.test(get(this.model, this.property)))) {
-      this.errors.pushObject(this.options.messages.onlyInteger);
+    } else if (!this.pattern.test(get(this.model, this.property))) {
+      if (this.options.onlyInteger === true) {
+        this.errors.pushObject(this.options.messages.onlyInteger);
+      } else {
+        this.errors.pushObject(this.options.messages.numericality);
+      }
     } else if (this.options.odd  && parseInt(get(this.model, this.property), 10) % 2 === 0) {
       this.errors.pushObject(this.options.messages.odd);
     } else if (this.options.even && parseInt(get(this.model, this.property), 10) % 2 !== 0) {
