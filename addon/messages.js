@@ -2,8 +2,14 @@ import Ember from 'ember';
 
 export default {
   render: function(attribute, context) {
-    if (Ember.I18n) {
+    // Ember-i18n
+    if (Ember.I18n && Ember.I18n.t) {
       return Ember.I18n.t('errors.' + attribute, context);
+
+    // Ember-gettext
+    } else if(Ember.I18n && i18n._t) {
+      return Ember.I18n._t("errors." + attribute, context);
+
     } else {
       var regex = new RegExp("{{(.*?)}}"),
           attributeName = "";
