@@ -8,7 +8,9 @@ var set = Ember.set;
 
 module('Inclusion Validator', {
   setup: function() {
-    Model = Ember.Object.extend(Mixin);
+    Model = Ember.Object.extend(Mixin, {
+      container: buildContainer()
+    });
     Ember.run(function() {
       model = Model.create();
     });

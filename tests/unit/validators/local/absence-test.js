@@ -1,13 +1,15 @@
 import Ember from 'ember';
 import Absence from 'ember-validations/validators/local/absence';
+import Mixin from 'ember-validations/mixin';
+import { buildContainer } from '../../../helpers/container';
 
 var model, Model, options, validator;
 var set = Ember.set;
 
 module('Absence Validator', {
   setup: function() {
-    Model = Ember.Object.extend({
-      dependentValidationKeys: {}
+    Model = Ember.Object.extend(Mixin, {
+      container: buildContainer()
     });
     Ember.run(function() {
       model = Model.create();
