@@ -20,11 +20,11 @@ export default Base.extend({
 
     if (this.options.messages === undefined || this.options.messages.numericality === undefined) {
       this.options.messages = this.options.messages || {};
-      this.options.messages.numericality = this.messages('notANumber', this.options);
+      this.options.messages.numericality = this.getMessage('notANumber', this.options);
     }
 
     if (this.options.onlyInteger !== undefined && this.options.messages.onlyInteger === undefined) {
-      this.options.messages.onlyInteger = this.messages('notAnInteger', this.options);
+      this.options.messages.onlyInteger = this.getMessage('notAnInteger', this.options);
     }
 
     keys = Ember.keys(this.CHECKS).concat(['odd', 'even']);
