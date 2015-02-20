@@ -1,6 +1,5 @@
 import Ember from 'ember';
 import Base from 'ember-validations/validators/base';
-import Messages from 'ember-validations/messages';
 
 var get = Ember.get;
 var set = Ember.set;
@@ -62,7 +61,7 @@ export default Base.extend({
       options[_key] = this.options[_key];
     }
 
-    return this.options.messages[this.MESSAGES[key]] || Messages.render(this.MESSAGES[key], options);
+    return this.options.messages[this.MESSAGES[key]] || this.getMessage(this.MESSAGES[key], options);
   },
   renderBlankMessage: function() {
     if (this.options.is) {
