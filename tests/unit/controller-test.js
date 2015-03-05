@@ -7,7 +7,7 @@ moduleFor('controller:foo', 'Controller sanity test', {
   needs: ['ember-validations@validator:local/presence']
 });
 
-test('does not blow up', function() {
+test('does not blow up', function(assert) {
   var controller = this.subject();
-  ok(controller);
+  assert.ok(controller);
 });

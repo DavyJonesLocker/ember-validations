@@ -1,8 +1,10 @@
 import Ember from 'ember';
+import { module, test } from 'qunit';
 import Base from 'ember-validations/validators/base';
 
 var model, Model, options, CustomValidator, validator;
 var get = Ember.get;
+var run = Ember.run;
 
 module('Base Validator', {
   setup: function() {
@@ -16,36 +18,36 @@ module('Base Validator', {
       },
       call: function() {}
     });
-    Ember.run(function() {
+    run(function() {
       model = Model.create();
     });
   }
 });
 
-test('when value is not empty', function() {
-  Ember.run(function() {
+test('when value is not empty', function(assert) {
+  run(function() {
     validator = CustomValidator.create({model: model, property: 'attribute'});
   });
-  equal(get(validator, 'isValid'), true);
+  assert.equal(get(validator, 'isValid'), true);
 });
 
-test('validator has isInvalid flag', function() {
-  Ember.run(function() {
+test('validator has isInvalid flag', function(assert) {
+  run(function() {
     validator = CustomValidator.create({model: model, property: 'attribute'});
   });
-  equal(get(validator, 'isInvalid'), false);
+  assert.equal(get(validator, 'isInvalid'), false);
 });
 
-test('generates dependentValidationKeys on the model', function() {
-  Ember.run(function() {
+test('generates dependentValidationKeys on the model', function(assert) {
+  run(function() {
     validator = CustomValidator.create({model: model, property: 'attribute'});
   });
-  deepEqual(get(model, 'dependentValidationKeys'), {attribute: ['otherAttribute']});
+  assert.deepEqual(get(model, 'dependentValidationKeys'), {attribute: ['otherAttribute']});
 });
 
-test('inactive validators should be considered valid', function() {
+test('inactive validators should be considered valid', function(assert) {
   var canValidate = true;
-  Ember.run(function() {
+  run(function() {
     validator = CustomValidator.createWithMixins({
       model: model,
       property: 'attribute',
@@ -57,8 +59,8 @@ test('inactive validators should be considered valid', function() {
       }
     });
   });
-  equal(get(validator, 'isValid'), false);
+  assert.equal(get(validator, 'isValid'), false);
   canValidate = false;
-  Ember.run(validator, 'validate');
-  equal(get(validator, 'isValid'), true);
+  run(validator, 'validate');
+  assert.equal(get(validator, 'isValid'), true);
 });
