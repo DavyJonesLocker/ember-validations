@@ -1,88 +1,90 @@
 import Ember from 'ember';
+import { module, test } from 'qunit';
 import Inclusion from 'ember-validations/validators/local/inclusion';
 import Mixin from 'ember-validations/mixin';
 import { buildContainer } from '../../../helpers/container';
 
 var model, Model, options, validator;
 var set = Ember.set;
+var run = Ember.run;
 
 module('Inclusion Validator', {
   setup: function() {
     Model = Ember.Object.extend(Mixin);
-    Ember.run(function() {
+    run(function() {
       model = Model.create();
     });
   }
 });
 
-test('when value is in the list', function() {
+test('when value is in the list', function(assert) {
   options = { 'message': 'failed validation', 'in': [1, 2, 3] };
-  Ember.run(function() {
+  run(function() {
     validator = Inclusion.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', 1);
   });
-  deepEqual(validator.errors, []);
+  assert.deepEqual(validator.errors, []);
 });
 
-test('when value is not in the list', function() {
+test('when value is not in the list', function(assert) {
   options = { 'message': 'failed validation', 'in': [1, 2, 3] };
-  Ember.run(function() {
+  run(function() {
     validator = Inclusion.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', 4);
   });
-  deepEqual(validator.errors, ['failed validation']);
+  assert.deepEqual(validator.errors, ['failed validation']);
 });
 
-test('when allowing blank', function() {
+test('when allowing blank', function(assert) {
   options = { 'message': 'failed validation', 'in': [1, 2, 3], allowBlank: true };
-  Ember.run(function() {
+  run(function() {
     validator = Inclusion.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', '');
   });
-  deepEqual(validator.errors, []);
+  assert.deepEqual(validator.errors, []);
 });
 
-test('when not allowing blank', function() {
+test('when not allowing blank', function(assert) {
   options = { 'message': 'failed validation', 'in': [1, 2, 3] };
-  Ember.run(function() {
+  run(function() {
     validator = Inclusion.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', '');
   });
-  deepEqual(validator.errors, ['failed validation']);
+  assert.deepEqual(validator.errors, ['failed validation']);
 });
 
-test('when value is in the range', function() {
+test('when value is in the range', function(assert) {
   options = { 'message': 'failed validation', 'range': [1, 3] };
-  Ember.run(function() {
+  run(function() {
     validator = Inclusion.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', 1);
   });
-  deepEqual(validator.errors, []);
+  assert.deepEqual(validator.errors, []);
 });
 
-test('when value is not in the range', function() {
+test('when value is not in the range', function(assert) {
   options = { 'message': 'failed validation', 'range': [1, 3] };
-  Ember.run(function() {
+  run(function() {
     validator = Inclusion.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', 4);
   });
-  deepEqual(validator.errors, ['failed validation']);
+  assert.deepEqual(validator.errors, ['failed validation']);
 });
 
-test('when options is array', function() {
+test('when options is array', function(assert) {
   options = [1, 2, 3];
-  Ember.run(function() {
+  run(function() {
     validator = Inclusion.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', '');
   });
-  deepEqual(validator.errors, ['is not included in the list']);
+  assert.deepEqual(validator.errors, ['is not included in the list']);
 });
 
-test('when no message is passed', function() {
+test('when no message is passed', function(assert) {
   options = { in: [1, 2, 3] };
-  Ember.run(function() {
+  run(function() {
     validator = Inclusion.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', '');
   });
-  deepEqual(validator.errors, ['is not included in the list']);
+  assert.deepEqual(validator.errors, ['is not included in the list']);
 });

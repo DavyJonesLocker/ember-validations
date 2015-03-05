@@ -1,52 +1,54 @@
 import Ember from 'ember';
+import { module, test } from 'qunit';
 import Presence from 'ember-validations/validators/local/presence';
 import Mixin from 'ember-validations/mixin';
 import { buildContainer } from '../../../helpers/container';
 
 var model, Model, options, validator;
 var set = Ember.set;
+var run = Ember.run;
 
 module('Presence Validator', {
   setup: function() {
     Model = Ember.Object.extend(Mixin);
-    Ember.run(function() {
+    run(function() {
       model = Model.create();
     });
   }
 });
 
-test('when value is not empty', function() {
+test('when value is not empty', function(assert) {
   options = { message: 'failed validation' };
-  Ember.run(function() {
+  run(function() {
     validator = Presence.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', 'not empty');
   });
-  deepEqual(validator.errors, []);
+  assert.deepEqual(validator.errors, []);
 });
 
-test('when value is empty', function() {
+test('when value is empty', function(assert) {
   options = { message: 'failed validation' };
-  Ember.run(function() {
+  run(function() {
     validator = Presence.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', '');
   });
-  deepEqual(validator.errors, ['failed validation']);
+  assert.deepEqual(validator.errors, ['failed validation']);
 });
 
-test('when options is true', function() {
+test('when options is true', function(assert) {
   options = true;
-  Ember.run(function() {
+  run(function() {
     validator = Presence.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', '');
   });
-  deepEqual(validator.errors, ["can't be blank"]);
+  assert.deepEqual(validator.errors, ["can't be blank"]);
 });
 
-test('when value is blank', function() {
+test('when value is blank', function(assert) {
   options = { message: 'failed validation' };
-  Ember.run(function() {
+  run(function() {
     validator = Presence.create({model: model, property: 'attribute', options: options});
     model.set('attribute', ' ');
   });
-  deepEqual(validator.errors, ['failed validation']);
+  assert.deepEqual(validator.errors, ['failed validation']);
 });

@@ -1,9 +1,9 @@
 export { pass, fail };
 
-function pass () {
-  ok(true, 'validation is working');
+function pass (assert) {
+  assert.ok(true, 'validation is working');
 }
 
-function fail () {
-  ok(false, 'validation is not working');
+function fail (assert) {
+  assert.ok(false, 'validation is not working');
 }
