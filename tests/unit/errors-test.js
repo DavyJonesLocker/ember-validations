@@ -1,10 +1,12 @@
 import Ember from 'ember';
+import { module, test } from 'qunit';
 import Mixin from 'ember-validations/mixin';
 import { buildContainer } from '../helpers/container';
 
 var user, User;
 var get = Ember.get;
 var set = Ember.set;
+var run = Ember.run;
 
 module('Errors test', {
   setup: function() {
@@ -26,46 +28,46 @@ module('Errors test', {
   }
 });
 
-test('validations are run on instantiation', function() {
-  Ember.run(function() {
+test('validations are run on instantiation', function(assert) {
+  run(function() {
     user = User.create();
   });
-  equal(get(user, 'isValid'), false);
-  deepEqual(get(user, 'errors.name'), ["can't be blank"]);
-  deepEqual(get(user, 'errors.age'), ["can't be blank", 'is not a number']);
-  Ember.run(function() {
+  assert.equal(get(user, 'isValid'), false);
+  assert.deepEqual(get(user, 'errors.name'), ["can't be blank"]);
+  assert.deepEqual(get(user, 'errors.age'), ["can't be blank", 'is not a number']);
+  run(function() {
     user = User.create({name: 'Brian', age: 33});
   });
-  ok(get(user, 'isValid'));
-  ok(Ember.isEmpty(get(user, 'errors.name')));
-  ok(Ember.isEmpty(get(user, 'errors.age')));
+  assert.ok(get(user, 'isValid'));
+  assert.ok(Ember.isEmpty(get(user, 'errors.name')));
+  assert.ok(Ember.isEmpty(get(user, 'errors.age')));
 });
 
-test('when errors are resolved', function() {
-  Ember.run(function() {
+test('when errors are resolved', function(assert) {
+  run(function() {
     user = User.create();
   });
-  equal(get(user, 'isValid'), false);
-  deepEqual(get(user, 'errors.name'), ["can't be blank"]);
-  deepEqual(get(user, 'errors.age'), ["can't be blank", 'is not a number']);
-  Ember.run(function() {
+  assert.equal(get(user, 'isValid'), false);
+  assert.deepEqual(get(user, 'errors.name'), ["can't be blank"]);
+  assert.deepEqual(get(user, 'errors.age'), ["can't be blank", 'is not a number']);
+  run(function() {
     set(user, 'name', 'Brian');
   });
-  equal(get(user, 'isValid'), false);
-  ok(Ember.isEmpty(get(user, 'errors.name')));
-  deepEqual(get(user, 'errors.age'), ["can't be blank", 'is not a number']);
-  Ember.run(function() {
+  assert.equal(get(user, 'isValid'), false);
+  assert.ok(Ember.isEmpty(get(user, 'errors.name')));
+  assert.deepEqual(get(user, 'errors.age'), ["can't be blank", 'is not a number']);
+  run(function() {
     set(user, 'age', 'thirty three');
   });
-  equal(get(user, 'isValid'), false);
-  ok(Ember.isEmpty(get(user, 'errors.name')));
-  deepEqual(get(user, 'errors.age'), ['is not a number']);
-  Ember.run(function() {
+  assert.equal(get(user, 'isValid'), false);
+  assert.ok(Ember.isEmpty(get(user, 'errors.name')));
+  assert.deepEqual(get(user, 'errors.age'), ['is not a number']);
+  run(function() {
     set(user, 'age', 33);
   });
-  ok(get(user, 'isValid'));
-  ok(Ember.isEmpty(get(user, 'errors.name')));
-  ok(Ember.isEmpty(get(user, 'errors.age')));
+  assert.ok(get(user, 'isValid'));
+  assert.ok(Ember.isEmpty(get(user, 'errors.name')));
+  assert.ok(Ember.isEmpty(get(user, 'errors.age')));
 });
 
 // test('validations use Ember.I18n.t to render the message if Ember.I18n is present', function() {
@@ -93,15 +95,15 @@ test('when errors are resolved', function() {
     // }
   // };
   
-  // Ember.run(function() {
+  // run(function() {
     // user = User.create();
   // });
   // equal(get(user, 'isValid'), false);
-  // deepEqual(get(user, 'errors.name'), ['muss ausgefüllt werden']);
-  // deepEqual(get(user, 'errors.age'), ['muss ausgefüllt werden', 'ist keine Zahl']);
-  // Ember.run(function() {
+  // assert.deepEqual(get(user, 'errors.name'), ['muss ausgefüllt werden']);
+  // assert.deepEqual(get(user, 'errors.age'), ['muss ausgefüllt werden', 'ist keine Zahl']);
+  // run(function() {
     // set(user, 'age', 'thirty three');
   // });
   // equal(get(user, 'isValid'), false);
-  // deepEqual(get(user, 'errors.age'), ['ist keine Zahl']);
+  // assert.deepEqual(get(user, 'errors.age'), ['ist keine Zahl']);
 // });

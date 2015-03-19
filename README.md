@@ -511,7 +511,7 @@ When you use [ember-i18n](https://github.com/jamesarosen/ember-i18n) your `Ember
 
 ```javascript
 Ember.I18n.translations = {
-  errors:
+  errors: {
     inclusion: "is not included in the list",
     exclusion: "is reserved",
     invalid: "is invalid",
@@ -533,6 +533,7 @@ Ember.I18n.translations = {
     otherThan: "must be other than {{count}}",
     odd: "must be odd",
     even: "must be even"
+  }
 }
 ````
 
@@ -584,7 +585,7 @@ This library follows [Semantic Versioning](http://semver.org)
 
 ## Want to help? ##
 
-Please do! We are always looking to improve this gem. Please see our
+Please do! We are always looking to improve this library. Please see our
 [Contribution Guidelines](https://github.com/dockyard/ember-validations/blob/master/CONTRIBUTING.md)
 on how to properly submit issues and pull requests.
 

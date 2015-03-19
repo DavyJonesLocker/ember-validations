@@ -1,372 +1,372 @@
 import Ember from 'ember';
+import { module, test } from 'qunit';
 import Numericality from 'ember-validations/validators/local/numericality';
 import Mixin from 'ember-validations/mixin';
 import { buildContainer } from '../../../helpers/container';
 
 var model, Model, options, validator;
 var set = Ember.set;
+var run = Ember.run;
 
 module('Numericality Validator', {
   setup: function() {
     Model = Ember.Object.extend(Mixin, {
       container: buildContainer()
     });
-    Ember.run(function() {
+    run(function() {
       model = Model.create();
     });
   }
 });
 
-test('when value is a number', function() {
+test('when value is a number', function(assert) {
   options = { messages: { numericality: 'failed validation' } };
-  Ember.run(function() {
+  run(function() {
     validator = Numericality.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', 123);
   });
-  deepEqual(validator.errors, []);
+  assert.deepEqual(validator.errors, []);
 });
 
-test('when value is a decimal number', function() {
+test('when value is a decimal number', function(assert) {
   options = { messages: { numericality: 'failed validation' } };
-  Ember.run(function() {
+  run(function() {
     validator = Numericality.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', 123.456);
   });
-  deepEqual(validator.errors, []);
+  assert.deepEqual(validator.errors, []);
 });
 
-test('when value is not a number', function() {
+test('when value is not a number', function(assert) {
   options = { messages: { numericality: 'failed validation' } };
-  Ember.run(function() {
+  run(function() {
     validator = Numericality.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', 'abc123');
   });
-  deepEqual(validator.errors, ['failed validation']);
+  assert.deepEqual(validator.errors, ['failed validation']);
 });
 
-test('when no value', function() {
+test('when no value', function(assert) {
   options = { messages: { numericality: 'failed validation' } };
-  Ember.run(function() {
+  run(function() {
     validator = Numericality.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', '');
   });
-  deepEqual(validator.errors, ['failed validation']);
+  assert.deepEqual(validator.errors, ['failed validation']);
 });
 
-test('when no value and allowing blank', function() {
+test('when no value and allowing blank', function(assert) {
   options = { messages: { numericality: 'failed validation' }, allowBlank: true };
-  Ember.run(function() {
+  run(function() {
     validator = Numericality.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', '');
   });
-  deepEqual(validator.errors, []);
+  assert.deepEqual(validator.errors, []);
 });
 
-test('when bad value and allowing blank', function() {
+test('when bad value and allowing blank', function(assert) {
   options = { messages: { numericality: 'failed validation' }, allowBlank: true };
-  Ember.run(function() {
+  run(function() {
     validator = Numericality.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', 'abc123');
   });
-  deepEqual(validator.errors, ['failed validation']);
+  assert.deepEqual(validator.errors, ['failed validation']);
 });
 
-test('when only allowing integers and value is integer', function() {
+test('when only allowing integers and value is integer', function(assert) {
   options = { messages: { onlyInteger: 'failed validation', numericality: 'failed validation' }, onlyInteger: true };
-  Ember.run(function() {
+  run(function() {
     validator = Numericality.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', 123);
   });
-  deepEqual(validator.errors, []);
+  assert.deepEqual(validator.errors, []);
 });
 
-test('when only allowing integers and value is not integer', function() {
+test('when only allowing integers and value is not integer', function(assert) {
   options = { messages: { onlyInteger: 'failed integer validation', numericality: 'failed validation' }, onlyInteger: true };
-  Ember.run(function() {
+  run(function() {
     validator = Numericality.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', 123.456);
   });
-  deepEqual(validator.errors, ['failed integer validation']);
+  assert.deepEqual(validator.errors, ['failed integer validation']);
 });
 
-test('when only integer and no message is passed', function() {
+test('when only integer and no message is passed', function(assert) {
   options = { onlyInteger: true };
-  Ember.run(function() {
+  run(function() {
     validator = Numericality.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', 1.1);
   });
-  deepEqual(validator.errors, ['must be an integer']);
+  assert.deepEqual(validator.errors, ['must be an integer']);
 });
 
-test('when only integer is passed directly', function() {
+test('when only integer is passed directly', function(assert) {
   options = 'onlyInteger';
-  Ember.run(function() {
+  run(function() {
     validator = Numericality.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', 1.1);
   });
-  deepEqual(validator.errors, ['must be an integer']);
+  assert.deepEqual(validator.errors, ['must be an integer']);
 });
 
-test('when only allowing values greater than 10 and value is greater than 10', function() {
+test('when only allowing values greater than 10 and value is greater than 10', function(assert) {
   options = { messages: { greaterThan: 'failed validation', numericality: 'failed validation' }, greaterThan: 10 };
-  Ember.run(function() {
+  run(function() {
     validator = Numericality.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', 11);
   });
-  deepEqual(validator.errors, []);
+  assert.deepEqual(validator.errors, []);
 });
 
-test('when only allowing values greater than 10 and value is 10', function() {
+test('when only allowing values greater than 10 and value is 10', function(assert) {
   options = { messages: { greaterThan: 'failed validation', numericality: 'failed validation' }, greaterThan: 10 };
-  Ember.run(function() {
+  run(function() {
     validator = Numericality.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', 10);
   });
-  deepEqual(validator.errors, ['failed validation']);
+  assert.deepEqual(validator.errors, ['failed validation']);
 });
 
-test('when only allowing values greater than or deepEqual to 10 and value is 10', function() {
+test('when only allowing values greater than or assert.deepEqual to 10 and value is 10', function(assert) {
   options = { messages: { greaterThanOrEqualTo: 'failed validation', numericality: 'failed validation' }, greaterThanOrEqualTo: 10 };
-  Ember.run(function() {
+  run(function() {
     validator = Numericality.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', 10);
   });
-  deepEqual(validator.errors, []);
+  assert.deepEqual(validator.errors, []);
 });
 
-test('when only allowing values greater than or deepEqual to 10 and value is 9', function() {
+test('when only allowing values greater than or assert.deepEqual to 10 and value is 9', function(assert) {
   options = { messages: { greaterThanOrEqualTo: 'failed validation', numericality: 'failed validation' }, greaterThanOrEqualTo: 10 };
-  Ember.run(function() {
+  run(function() {
     validator = Numericality.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', 9);
   });
-  deepEqual(validator.errors, ['failed validation']);
+  assert.deepEqual(validator.errors, ['failed validation']);
 });
 
-test('when only allowing values less than 10 and value is less than 10', function() {
+test('when only allowing values less than 10 and value is less than 10', function(assert) {
   options = { messages: { lessThan: 'failed validation', numericality: 'failed validation' }, lessThan: 10 };
-  Ember.run(function() {
+  run(function() {
     validator = Numericality.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', 9);
   });
-  deepEqual(validator.errors, []);
+  assert.deepEqual(validator.errors, []);
 });
 
-test('when only allowing values less than 10 and value is 10', function() {
+test('when only allowing values less than 10 and value is 10', function(assert) {
   options = { messages: { lessThan: 'failed validation', numericality: 'failed validation' }, lessThan: 10 };
-  Ember.run(function() {
+  run(function() {
     validator = Numericality.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', 10);
   });
-  deepEqual(validator.errors, ['failed validation']);
+  assert.deepEqual(validator.errors, ['failed validation']);
 });
 
-test('when only allowing values less than or deepEqual to 10 and value is 10', function() {
+test('when only allowing values less than or assert.deepEqual to 10 and value is 10', function(assert) {
   options = { messages: { lessThanOrEqualTo: 'failed validation', numericality: 'failed validation' }, lessThanOrEqualTo: 10 };
-  Ember.run(function() {
+  run(function() {
     validator = Numericality.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', 10);
   });
-  deepEqual(validator.errors, []);
+  assert.deepEqual(validator.errors, []);
 });
 
-test('when only allowing values less than or deepEqual to 10 and value is 11', function() {
+test('when only allowing values less than or assert.deepEqual to 10 and value is 11', function(assert) {
   options = { messages: { lessThanOrEqualTo: 'failed validation', numericality: 'failed validation' }, lessThanOrEqualTo: 10 };
-  Ember.run(function() {
+  run(function() {
     validator = Numericality.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', 11);
-  deepEqual(validator.errors, ['failed validation']);
+  assert.deepEqual(validator.errors, ['failed validation']);
   });
 });
 
-test('when only allowing values equal to 10 and value is 10', function() {
+test('when only allowing values equal to 10 and value is 10', function(assert) {
   options = { messages: { equalTo: 'failed validation', numericality: 'failed validation' }, equalTo: 10 };
-  Ember.run(function() {
+  run(function() {
     validator = Numericality.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', 10);
   });
-  deepEqual(validator.errors, []);
+  assert.deepEqual(validator.errors, []);
 });
 
-test('when only allowing values equal to 10 and value is 11', function() {
+test('when only allowing values equal to 10 and value is 11', function(assert) {
   options = { messages: { equalTo: 'failed equal validation', numericality: 'failed validation' }, equalTo: 10 };
-  Ember.run(function() {
+  run(function() {
     validator = Numericality.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', 11);
   });
-  deepEqual(validator.errors, ['failed equal validation']);
+  assert.deepEqual(validator.errors, ['failed equal validation']);
 });
 
-test('when only allowing value equal to 0 and value is 1', function() {
+test('when only allowing value equal to 0 and value is 1', function(assert) {
   options = { messages: { equalTo: 'failed equal validation', numericality: 'failed validation' }, equalTo: 0 };
-  Ember.run(function() {
+  run(function() {
     validator = Numericality.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', 1);
   });
-  deepEqual(validator.errors, ['failed equal validation']);
+  assert.deepEqual(validator.errors, ['failed equal validation']);
 });
 
-test('when only allowing odd values and the value is odd', function() {
+test('when only allowing odd values and the value is odd', function(assert) {
   options = { messages: { odd: 'failed validation', numericality: 'failed validation' }, odd: true };
-  Ember.run(function() {
+  run(function() {
     validator = Numericality.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', 11);
   });
-  deepEqual(validator.errors, []);
+  assert.deepEqual(validator.errors, []);
 });
 
-test('when only allowing odd values and the value is even', function() {
+test('when only allowing odd values and the value is even', function(assert) {
   options = { messages: { odd: 'failed validation', numericality: 'failed validation' }, odd: true };
-  Ember.run(function() {
+  run(function() {
     validator = Numericality.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', 10);
   });
-  deepEqual(validator.errors, ['failed validation']);
+  assert.deepEqual(validator.errors, ['failed validation']);
 });
 
-test('when only allowing even values and the value is even', function() {
+test('when only allowing even values and the value is even', function(assert) {
   options = { messages: { even: 'failed validation', numericality: 'failed validation' }, even: true };
-  Ember.run(function() {
+  run(function() {
     validator = Numericality.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', 10);
   });
-  deepEqual(validator.errors, []);
+  assert.deepEqual(validator.errors, []);
 });
 
-test('when only allowing even values and the value is odd', function() {
+test('when only allowing even values and the value is odd', function(assert) {
   options = { messages: { even: 'failed validation', numericality: 'failed validation' }, even: true };
-  Ember.run(function() {
+  run(function() {
     validator = Numericality.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', 11);
   });
-  deepEqual(validator.errors, ['failed validation']);
+  assert.deepEqual(validator.errors, ['failed validation']);
 });
 
-test('when value refers to another present property', function() {
+test('when value refers to another present property', function(assert) {
   options   = { messages: { greaterThan: 'failed to be greater', numericality: 'failed validation' }, greaterThan: 'attribute_2' };
-  Ember.run(function() {
+  run(function() {
     validator = Numericality.create({model: model, property: 'attribute_1', options: options});
     set(model, 'attribute_1', 0);
     set(model, 'attribute_2', 1);
   });
-  deepEqual(validator.errors, ['failed to be greater']);
-  Ember.run(function() {
+  assert.deepEqual(validator.errors, ['failed to be greater']);
+  run(function() {
     set(model, 'attribute_1', 2);
     set(model, 'attribute_2', 1);
   });
-  deepEqual(validator.errors, []);
+  assert.deepEqual(validator.errors, []);
 });
 
-test('when options is true', function() {
+test('when options is true', function(assert) {
   options = true;
-  Ember.run(function() {
+  run(function() {
     validator = Numericality.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', '');
   });
-  deepEqual(validator.errors, ['is not a number']);
+  assert.deepEqual(validator.errors, ['is not a number']);
 });
 
-test('when equal to  and no message is passed', function() {
+test('when equal to  and no message is passed', function(assert) {
   options = { equalTo: 11 };
-  Ember.run(function() {
+  run(function() {
     validator = Numericality.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', 10);
   });
-  deepEqual(validator.errors, ['must be equal to 11']);
+  assert.deepEqual(validator.errors, ['must be equal to 11']);
 });
 
-test('when greater than and no message is passed', function() {
+test('when greater than and no message is passed', function(assert) {
   options = { greaterThan: 11 };
-  Ember.run(function() {
+  run(function() {
     validator = Numericality.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', 10);
   });
-  deepEqual(validator.errors, ['must be greater than 11']);
+  assert.deepEqual(validator.errors, ['must be greater than 11']);
 });
 
-test('when greater than or equal to and no message is passed', function() {
+test('when greater than or equal to and no message is passed', function(assert) {
   options = { greaterThanOrEqualTo: 11 };
-  Ember.run(function() {
+  run(function() {
     validator = Numericality.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', 10);
   });
-  deepEqual(validator.errors, ['must be greater than or equal to 11']);
+  assert.deepEqual(validator.errors, ['must be greater than or equal to 11']);
 });
 
-test('when less than and no message is passed', function() {
+test('when less than and no message is passed', function(assert) {
   options = { lessThan: 10 };
-  Ember.run(function() {
+  run(function() {
     validator = Numericality.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', 11);
   });
-  deepEqual(validator.errors, ['must be less than 10']);
+  assert.deepEqual(validator.errors, ['must be less than 10']);
 });
 
-test('when less than or equal to and no message is passed', function() {
+test('when less than or equal to and no message is passed', function(assert) {
   options = { lessThanOrEqualTo: 10 };
-  Ember.run(function() {
+  run(function() {
     validator = Numericality.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', 11);
   });
-  deepEqual(validator.errors, ['must be less than or equal to 10']);
+  assert.deepEqual(validator.errors, ['must be less than or equal to 10']);
 });
 
-test('when odd and no message is passed', function() {
+test('when odd and no message is passed', function(assert) {
   options = { odd: true };
-  Ember.run(function() {
+  run(function() {
     validator = Numericality.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', 10);
   });
-  deepEqual(validator.errors, ['must be odd']);
+  assert.deepEqual(validator.errors, ['must be odd']);
 });
 
-test('when even and no message is passed', function() {
+test('when even and no message is passed', function(assert) {
   options = { even: true };
-  Ember.run(function() {
+  run(function() {
     validator = Numericality.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', 11);
   });
-  deepEqual(validator.errors, ['must be even']);
+  assert.deepEqual(validator.errors, ['must be even']);
 });
 
-test('when other messages are passed but not a numericality message', function() {
+test('when other messages are passed but not a numericality message', function(assert) {
   options = { messages: { greaterThan: 'failed validation' } };
-  Ember.run(function() {
+  run(function() {
     validator = Numericality.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', 'abc');
   });
-  deepEqual(validator.errors, ['is not a number']);
+  assert.deepEqual(validator.errors, ['is not a number']);
 });
 
-test('when greaterThan fails and a greaterThan message is passed but not a numericality message', function() {
+test('when greaterThan fails and a greaterThan message is passed but not a numericality message', function(assert) {
   options = { greaterThan: 11, messages: { greaterThan: 'custom message' } };
-  Ember.run(function() {
+  run(function() {
     validator = Numericality.create({model: model, property: 'attribute', options: options});
     model.set('attribute', 10);
   });
-  deepEqual(validator.errors, ['custom message']);
+  assert.deepEqual(validator.errors, ['custom message']);
 });
 
-test("numericality validators don't call addObserver on null props", function() {
-  expect(1);
-
+test("numericality validators don't call addObserver on null props", function(assert) {
   var stubbedObserverCalls = 0;
 
   var realAddObserver = model.addObserver;
   model.addObserver = function(_, path) {
     stubbedObserverCalls += 1;
     if (!path) {
-      ok(false, "shouldn't call addObserver with falsy path");
+      assert.ok(false, "shouldn't call addObserver with falsy path");
     }
     return realAddObserver.apply(this, arguments);
   };
 
   options = { lessThanOrEqualTo: 10 };
-  Ember.run(function() {
+  run(function() {
     validator = Numericality.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', 11);
   });
   model.addObserver = realAddObserver;
 
-  equal(1, stubbedObserverCalls, "stubbed addObserver was called");
+  assert.equal(1, stubbedObserverCalls, "stubbed addObserver was called");
 });
