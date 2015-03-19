@@ -539,39 +539,47 @@ Ember.I18n.translations = {
 
 ## Overriding default message ##
 
-Your application may need to override default message (and you are not using [ember-i18n](https://github.com/jamesarosen/ember-i18n)). 
-This is done by creating a service presenting at least one method: `render(attribute, context)`. 
+Your application may need to override default message but you are not using [ember-i18n](https://github.com/jamesarosen/ember-i18n).
+There are two possibilities: you can either extends the default validations messages 
+service or you can create your own. In both case, the service must be named `my-app/app/services/validations/messages.js` 
+
+#### Extending the default service ####
+Here is a simple example overriding the defaults English messages with French messages. 
+```javascript
+import Messages from 'ember-validations/services/validations/messages';
+
+export default Messages.extend({
+  defaults: {
+    inclusion: "n'est pas dans la liste",
+    exclusion: "est un mot reservé",
+    invalid: "n'est pas valide",
+    confirmation: "ne correspond pas à {{attribute}}",
+    accepted: "doit être accepté",
+    empty: "ne peut être vide",
+    blank: "est requis",
+    present: "doit être vide",
+    tooLong: "est trop long (longueur maximale de {{count}} caractères)",
+    tooShort: "est trop court (longueur minimale de {{count}} caractères)",
+    wrongLength: "n'a pas la bonne longueur (doit être de {{count}} caractères)",
+    notANumber: "n'est pas un nombre",
+    notAnInteger: "doit être un entier",
+    greaterThan: "doit être suppérieur à {{count}}",
+    greaterThanOrEqualTo: "doit être suppérieur ou égal à {{count}}",
+    equalTo: "doit être égal à {{count}}",
+    lessThan: "doit être inférieur à {{count}}",
+    lessThanOrEqualTo: "doit être inférieur ou égal à {{count}}",
+    otherThan: "doit être différent de {{count}}",
+    odd: "doit être impair",
+    even: "doit être pair",
+    url: "n'est pas une URL valide"
+  }
+});
+```
+
+#### Creating your own ####
+There is only one constraint you must respect: the service must have the function `render(attribute, context)`
 * `attribute` validation key 
 * `context` an array of additional data for creating the message
-
-Here are the validation key and default message: 
-```javascript
-defaults: {
-  inclusion: "is not included in the list",
-  exclusion: "is reserved",
-  invalid: "is invalid",
-  confirmation: "doesn't match {{attribute}}",
-  accepted: "must be accepted",
-  empty: "can't be empty",
-  blank: "can't be blank",
-  present: "must be blank",
-  tooLong: "is too long (maximum is {{count}} characters)",
-  tooShort: "is too short (minimum is {{count}} characters)",
-  wrongLength: "is the wrong length (should be {{count}} characters)",
-  notANumber: "is not a number",
-  notAnInteger: "must be an integer",
-  greaterThan: "must be greater than {{count}}",
-  greaterThanOrEqualTo: "must be greater than or equal to {{count}}",
-  equalTo: "must be equal to {{count}}",
-  lessThan: "must be less than {{count}}",
-  lessThanOrEqualTo: "must be less than or equal to {{count}}",
-  otherThan: "must be other than {{count}}",
-  odd: "must be odd",
-  even: "must be even"
-}
-````
-
-Once your service is created, register it with the name `validations:messages` using an initializer. 
 
 ## Authors ##
 

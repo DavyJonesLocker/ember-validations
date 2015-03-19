@@ -1,5 +1,4 @@
 import Ember from 'ember';
-import Messages from 'ember-validations/messages';
 
 var get = Ember.get;
 var set = Ember.set;
@@ -102,15 +101,8 @@ export default Ember.Object.extend({
   },
   getMessage: function(attribute, context) {
     var container = get(this, 'container');
-    var messageService = container.lookup('validations:messages');
-    var message;
-    if (messageService) {
-      message = messageService.render(attribute, context);
-    }
-    // fall back if the message service did not have a message for the given attribute
-    if (message === undefined) {
-      message = Messages.render(attribute, context);
-    }
-    return message;
+    var service = container.lookup('service:validations');
+    var messages = get(service, 'messages');
+    return messages.render(attribute, context);
   }
 });
