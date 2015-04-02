@@ -505,6 +505,50 @@ test('Controller Test', function() { ... });
 Where `UserEditController` uses the built-in `presence` and `length` validators,
 and the locally defined `name` and `email` validators.
 
+#### Test Helpers ####
+
+To test whether your Ember validations are working correctly, you can
+use the test helpers:
+
+**`testValidPropertyValues(propertyName, values [, context ])`**
+
+**`testInvalidPropertyValues(propertyName, values [, context ])`**
+
+* `propertyName` (String): the property that you are validating.
+* `values` (Array): an array of property values to check.
+* `context` (function) _optional_: if specified, this function will be
+  called with the object under test as an argument. See example below.
+
+```javascript
+import { test, moduleFor } from 'ember-qunit';
+import {
+  testValidPropertyValues,
+  testInvalidPropertyValues
+} from '../../helpers/validate-properties';
+
+moduleFor('controller:user', 'UserController', {
+  needs: ['ember-validations@validator:local/presence',
+          'ember-validations@validator:local/length'
+         ]
+});
+
+testValidPropertyValues('firstName', ['Winston', '12345']);
+testInvalidPropertyValues('firstName', ['abc', '', null, undefined]);
+```
+
+If a property's validation relies on another property, you can pass a
+context to the test helper:
+
+```javascript
+testValidPropertyValues('lastName', ['Dog', '12345'], function(subject) {
+  subject.set('firstName', 'Boomer');
+});
+
+testValidPropertyValues('lastName', ['', null, undefined], function(subject) {
+  subject.set('firstName', null);
+});
+```
+
 ## i18n ##
 
 When you use [ember-i18n](https://github.com/jamesarosen/ember-i18n) your `Ember.I18n.translations` object should contain the following keys under the `errors` key:
