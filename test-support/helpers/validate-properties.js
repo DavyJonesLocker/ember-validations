@@ -1,29 +1,35 @@
 import Ember from 'ember';
 import { test } from 'ember-qunit';
 
-var map = Ember.EnumerableUtils.map;
+var forEach = Ember.EnumerableUtils.forEach;
 var run = Ember.run;
-var RSVP = Ember.RSVP;
-
-function validateValue(object, propertyName, value, isTestForValid) {
-  function handleValidation(errors) {
-    var hasErrors = object.get('errors.' + propertyName + '.firstObject');
-    if ((hasErrors && !isTestForValid) || (!hasErrors && isTestForValid)) {
-      return value;
-    }
-  }
-
-  run(object, 'set', propertyName, value);
-
-  return object.validate().then(handleValidation, handleValidation);
-}
 
 function validateValues(object, propertyName, values, isTestForValid) {
-  var promises = map(values, function(value) {
-    return validateValue(object, propertyName, value, isTestForValid);
+  var promise = null;
+  var validatedValues = [];
+
+  forEach(values, function(value) {
+    function handleValidation(errors) {
+      var hasErrors = object.get('errors.' + propertyName + '.firstObject');
+      if ((hasErrors && !isTestForValid) || (!hasErrors && isTestForValid)) {
+        validatedValues.push(value);
+      }
+    }
+
+    run(object, 'set', propertyName, value);
+
+    var objectPromise = null;
+    run(function() {
+      objectPromise = object.validate().then(handleValidation, handleValidation);
+    });
+
+    // Since we are setting the values in a different run loop as we are validating them,
+    // we need to chain the promises so that they run sequentially. The wrong value will
+    // be validated if the promises execute concurrently
+    promise = promise ? promise.then(objectPromise) : objectPromise;
   });
 
-  return RSVP.all(promises).then(function(validatedValues) {
+  return promise.then(function() {
     return validatedValues;
   });
 }
@@ -32,7 +38,7 @@ function testPropertyValues(propertyName, values, isTestForValid, context) {
   var validOrInvalid = (isTestForValid ? 'Valid' : 'Invalid');
   var testName = validOrInvalid + ' ' + propertyName;
 
-  test(testName, function() {
+  test(testName, function(assert) {
     var object = this.subject();
 
     if (context && typeof context === 'function') {
@@ -47,7 +53,7 @@ function testPropertyValues(propertyName, values, isTestForValid, context) {
 
     return validateValues(object, propertyName, values, isTestForValid)
       .then(function(validatedValues) {
-        deepEqual(validatedValues, values, assertMessage);
+        assert.deepEqual(validatedValues, values, assertMessage);
       });
   });
 }
