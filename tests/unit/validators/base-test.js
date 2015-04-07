@@ -55,7 +55,7 @@ test('inactive validators should be considered valid', function(assert) {
         return canValidate;
       },
       call: function() {
-        this.errors.pushObject("nope");
+        this.validationErrors.pushObject("nope");
       }
     });
   });

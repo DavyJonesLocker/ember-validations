@@ -20,10 +20,10 @@ export default Base.extend({
   call: function() {
     if (this.options.accept) {
       if (get(this.model, this.property) !== this.options.accept) {
-        this.errors.pushObject(this.options.message);
+        this.validationErrors.pushObject(this.options.message);
       }
     } else if (get(this.model, this.property) !== '1' && get(this.model, this.property) !== 1 && get(this.model, this.property) !== true) {
-      this.errors.pushObject(this.options.message);
+      this.validationErrors.pushObject(this.options.message);
     }
   }
 });

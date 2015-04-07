@@ -19,7 +19,7 @@ export default Base.extend({
   },
   call: function() {
     if (!Ember.isEmpty(get(this.model, this.property))) {
-      this.errors.pushObject(this.options.message);
+      this.validationErrors.pushObject(this.options.message);
     }
   }
 });

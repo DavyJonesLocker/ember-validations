@@ -23,7 +23,7 @@ test('when matching format', function(assert) {
     validator = Format.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute',  '123');
   });
-  assert.deepEqual(validator.errors, []);
+  assert.deepEqual(validator.validationErrors, []);
 });
 
 test('when not matching format', function(assert) {
@@ -32,7 +32,7 @@ test('when not matching format', function(assert) {
     validator = Format.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', 'abc');
   });
-  assert.deepEqual(validator.errors, ['failed validation']);
+  assert.deepEqual(validator.validationErrors, ['failed validation']);
 });
 
 test('when allowing blank', function(assert) {
@@ -41,7 +41,7 @@ test('when allowing blank', function(assert) {
     validator = Format.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', '');
   });
-  assert.deepEqual(validator.errors, []);
+  assert.deepEqual(validator.validationErrors, []);
 });
 
 test('when not allowing blank', function(assert) {
@@ -50,7 +50,7 @@ test('when not allowing blank', function(assert) {
     validator = Format.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', '');
   });
-  assert.deepEqual(validator.errors, ['failed validation']);
+  assert.deepEqual(validator.validationErrors, ['failed validation']);
 });
 
 test('when options is regexp', function(assert) {
@@ -59,7 +59,7 @@ test('when options is regexp', function(assert) {
     validator = Format.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', '');
   });
-  assert.deepEqual(validator.errors, ['is invalid']);
+  assert.deepEqual(validator.validationErrors, ['is invalid']);
 });
 
 test('when no message is passed', function(assert) {
@@ -68,5 +68,5 @@ test('when no message is passed', function(assert) {
     validator = Format.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', '');
   });
-  assert.deepEqual(validator.errors, ['is invalid']);
+  assert.deepEqual(validator.validationErrors, ['is invalid']);
 });

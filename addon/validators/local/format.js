@@ -19,12 +19,12 @@ export default Base.extend({
    call: function() {
     if (Ember.isEmpty(get(this.model, this.property))) {
       if (this.options.allowBlank === undefined) {
-        this.errors.pushObject(this.options.message);
+        this.validationErrors.pushObject(this.options.message);
       }
     } else if (this.options['with'] && !this.options['with'].test(get(this.model, this.property))) {
-      this.errors.pushObject(this.options.message);
+      this.validationErrors.pushObject(this.options.message);
     } else if (this.options.without && this.options.without.test(get(this.model, this.property))) {
-      this.errors.pushObject(this.options.message);
+      this.validationErrors.pushObject(this.options.message);
     }
   }
 });

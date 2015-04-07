@@ -76,7 +76,7 @@ export default Base.extend({
 
     if (Ember.isEmpty(get(this.model, this.property))) {
       if (this.options.allowBlank === undefined && (this.options.is || this.options.minimum)) {
-        this.errors.pushObject(this.renderBlankMessage());
+        this.validationErrors.pushObject(this.renderBlankMessage());
       }
     } else {
       for (key in this.CHECKS) {
@@ -90,7 +90,7 @@ export default Base.extend({
           this.CHECKS[key]
         );
         if (!comparisonResult) {
-          this.errors.pushObject(this.renderMessageFor(key));
+          this.validationErrors.pushObject(this.renderMessageFor(key));
         }
       }
     }

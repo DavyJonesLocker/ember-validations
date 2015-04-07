@@ -23,7 +23,7 @@ test('when value is a number', function(assert) {
     validator = Numericality.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', 123);
   });
-  assert.deepEqual(validator.errors, []);
+  assert.deepEqual(validator.validationErrors, []);
 });
 
 test('when value is a decimal number', function(assert) {
@@ -32,7 +32,7 @@ test('when value is a decimal number', function(assert) {
     validator = Numericality.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', 123.456);
   });
-  assert.deepEqual(validator.errors, []);
+  assert.deepEqual(validator.validationErrors, []);
 });
 
 test('when value is not a number', function(assert) {
@@ -41,7 +41,7 @@ test('when value is not a number', function(assert) {
     validator = Numericality.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', 'abc123');
   });
-  assert.deepEqual(validator.errors, ['failed validation']);
+  assert.deepEqual(validator.validationErrors, ['failed validation']);
 });
 
 test('when no value', function(assert) {
@@ -50,7 +50,7 @@ test('when no value', function(assert) {
     validator = Numericality.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', '');
   });
-  assert.deepEqual(validator.errors, ['failed validation']);
+  assert.deepEqual(validator.validationErrors, ['failed validation']);
 });
 
 test('when no value and allowing blank', function(assert) {
@@ -59,7 +59,7 @@ test('when no value and allowing blank', function(assert) {
     validator = Numericality.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', '');
   });
-  assert.deepEqual(validator.errors, []);
+  assert.deepEqual(validator.validationErrors, []);
 });
 
 test('when bad value and allowing blank', function(assert) {
@@ -68,7 +68,7 @@ test('when bad value and allowing blank', function(assert) {
     validator = Numericality.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', 'abc123');
   });
-  assert.deepEqual(validator.errors, ['failed validation']);
+  assert.deepEqual(validator.validationErrors, ['failed validation']);
 });
 
 test('when only allowing integers and value is integer', function(assert) {
@@ -77,7 +77,7 @@ test('when only allowing integers and value is integer', function(assert) {
     validator = Numericality.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', 123);
   });
-  assert.deepEqual(validator.errors, []);
+  assert.deepEqual(validator.validationErrors, []);
 });
 
 test('when only allowing integers and value is not integer', function(assert) {
@@ -86,7 +86,7 @@ test('when only allowing integers and value is not integer', function(assert) {
     validator = Numericality.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', 123.456);
   });
-  assert.deepEqual(validator.errors, ['failed integer validation']);
+  assert.deepEqual(validator.validationErrors, ['failed integer validation']);
 });
 
 test('when only integer and no message is passed', function(assert) {
@@ -95,7 +95,7 @@ test('when only integer and no message is passed', function(assert) {
     validator = Numericality.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', 1.1);
   });
-  assert.deepEqual(validator.errors, ['must be an integer']);
+  assert.deepEqual(validator.validationErrors, ['must be an integer']);
 });
 
 test('when only integer is passed directly', function(assert) {
@@ -104,7 +104,7 @@ test('when only integer is passed directly', function(assert) {
     validator = Numericality.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', 1.1);
   });
-  assert.deepEqual(validator.errors, ['must be an integer']);
+  assert.deepEqual(validator.validationErrors, ['must be an integer']);
 });
 
 test('when only allowing values greater than 10 and value is greater than 10', function(assert) {
@@ -113,7 +113,7 @@ test('when only allowing values greater than 10 and value is greater than 10', f
     validator = Numericality.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', 11);
   });
-  assert.deepEqual(validator.errors, []);
+  assert.deepEqual(validator.validationErrors, []);
 });
 
 test('when only allowing values greater than 10 and value is 10', function(assert) {
@@ -122,7 +122,7 @@ test('when only allowing values greater than 10 and value is 10', function(asser
     validator = Numericality.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', 10);
   });
-  assert.deepEqual(validator.errors, ['failed validation']);
+  assert.deepEqual(validator.validationErrors, ['failed validation']);
 });
 
 test('when only allowing values greater than or assert.deepEqual to 10 and value is 10', function(assert) {
@@ -131,7 +131,7 @@ test('when only allowing values greater than or assert.deepEqual to 10 and value
     validator = Numericality.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', 10);
   });
-  assert.deepEqual(validator.errors, []);
+  assert.deepEqual(validator.validationErrors, []);
 });
 
 test('when only allowing values greater than or assert.deepEqual to 10 and value is 9', function(assert) {
@@ -140,7 +140,7 @@ test('when only allowing values greater than or assert.deepEqual to 10 and value
     validator = Numericality.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', 9);
   });
-  assert.deepEqual(validator.errors, ['failed validation']);
+  assert.deepEqual(validator.validationErrors, ['failed validation']);
 });
 
 test('when only allowing values less than 10 and value is less than 10', function(assert) {
@@ -149,7 +149,7 @@ test('when only allowing values less than 10 and value is less than 10', functio
     validator = Numericality.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', 9);
   });
-  assert.deepEqual(validator.errors, []);
+  assert.deepEqual(validator.validationErrors, []);
 });
 
 test('when only allowing values less than 10 and value is 10', function(assert) {
@@ -158,7 +158,7 @@ test('when only allowing values less than 10 and value is 10', function(assert) 
     validator = Numericality.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', 10);
   });
-  assert.deepEqual(validator.errors, ['failed validation']);
+  assert.deepEqual(validator.validationErrors, ['failed validation']);
 });
 
 test('when only allowing values less than or assert.deepEqual to 10 and value is 10', function(assert) {
@@ -167,7 +167,7 @@ test('when only allowing values less than or assert.deepEqual to 10 and value is
     validator = Numericality.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', 10);
   });
-  assert.deepEqual(validator.errors, []);
+  assert.deepEqual(validator.validationErrors, []);
 });
 
 test('when only allowing values less than or assert.deepEqual to 10 and value is 11', function(assert) {
@@ -175,7 +175,7 @@ test('when only allowing values less than or assert.deepEqual to 10 and value is
   run(function() {
     validator = Numericality.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', 11);
-  assert.deepEqual(validator.errors, ['failed validation']);
+  assert.deepEqual(validator.validationErrors, ['failed validation']);
   });
 });
 
@@ -185,7 +185,7 @@ test('when only allowing values equal to 10 and value is 10', function(assert) {
     validator = Numericality.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', 10);
   });
-  assert.deepEqual(validator.errors, []);
+  assert.deepEqual(validator.validationErrors, []);
 });
 
 test('when only allowing values equal to 10 and value is 11', function(assert) {
@@ -194,7 +194,7 @@ test('when only allowing values equal to 10 and value is 11', function(assert) {
     validator = Numericality.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', 11);
   });
-  assert.deepEqual(validator.errors, ['failed equal validation']);
+  assert.deepEqual(validator.validationErrors, ['failed equal validation']);
 });
 
 test('when only allowing value equal to 0 and value is 1', function(assert) {
@@ -203,7 +203,7 @@ test('when only allowing value equal to 0 and value is 1', function(assert) {
     validator = Numericality.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', 1);
   });
-  assert.deepEqual(validator.errors, ['failed equal validation']);
+  assert.deepEqual(validator.validationErrors, ['failed equal validation']);
 });
 
 test('when only allowing odd values and the value is odd', function(assert) {
@@ -212,7 +212,7 @@ test('when only allowing odd values and the value is odd', function(assert) {
     validator = Numericality.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', 11);
   });
-  assert.deepEqual(validator.errors, []);
+  assert.deepEqual(validator.validationErrors, []);
 });
 
 test('when only allowing odd values and the value is even', function(assert) {
@@ -221,7 +221,7 @@ test('when only allowing odd values and the value is even', function(assert) {
     validator = Numericality.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', 10);
   });
-  assert.deepEqual(validator.errors, ['failed validation']);
+  assert.deepEqual(validator.validationErrors, ['failed validation']);
 });
 
 test('when only allowing even values and the value is even', function(assert) {
@@ -230,7 +230,7 @@ test('when only allowing even values and the value is even', function(assert) {
     validator = Numericality.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', 10);
   });
-  assert.deepEqual(validator.errors, []);
+  assert.deepEqual(validator.validationErrors, []);
 });
 
 test('when only allowing even values and the value is odd', function(assert) {
@@ -239,7 +239,7 @@ test('when only allowing even values and the value is odd', function(assert) {
     validator = Numericality.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', 11);
   });
-  assert.deepEqual(validator.errors, ['failed validation']);
+  assert.deepEqual(validator.validationErrors, ['failed validation']);
 });
 
 test('when value refers to another present property', function(assert) {
@@ -249,12 +249,12 @@ test('when value refers to another present property', function(assert) {
     set(model, 'attribute_1', 0);
     set(model, 'attribute_2', 1);
   });
-  assert.deepEqual(validator.errors, ['failed to be greater']);
+  assert.deepEqual(validator.validationErrors, ['failed to be greater']);
   run(function() {
     set(model, 'attribute_1', 2);
     set(model, 'attribute_2', 1);
   });
-  assert.deepEqual(validator.errors, []);
+  assert.deepEqual(validator.validationErrors, []);
 });
 
 test('when options is true', function(assert) {
@@ -263,7 +263,7 @@ test('when options is true', function(assert) {
     validator = Numericality.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', '');
   });
-  assert.deepEqual(validator.errors, ['is not a number']);
+  assert.deepEqual(validator.validationErrors, ['is not a number']);
 });
 
 test('when equal to  and no message is passed', function(assert) {
@@ -272,7 +272,7 @@ test('when equal to  and no message is passed', function(assert) {
     validator = Numericality.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', 10);
   });
-  assert.deepEqual(validator.errors, ['must be equal to 11']);
+  assert.deepEqual(validator.validationErrors, ['must be equal to 11']);
 });
 
 test('when greater than and no message is passed', function(assert) {
@@ -281,7 +281,7 @@ test('when greater than and no message is passed', function(assert) {
     validator = Numericality.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', 10);
   });
-  assert.deepEqual(validator.errors, ['must be greater than 11']);
+  assert.deepEqual(validator.validationErrors, ['must be greater than 11']);
 });
 
 test('when greater than or equal to and no message is passed', function(assert) {
@@ -290,7 +290,7 @@ test('when greater than or equal to and no message is passed', function(assert) 
     validator = Numericality.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', 10);
   });
-  assert.deepEqual(validator.errors, ['must be greater than or equal to 11']);
+  assert.deepEqual(validator.validationErrors, ['must be greater than or equal to 11']);
 });
 
 test('when less than and no message is passed', function(assert) {
@@ -299,7 +299,7 @@ test('when less than and no message is passed', function(assert) {
     validator = Numericality.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', 11);
   });
-  assert.deepEqual(validator.errors, ['must be less than 10']);
+  assert.deepEqual(validator.validationErrors, ['must be less than 10']);
 });
 
 test('when less than or equal to and no message is passed', function(assert) {
@@ -308,7 +308,7 @@ test('when less than or equal to and no message is passed', function(assert) {
     validator = Numericality.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', 11);
   });
-  assert.deepEqual(validator.errors, ['must be less than or equal to 10']);
+  assert.deepEqual(validator.validationErrors, ['must be less than or equal to 10']);
 });
 
 test('when odd and no message is passed', function(assert) {
@@ -317,7 +317,7 @@ test('when odd and no message is passed', function(assert) {
     validator = Numericality.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', 10);
   });
-  assert.deepEqual(validator.errors, ['must be odd']);
+  assert.deepEqual(validator.validationErrors, ['must be odd']);
 });
 
 test('when even and no message is passed', function(assert) {
@@ -326,7 +326,7 @@ test('when even and no message is passed', function(assert) {
     validator = Numericality.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', 11);
   });
-  assert.deepEqual(validator.errors, ['must be even']);
+  assert.deepEqual(validator.validationErrors, ['must be even']);
 });
 
 test('when other messages are passed but not a numericality message', function(assert) {
@@ -335,7 +335,7 @@ test('when other messages are passed but not a numericality message', function(a
     validator = Numericality.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', 'abc');
   });
-  assert.deepEqual(validator.errors, ['is not a number']);
+  assert.deepEqual(validator.validationErrors, ['is not a number']);
 });
 
 test('when greaterThan fails and a greaterThan message is passed but not a numericality message', function(assert) {
@@ -344,7 +344,7 @@ test('when greaterThan fails and a greaterThan message is passed but not a numer
     validator = Numericality.create({model: model, property: 'attribute', options: options});
     model.set('attribute', 10);
   });
-  assert.deepEqual(validator.errors, ['custom message']);
+  assert.deepEqual(validator.validationErrors, ['custom message']);
 });
 
 test("numericality validators don't call addObserver on null props", function(assert) {
