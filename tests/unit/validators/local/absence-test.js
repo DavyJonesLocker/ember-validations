@@ -22,11 +22,11 @@ test('when value is not empty', function(assert) {
   run(function(){
     validator = Absence.create({model: model, property: 'attribute', options: options});
   });
-  assert.deepEqual(validator.errors, []);
+  assert.deepEqual(validator.validationErrors, []);
   run(function() {
     set(model, 'attribute', 'not empty');
   });
-  assert.deepEqual(validator.errors, ['failed validation']);
+  assert.deepEqual(validator.validationErrors, ['failed validation']);
 });
 
 test('when value is made empty', function(assert) {
@@ -36,7 +36,7 @@ test('when value is made empty', function(assert) {
     validator = Absence.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', undefined);
   });
-  assert.deepEqual(validator.errors, []);
+  assert.deepEqual(validator.validationErrors, []);
 });
 
 test('when options is true', function(assert) {
@@ -45,5 +45,5 @@ test('when options is true', function(assert) {
     validator = Absence.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', 'not empty');
   });
-  assert.deepEqual(validator.errors, ["must be blank"]);
+  assert.deepEqual(validator.validationErrors, ["must be blank"]);
 });

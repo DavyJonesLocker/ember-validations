@@ -337,7 +337,7 @@ To create a new validator you need to override the `call` function. When
 the validator is run its `call` function is what handles determining if
 the validator is valid or not. Call has access to `this.model`,
 `this.property`. If the validation fails you **must** push the failing
-message onto the validator's `this.errors` array. A simple example of a
+message onto the validator's `this.validationErrors` array. A simple example of a
 validator could be:
 
 ```javascript
@@ -346,7 +346,7 @@ import Base from 'ember-validations/validators/base';
 export default Base.extend({
   call: function() {
     if (Ember.isBlank(this.model.get(this.property))) {
-      this.errors.pushObject("cannot be blank");
+      this.validationErrors.pushObject("cannot be blank");
     }
   }
 });
@@ -368,7 +368,7 @@ export default Base.extend({
   },
   call: function() {
     if (Ember.isBlank(this.model.get(this.property))) {
-      this.errors.pushObject("cannot be blank");
+      this.validationErrors.pushObject("cannot be blank");
     }
   }
 });
@@ -393,7 +393,7 @@ User.create({
         if (this.model.get('canNotDoSomething')) {
           return "you can't do this!"
         }
-      }) 
+      })
     }
   }
 });
@@ -401,7 +401,7 @@ User.create({
 
 Inside the `validator` function you have access to `this.model` which is
 a reference to the model. You **must** return an error message that will
-be attached to the errors array for the property it is created on.
+be attached to the validationErrors array for the property it is created on.
 Return nothing for the validator to pass.
 
 Alternatively if the property doesn't have any additional validations
@@ -414,7 +414,7 @@ User.create({
       if (this.model.get('canNotDoSomething')) {
         return "you can't do this!"
       }
-    }) 
+    })
   }
 });
 ```
@@ -441,14 +441,14 @@ user.validate().then(function() {
 }).finally(function() {
   // all validations complete
   // regardless of isValid state
- user.get('isValid'); // true || false 
+ user.get('isValid'); // true || false
 });
 ```
 
 ## Inspecting Errors ##
 
 After mixing in `EmberValidations.Mixin` into your object it will now have a
-`.errors` object. All validation error messages will be placed in there
+`.validationErrors` object. All validation error messages will be placed in there
 for the corresponding property. Errors messages will always be an array.
 
 ```javascript
@@ -468,11 +468,11 @@ import User from 'my-app/models/user';
 user = User.create();
 user.validate().then(null, function() {
   user.get('isValid'); // false
-  user.get('errors.firstName'); // ["can't be blank"]
+  user.get('validationErrors.firstName'); // ["can't be blank"]
   user.set('firstName', 'Brian');
   user.validate().then(function() {
     user.get('isValid'); // true
-    user.get('errors.firstName'); // []
+    user.get('validationErrors.firstName'); // []
   })
 })
 

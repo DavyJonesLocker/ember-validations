@@ -524,7 +524,7 @@ test("mixed validation syntax", function(assert) {
     });
   });
 
-  assert.deepEqual(['it failed'], get(user, 'errors.name'));
+  assert.deepEqual(['it failed'], get(user, 'validationErrors.name'));
 });
 
 test("concise validation syntax", function(assert) {
@@ -538,5 +538,5 @@ test("concise validation syntax", function(assert) {
     });
   });
 
-  assert.deepEqual(['it failed'], get(user, 'errors.name'));
+  assert.deepEqual(['it failed'], get(user, 'validationErrors.name'));
 });
