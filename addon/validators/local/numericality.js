@@ -85,8 +85,8 @@ export default Base.extend({
         }
 
         comparisonResult = this.compare(
-          get(this.model, this.property),
-          checkValue,
+          parseFloat(get(this.model, this.property)),
+          parseFloat(checkValue),
           this.CHECKS[check]
         );
 
