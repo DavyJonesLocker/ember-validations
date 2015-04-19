@@ -1,10 +1,12 @@
 # ember-validations 2.0 Goals
 
-* Replace observers with CPs (for performance)
+## Replace observers with CPs (for performance)
+
 Currently ember-validations is a performance hog. This is due to the many observers being used throughout the library. Replacing all observers with
 Computed Properties would resolve this issue.
 
-* Composite Errors Object
+## Composite Errors Object
+
 The current Errors object baked into ember-validations only works to a single depth. Ideally we would want that object to reflect
 all the error messages in the entire graph. This would help enable libraries like easy-form to easily derive error objects for property paths
 
@@ -69,7 +71,7 @@ Ember.get(controller, 'isValid');
 // false
 ```
 
-* Full compatibility with Ember Data
+## Full compatibility with Ember Data
 
 ember-validations proposes that the only point of client side error messages is to instruct the user on how to react. That
 can come in the form of making a correction to data that is invalid or waiting for a service that is not working to become available.
