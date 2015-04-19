@@ -87,3 +87,11 @@ there is no associate that message with any property.
 
 Ember Data itself has unfortunately gone in a very different direction. It will be up to ember-validations to have to push for the current implementation of DS.Errors
 to be either dropped or replaced with something that is suitable for complex error message handling and correction.
+
+## Refactor with es2015 syntax
+
+I'd like to move as much code over to es2015.
+
+## Break up test modules into individual files
+
+One Best Practice we are putting into place at DockYard is one test module per file. ember-validation's test suite violates this rule quite a bit.
