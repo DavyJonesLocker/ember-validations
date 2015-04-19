@@ -2,7 +2,6 @@ import Ember from 'ember';
 import { module, test } from 'qunit';
 import Numericality from 'ember-validations/validators/local/numericality';
 import Mixin from 'ember-validations/mixin';
-import { buildContainer } from '../../../helpers/container';
 
 var model, Model, options, validator;
 var set = Ember.set;

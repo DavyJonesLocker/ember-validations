@@ -2,7 +2,7 @@ import Ember from 'ember';
 import { module, test } from 'qunit';
 import Confirmation from 'ember-validations/validators/local/confirmation';
 import Mixin from 'ember-validations/mixin';
-import { buildContainer } from '../../../helpers/container';
+import buildContainer from '../../../helpers/build-container';
 
 var model, Model, options, validator;
 var get = Ember.get;
