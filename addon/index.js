@@ -1,8 +1,6 @@
 import Mixin from 'ember-validations/mixin';
 
-export default {
-  Mixin: Mixin,
-  validator: function(callback) {
-    return { callback: callback };
-  }
-};
+export default Mixin;
+export function validator(callback) {
+  return { callback: callback };
+}

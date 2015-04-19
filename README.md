@@ -43,14 +43,14 @@ If it is a bug [please open an issue on GitHub](https://github.com/dockyard/embe
 
 ## Usage ##
 
-You need to mixin `EmberValidations.Mixin` into any `Ember.Object` you want to add
+You need to mixin `EmberValidations` into any `Ember.Object` you want to add
 validations to:
 
 ```javascript
 import Ember from 'ember';
 import EmberValidations from 'ember-validations';
 
-export default Ember.ObjectController.extend(EmberValidations.Mixin);
+export default Ember.ObjectController.extend(EmberValidations);
 ```
 
 You define your validations as a JSON object. They should be added to
@@ -383,13 +383,15 @@ any given path the validator will automatically trigger.
 #### Inline Validators ####
 
 If you want to create validators inline you can use the
-`EmberValidations.validator` function:
+`validator` function that is part of the `ember-validations` export:
 
 ```javascript
+import EmberValidations, { validator } from 'ember-validations';
+
 User.create({
   validations: {
     name: {
-      inline: EmberValidations.validator(function() {
+      inline: validator(function() {
         if (this.model.get('canNotDoSomething')) {
           return "you can't do this!"
         }
@@ -447,7 +449,7 @@ user.validate().then(function() {
 
 ## Inspecting Errors ##
 
-After mixing in `EmberValidations.Mixin` into your object it will now have a
+After mixing in `EmberValidations` into your object it will now have a
 `.errors` object. All validation error messages will be placed in there
 for the corresponding property. Errors messages will always be an array.
 
@@ -455,7 +457,7 @@ for the corresponding property. Errors messages will always be an array.
 import Ember from 'ember';
 import EmberValidations from 'ember-validations';
 
-export default Ember.Object.extend(EmberValidations.Mixin, {
+export default Ember.Object.extend(EmberValidations, {
   validations: {
     firstName: { presence: true }
   }
