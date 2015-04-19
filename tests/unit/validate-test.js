@@ -1,6 +1,6 @@
 import Ember from 'ember';
 import { module, test } from 'qunit';
-import EmberValidations from 'ember-validations';
+import EmberValidations, { validator } from 'ember-validations';
 import buildContainer from '../helpers/build-container';
 import Base from 'ember-validations/validators/base';
 
@@ -11,7 +11,7 @@ var run = Ember.run;
 
 module('Validate test', {
   setup: function() {
-    User = Ember.Object.extend(EmberValidations.Mixin, {
+    User = Ember.Object.extend(EmberValidations, {
       container: buildContainer(),
       validations: {
         firstName: {
@@ -75,7 +75,7 @@ test('runs all validations', function(assert) {
 
 test('can be mixed into an object controller', function(assert) {
   var Controller, controller, user;
-  Controller = Ember.ObjectController.extend(EmberValidations.Mixin, {
+  Controller = Ember.ObjectController.extend(EmberValidations, {
     container: buildContainer(),
     validations: {
       name: {
@@ -105,7 +105,7 @@ test('can be mixed into an array controller', function(assert) {
   var Controller, controller, user, UserController;
   var container = buildContainer();
 
-  UserController = Ember.ObjectController.extend(EmberValidations.Mixin, {
+  UserController = Ember.ObjectController.extend(EmberValidations, {
     container: buildContainer(),
     validations: {
       name: {
@@ -114,7 +114,7 @@ test('can be mixed into an array controller', function(assert) {
     }
   });
   container.register('controller:User', UserController);
-  Controller = Ember.ArrayController.extend(EmberValidations.Mixin, {
+  Controller = Ember.ArrayController.extend(EmberValidations, {
     itemController: 'User',
     container: container,
     validations: {
@@ -149,7 +149,7 @@ var Profile, profile;
 
 module('Relationship validators', {
   setup: function() {
-    Profile = Ember.Object.extend(EmberValidations.Mixin, {
+    Profile = Ember.Object.extend(EmberValidations, {
       container: buildContainer(),
       validations: {
         title: {
@@ -162,7 +162,7 @@ module('Relationship validators', {
       profile = Profile.create({hey: 'yo'});
     });
 
-    User = Ember.Object.extend(EmberValidations.Mixin, {
+    User = Ember.Object.extend(EmberValidations, {
       container: buildContainer()
     });
   }
@@ -348,7 +348,7 @@ module('validator class lookup order', {
     requirejs.clear();
     requirejs.rollback();
 
-    User = Ember.Object.extend(EmberValidations.Mixin, {
+    User = Ember.Object.extend(EmberValidations, {
       container: buildContainer()
     });
   },
@@ -505,7 +505,7 @@ test('should store validators in cache for faster lookup', function(assert) {
 
 module('inline validations', {
   setup: function() {
-    User = Ember.Object.extend(EmberValidations.Mixin, {
+    User = Ember.Object.extend(EmberValidations, {
       container: buildContainer()
     });
   }
@@ -516,7 +516,7 @@ test("mixed validation syntax", function(assert) {
     user = User.create({
       validations: {
         name: {
-          inline: EmberValidations.validator(function() {
+          inline: validator(function() {
             return 'it failed';
           })
         }
@@ -531,7 +531,7 @@ test("concise validation syntax", function(assert) {
   run(function() {
     user = User.create({
       validations: {
-        name: EmberValidations.validator(function() {
+        name: validator(function() {
           return 'it failed';
         })
       }
