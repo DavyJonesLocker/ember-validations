@@ -1,7 +1,7 @@
 import Ember from 'ember';
 import { module, test } from 'qunit';
 import EmberValidations from 'ember-validations';
-import { buildContainer } from '../helpers/container';
+import buildContainer from '../helpers/build-container';
 import Base from 'ember-validations/validators/base';
 
 var user, User, promise;

@@ -1,7 +1,7 @@
 import Ember from 'ember';
 import { module, test } from 'qunit';
 import Mixin from 'ember-validations/mixin';
-import { buildContainer } from '../helpers/container';
+import buildContainer from '../helpers/build-container';
 
 var user, User;
 var get = Ember.get;
