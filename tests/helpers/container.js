@@ -1,25 +1,23 @@
 import Ember from 'ember';
-import Resolver from 'ember/resolver';
+import resolver from './resolver';
 
 function buildContainer() {
-  var container = new Ember.Container();
-  container.resolver = buildResolver();
-  container.normalizeFullName = container.resolver.normalize;
-  container.describe = container.resolver.describe;
-  container.makeToString = container.resolver.makeToString;
+  return new Ember.Container(buildRegistry());
+}
 
-  return container;
+function buildRegistry() {
+  var registry = new Ember.Registry();
+  registry.resolver = buildResolver();
+  registry.normalizeFullName = registry.resolver.normalize;
+  registry.describe = registry.resolver.describe;
+  registry.makeToString = registry.resolver.makeToString;
+
+  return registry;
 }
 
 function buildResolver() {
-  var resolver = Resolver.create({
-    namespace: Ember.Namespace.create({
-      modulePrefix: 'dummy'
-    })
-  });
-
-  function resolve(fullName) {
-    return resolver.resolve(fullName);
+  function resolve(fullname) {
+    return resolver.resolve(fullname);
   }
 
   resolve.describe = function(fullName) {
@@ -34,7 +32,6 @@ function buildResolver() {
     if (resolver.normalize) {
       return resolver.normalize(fullName);
     } else {
-      Ember.deprecate('The Resolver should now provide a \'normalize\' function', false);
       return fullName;
     }
   };
