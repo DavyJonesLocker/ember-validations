@@ -11,6 +11,12 @@ export default Ember.Object.extend({
       'if': get(this, 'options.if'),
       unless: get(this, 'options.unless')
     };
+    if (typeof(this.conditionals.if) === 'string') {
+      this.dependentValidationKeys.pushObject(this.conditionals.if);
+    }
+    if (typeof(this.conditionals.unless) === 'string') {
+      this.dependentValidationKeys.pushObject(this.conditionals.unless);
+    }
     this.model.addObserver(this.property, this, this._validate);
   },
   addObserversForDependentValidationKeys: Ember.on('init', function() {
