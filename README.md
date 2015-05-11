@@ -17,7 +17,13 @@ The builds will be in the `dist/` directory.
 #### With Ember-CLI ####
 
 If you are using
-[`ember-cli`](https://github.com/stefanpenner/ember-cli) you can add
+[`ember-cli`](https://github.com/stefanpenner/ember-cli) >= 0.2.3, you can install
+ember-validations by running:
+
+    ember install ember-validations
+
+If you are using
+[`ember-cli`](https://github.com/stefanpenner/ember-cli) < 0.2.3 you can add
 `ember-validations` to your `package.json`:
 
 ```javascript
