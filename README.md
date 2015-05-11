@@ -22,18 +22,6 @@ ember-validations by running:
 
     ember install ember-validations
 
-If you are using
-[`ember-cli`](https://github.com/stefanpenner/ember-cli) < 0.2.3 you can add
-`ember-validations` to your `package.json`:
-
-```javascript
-"devDependencies": {
-  ...
-  "ember-validations": "~ 2.0.0"
-}
-```
-
-You may want to be more precise with your version locking.
 
 #### Without Ember-CLI ####
 
