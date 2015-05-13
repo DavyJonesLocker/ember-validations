@@ -1,11 +1,14 @@
 import Ember from 'ember';
 
-var get = Ember.get;
-var set = Ember.set;
+const { A } = Ember;
 
-export default Ember.Object.extend({
-  unknownProperty: function(property) {
-    set(this, property, Ember.A());
+const EmberObject = Ember.Object;
+const get = Ember.get;
+const set = Ember.set;
+
+export default EmberObject.extend({
+  unknownProperty(property) {
+    set(this, property, A());
     return get(this, property);
   }
 });

@@ -31,6 +31,7 @@
     "ember-data": "1.0.0-beta.16.1",
     "ember-disable-prototype-extensions": "^1.0.0",
     "ember-export-application-global": "^1.0.2",
+    "ember-suave": "0.1.9",
     "ember-test-container": "0.1.0",
     "ember-try": "0.0.4"
   },
