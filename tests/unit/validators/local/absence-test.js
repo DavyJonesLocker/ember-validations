@@ -2,13 +2,18 @@ import Ember from 'ember';
 import { module, test } from 'qunit';
 import Absence from 'ember-validations/validators/local/absence';
 
-var model, Model, options, validator;
-var set = Ember.set;
-var run = Ember.run;
+const {
+  run
+} = Ember;
+
+const EmberObject = Ember.Object;
+const set = Ember.set;
+
+let model, Model, options, validator;
 
 module('Absence Validator', {
-  setup: function() {
-    Model = Ember.Object.extend({
+  beforeEach() {
+    Model = EmberObject.extend({
       dependentValidationKeys: {}
     });
     run(function() {
@@ -19,8 +24,8 @@ module('Absence Validator', {
 
 test('when value is not empty', function(assert) {
   options = { message: 'failed validation' };
-  run(function(){
-    validator = Absence.create({model: model, property: 'attribute', options: options});
+  run(function() {
+    validator = Absence.create({ model, property: 'attribute', options });
   });
   assert.deepEqual(validator.errors, []);
   run(function() {
@@ -32,8 +37,8 @@ test('when value is not empty', function(assert) {
 test('when value is made empty', function(assert) {
   set(model, 'attribute', 'not empty');
   options = { message: 'failed validation' };
-  run(function(){
-    validator = Absence.create({model: model, property: 'attribute', options: options});
+  run(function() {
+    validator = Absence.create({ model, property: 'attribute', options });
     set(model, 'attribute', undefined);
   });
   assert.deepEqual(validator.errors, []);
@@ -41,9 +46,9 @@ test('when value is made empty', function(assert) {
 
 test('when options is true', function(assert) {
   options = true;
-  run(function(){
-    validator = Absence.create({model: model, property: 'attribute', options: options});
+  run(function() {
+    validator = Absence.create({ model, property: 'attribute', options });
     set(model, 'attribute', 'not empty');
   });
-  assert.deepEqual(validator.errors, ["must be blank"]);
+  assert.deepEqual(validator.errors, ['must be blank']);
 });

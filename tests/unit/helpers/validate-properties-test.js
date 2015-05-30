@@ -4,7 +4,7 @@ import {
   testInvalidPropertyValues
 } from '../../helpers/validate-properties';
 
-var _deepEqual;
+let _deepEqual;
 
 moduleFor('controller:foo', 'Unit - Foo Controller Test', {
   needs: [
@@ -29,14 +29,13 @@ testValidPropertyValues('baz', ['Winston', '12345', null, undefined, ''], functi
   subject.set('isBaz', false);
 });
 
-
 moduleFor('controller:foo', 'Unit - Ensure validate properties test helpers fail when invalid', {
   needs: [
     'ember-validations@validator:local/presence',
     'ember-validations@validator:local/length'
   ],
 
-  beforeEach: function(assert) {
+  beforeEach(assert) {
     // use inverse of deepEqual to ensure the test helpers fail when invalid
     assert.deepEqual = assert.notDeepEqual;
   }

@@ -1,4 +1,7 @@
+// jscs:disable
 if (false) {} // remove this line. It is only here to fix issue #232
+// jscs:enable
+
 // module('Uniqueness options', {
   // setup: function() {
     // Ember.Validations.forms['new_user'] = {

@@ -3,12 +3,17 @@ import Base from 'ember-validations/validators/base';
 import Messages from 'ember-validations/messages';
 import Patterns from 'ember-validations/patterns';
 
-var get = Ember.get;
+const {
+  $,
+  keys,
+  isEmpty
+} = Ember;
+
+const get = Ember.get;
 
 export default Base.extend({
-  init: function() {
-    /*jshint expr:true*/
-    var index, keys, key;
+  init() {
+    let index, _keys, key;
     this._super();
 
     if (this.options === true) {
@@ -28,11 +33,11 @@ export default Base.extend({
       this.options.messages.onlyInteger = Messages.render('notAnInteger', this.options);
     }
 
-    keys = Ember.keys(this.CHECKS).concat(['odd', 'even']);
-    for(index = 0; index < keys.length; index++) {
-      key = keys[index];
+    _keys = keys(this.CHECKS).concat(['odd', 'even']);
+    for (index = 0; index < _keys.length; index++) {
+      key = _keys[index];
 
-      var prop = this.options[key];
+      const prop = this.options[key];
       // I have no idea what the hell is going on here. This seems to do nothing.
       // The observer's key is being set to the values in the options hash?
       if (key in this.options && isNaN(prop)) {
@@ -40,7 +45,7 @@ export default Base.extend({
       }
 
       if (prop !== undefined && this.options.messages[key] === undefined) {
-        if (Ember.$.inArray(key, Ember.keys(this.CHECKS)) !== -1) {
+        if ($.inArray(key, keys(this.CHECKS)) !== -1) {
           this.options.count = prop;
         }
         this.options.messages[key] = Messages.render(key, this.options);
@@ -50,17 +55,19 @@ export default Base.extend({
       }
     }
   },
-  CHECKS: {
-    equalTo              : '===',
-    greaterThan          : '>',
-    greaterThanOrEqualTo : '>=',
-    lessThan             : '<',
-    lessThanOrEqualTo    : '<='
-  },
-  call: function() {
-    var check, checkValue, comparisonResult;
 
-    if (Ember.isEmpty(get(this.model, this.property))) {
+  CHECKS: {
+    equalTo: '===',
+    greaterThan: '>',
+    greaterThanOrEqualTo: '>=',
+    lessThan: '<',
+    lessThanOrEqualTo: '<='
+  },
+
+  call() {
+    let check, checkValue, comparisonResult;
+
+    if (isEmpty(get(this.model, this.property))) {
       if (this.options.allowBlank === undefined) {
         this.errors.pushObject(this.options.messages.numericality);
       }

@@ -3,14 +3,19 @@ import { module, test } from 'qunit';
 import Mixin from 'ember-validations/mixin';
 import buildContainer from '../helpers/build-container';
 
-var user, User;
-var get = Ember.get;
-var set = Ember.set;
-var run = Ember.run;
+const {
+  run
+} = Ember;
+
+const EmberObject = Ember.Object;
+const get = Ember.get;
+const set = Ember.set;
+
+let user, User;
 
 module('Errors test', {
-  setup: function() {
-    User = Ember.Object.extend(Mixin, {
+  beforeEach() {
+    User = EmberObject.extend(Mixin, {
       container: buildContainer(),
       validations: {
         name: {
@@ -23,7 +28,8 @@ module('Errors test', {
       }
     });
   },
-  teardown: function() {
+
+  afterEach() {
     delete Ember.I18n;
   }
 });
@@ -36,7 +42,7 @@ test('validations are run on instantiation', function(assert) {
   assert.deepEqual(get(user, 'errors.name'), ["can't be blank"]);
   assert.deepEqual(get(user, 'errors.age'), ["can't be blank", 'is not a number']);
   run(function() {
-    user = User.create({name: 'Brian', age: 33});
+    user = User.create({ name: 'Brian', age: 33 });
   });
   assert.ok(get(user, 'isValid'));
   assert.ok(Ember.isEmpty(get(user, 'errors.name')));
@@ -94,7 +100,7 @@ test('when errors are resolved', function(assert) {
       // return Ember.I18n.lookupKey(key, Ember.I18n.translations);
     // }
   // };
-  
+
   // run(function() {
     // user = User.create();
   // });
