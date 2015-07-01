@@ -1,14 +1,13 @@
 import Ember from 'ember';
 import { test } from 'ember-qunit';
 
-var forEach = Ember.EnumerableUtils.forEach;
 var run = Ember.run;
 
 function validateValues(object, propertyName, values, isTestForValid) {
   var promise = null;
   var validatedValues = [];
 
-  forEach(values, function(value) {
+  values.forEach(function(value) {
     function handleValidation(errors) {
       var hasErrors = object.get('errors.' + propertyName + '.firstObject');
       if ((hasErrors && !isTestForValid) || (!hasErrors && isTestForValid)) {
