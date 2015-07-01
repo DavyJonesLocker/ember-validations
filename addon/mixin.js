@@ -8,7 +8,7 @@ var set = Ember.set;
 var setValidityMixin = Ember.Mixin.create({
   isValid: Ember.computed('validators.@each.isValid', function() {
     var compactValidators = get(this, 'validators').compact();
-    var filteredValidators = Ember.EnumerableUtils.filter(compactValidators, function(validator) {
+    var filteredValidators = compactValidators.filter(function(validator) {
       return !get(validator, 'isValid');
     });
 
@@ -141,7 +141,7 @@ export default Ember.Mixin.create(setValidityMixin, {
       if (validatorName === 'inline') {
         pushValidator.call(this, createInlineClass(this.validations[property][validatorName].callback));
       } else if (this.validations[property].hasOwnProperty(validatorName)) {
-        Ember.EnumerableUtils.forEach(lookupValidator.call(this, validatorName), pushValidator, this);
+        lookupValidator.call(this, validatorName).forEach(pushValidator, this);
       }
     }
   },
@@ -156,7 +156,7 @@ export default Ember.Mixin.create(setValidityMixin, {
     var self = this;
     return this._validate().then(function(vals) {
       var errors = get(self, 'errors');
-      if (Ember.EnumerableUtils.indexOf(vals, false) > -1) {
+      if (vals.indexOf(false) > -1) {
         return Ember.RSVP.reject(errors);
       }
       return errors;
