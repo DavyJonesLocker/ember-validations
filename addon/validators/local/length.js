@@ -51,10 +51,10 @@ export default Base.extend({
     }
   },
   messageKeys: function() {
-    return Ember.keys(this.MESSAGES);
+    return Object.keys(this.MESSAGES);
   },
   checkKeys: function() {
-    return Ember.keys(this.CHECKS);
+    return Object.keys(this.CHECKS);
   },
   renderMessageFor: function(key) {
     var options = {count: this.getValue(key)}, _key;

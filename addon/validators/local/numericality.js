@@ -28,7 +28,7 @@ export default Base.extend({
       this.options.messages.onlyInteger = Messages.render('notAnInteger', this.options);
     }
 
-    keys = Ember.keys(this.CHECKS).concat(['odd', 'even']);
+    keys = Object.keys(this.CHECKS).concat(['odd', 'even']);
     for(index = 0; index < keys.length; index++) {
       key = keys[index];
 
