@@ -50,7 +50,7 @@ validations to:
 import Ember from 'ember';
 import EmberValidations from 'ember-validations';
 
-export default Ember.ObjectController.extend(EmberValidations);
+export default Ember.Controller.extend(EmberValidations);
 ```
 
 You define your validations as a JSON object. They should be added to
@@ -61,16 +61,16 @@ to the property. If you pass `true` then the property itself will be
 seen as a validatable object.
 
 ```javascript
-export default Ember.ObjectController.extend({
+export default Ember.Controller.extend({
   validations: {
-    firstName: {
+    'model.firstName': {
       presence: true,
       length: { minimum: 5 }
     },
-    age: {
+    'model.age': {
       numericality: true
     },
-    profile: true
+    'model.profile': true
   }
 });
 ```
@@ -95,7 +95,7 @@ again, until this is officially built into the project, YMMV.
 **Note: If you override the init function, you must call _super()**
 
 ```javascript
-export default Ember.ObjectController.extend({
+export default Ember.Controller.extend({
   init: function() {
     // this call is necessary, don't forget it!
     this._super.apply(this, arguments);
@@ -534,20 +534,20 @@ moduleFor('controller:user', 'UserController', {
          ]
 });
 
-testValidPropertyValues('firstName', ['Winston', '12345']);
-testInvalidPropertyValues('firstName', ['abc', '', null, undefined]);
+testValidPropertyValues('model.firstName', ['Winston', '12345']);
+testInvalidPropertyValues('model.firstName', ['abc', '', null, undefined]);
 ```
 
 If a property's validation relies on another property, you can pass a
 context to the test helper:
 
 ```javascript
-testValidPropertyValues('lastName', ['Dog', '12345'], function(subject) {
-  subject.set('firstName', 'Boomer');
+testValidPropertyValues('model.lastName', ['Dog', '12345'], function(subject) {
+  subject.set('model.firstName', 'Boomer');
 });
 
-testValidPropertyValues('lastName', ['', null, undefined], function(subject) {
-  subject.set('firstName', null);
+testValidPropertyValues('model.lastName', ['', null, undefined], function(subject) {
+  subject.set('model.firstName', null);
 });
 ```
 
