@@ -313,7 +313,7 @@ You can place your custom validators into
 import Base from 'ember-validations/validators/base';
 
 export default Base.extend({
-   ...
+  // ...
 });
 ```
 
@@ -333,7 +333,7 @@ You can add your validators to the global object:
 ```javascript
 EmberValidations.validators.local.<ClassName> =
 EmberValidations.validators.Base.extend({
- ...
+  // ...
 });
 ```
 
