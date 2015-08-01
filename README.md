@@ -61,6 +61,8 @@ to the property. If you pass `true` then the property itself will be
 seen as a validatable object.
 
 ```javascript
+import Ember from 'ember';
+
 export default Ember.ObjectController.extend({
   validations: {
     firstName: {
@@ -79,6 +81,8 @@ Though not yet explicitly part of the API, you can also add validators
 to nested objects:
 
 ```javascript
+import Ember from 'ember';
+
 export default Ember.Component.extend({
   validations: {
     'user.firstName': {
@@ -95,6 +99,8 @@ again, until this is officially built into the project, YMMV.
 **Note: If you override the init function, you must call _super()**
 
 ```javascript
+import Ember from 'ember';
+
 export default Ember.ObjectController.extend({
   init: function() {
     // this call is necessary, don't forget it!
@@ -307,7 +313,7 @@ You can place your custom validators into
 import Base from 'ember-validations/validators/base';
 
 export default Base.extend({
-   ...
+  // ...
 });
 ```
 
@@ -327,7 +333,7 @@ You can add your validators to the global object:
 ```javascript
 EmberValidations.validators.local.<ClassName> =
 EmberValidations.validators.Base.extend({
- ...
+  // ...
 });
 ```
 
@@ -342,6 +348,7 @@ validator could be:
 
 ```javascript
 import Base from 'ember-validations/validators/base';
+import Ember from 'ember';
 
 export default Base.extend({
   call: function() {
@@ -358,6 +365,7 @@ to accomplish this:
 
 ```javascript
 import Base from 'ember-validations/validators/base';
+import Ember from 'ember';
 
 export default Base.extend({
   init: function() {
@@ -395,7 +403,7 @@ User.create({
         if (this.model.get('canNotDoSomething')) {
           return "you can't do this!"
         }
-      }) 
+      })
     }
   }
 });
@@ -416,7 +424,7 @@ User.create({
       if (this.model.get('canNotDoSomething')) {
         return "you can't do this!"
       }
-    }) 
+    })
   }
 });
 ```
@@ -443,7 +451,7 @@ user.validate().then(function() {
 }).finally(function() {
   // all validations complete
   // regardless of isValid state
- user.get('isValid'); // true || false 
+ user.get('isValid'); // true || false
 });
 ```
 
