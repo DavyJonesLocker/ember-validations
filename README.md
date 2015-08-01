@@ -61,6 +61,8 @@ to the property. If you pass `true` then the property itself will be
 seen as a validatable object.
 
 ```javascript
+import Ember from 'ember';
+
 export default Ember.ObjectController.extend({
   validations: {
     firstName: {
@@ -79,6 +81,8 @@ Though not yet explicitly part of the API, you can also add validators
 to nested objects:
 
 ```javascript
+import Ember from 'ember';
+
 export default Ember.Component.extend({
   validations: {
     'user.firstName': {
@@ -95,6 +99,8 @@ again, until this is officially built into the project, YMMV.
 **Note: If you override the init function, you must call _super()**
 
 ```javascript
+import Ember from 'ember';
+
 export default Ember.ObjectController.extend({
   init: function() {
     // this call is necessary, don't forget it!
@@ -342,6 +348,7 @@ validator could be:
 
 ```javascript
 import Base from 'ember-validations/validators/base';
+import Ember from 'ember';
 
 export default Base.extend({
   call: function() {
@@ -358,6 +365,7 @@ to accomplish this:
 
 ```javascript
 import Base from 'ember-validations/validators/base';
+import Ember from 'ember';
 
 export default Base.extend({
   init: function() {
