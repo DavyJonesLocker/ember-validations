@@ -403,7 +403,7 @@ User.create({
         if (this.model.get('canNotDoSomething')) {
           return "you can't do this!"
         }
-      }) 
+      })
     }
   }
 });
@@ -424,7 +424,7 @@ User.create({
       if (this.model.get('canNotDoSomething')) {
         return "you can't do this!"
       }
-    }) 
+    })
   }
 });
 ```
@@ -451,7 +451,7 @@ user.validate().then(function() {
 }).finally(function() {
   // all validations complete
   // regardless of isValid state
- user.get('isValid'); // true || false 
+ user.get('isValid'); // true || false
 });
 ```
 
