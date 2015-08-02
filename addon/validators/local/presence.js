@@ -1,6 +1,5 @@
 import Ember from 'ember';
 import Base from 'ember-validations/validators/base';
-import Messages from 'ember-validations/messages';
 
 var get = Ember.get;
 
@@ -13,7 +12,7 @@ export default Base.extend({
     }
 
     if (this.options.message === undefined) {
-      this.options.message = Messages.render('blank', this.options);
+      this.options.message = this.getMessage('blank', this.options);
     }
   },
   call: function() {

@@ -9,7 +9,9 @@ var run = Ember.run;
 
 module('Format Validator', {
   setup: function() {
-    Model = Ember.Object.extend(Mixin);
+    Model = Ember.Object.extend(Mixin, {
+      container: buildContainer()
+    });
     run(function() {
       model = Model.create();
     });

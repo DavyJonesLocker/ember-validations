@@ -1,10 +1,12 @@
-import {
-  moduleFor,
-  test
-} from 'ember-qunit';
+import { moduleFor, test } from 'ember-qunit';
+import { buildContainer } from '../helpers/container';
 
 moduleFor('controller:foo', 'Controller sanity test', {
-  needs: ['ember-validations@validator:local/presence']
+  needs: [
+    'service:validations',
+    'ember-validations@service:validations/messages',
+    'ember-validations@validator:local/presence'
+  ]
 });
 
 test('does not blow up', function(assert) {

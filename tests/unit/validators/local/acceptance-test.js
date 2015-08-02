@@ -1,6 +1,8 @@
 import Ember from 'ember';
 import { module, test } from 'qunit';
 import Acceptance from 'ember-validations/validators/local/acceptance';
+import Mixin from 'ember-validations/mixin';
+import { buildContainer } from '../../../helpers/container';
 
 var model, Model, options, validator;
 var set = Ember.set;
@@ -8,8 +10,8 @@ var run = Ember.run;
 
 module('Acceptance Validator', {
   setup: function() {
-    Model = Ember.Object.extend({
-      dependentValidationKeys: {}
+    Model = Ember.Object.extend(Mixin, {
+      container: buildContainer()
     });
     run(function() {
       model = Model.create();
