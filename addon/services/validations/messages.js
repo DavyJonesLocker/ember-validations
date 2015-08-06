@@ -1,6 +1,6 @@
 import Ember from 'ember';
 
-export default Ember.Object.extend({
+export default Ember.Service.extend({
   render: function(attribute, context) {
     if (Ember.I18n) {
       return Ember.I18n.t('errors.' + attribute, context);

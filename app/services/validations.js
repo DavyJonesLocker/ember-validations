@@ -6,7 +6,7 @@ var get = Ember.get;
 export default Ember.Service.extend({
   init: function() {
     set(this, 'cache', {});
-    
+
     // adding message service
     var container = get(this, 'container');
     var messages = container.lookup("service:validations/messages");
