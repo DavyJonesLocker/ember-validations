@@ -1,6 +1,5 @@
 import Ember from 'ember';
 import Base from 'ember-validations/validators/base';
-import Messages from 'ember-validations/messages';
 
 var get = Ember.get;
 var set = Ember.set;
@@ -14,7 +13,7 @@ export default Base.extend({
     /*jshint expr:true*/
     if (this.options === true) {
       set(this, 'options', { attribute: this.originalProperty });
-      set(this, 'options', { message: Messages.render('confirmation', this.options) });
+      set(this, 'options', { message: this.getMessage('confirmation', this.options) });
     }
   },
   call: function() {

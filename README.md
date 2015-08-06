@@ -589,7 +589,51 @@ Ember.I18n.translations = {
     even: "must be even"
   }
 }
-````
+```
+
+## Overriding default message ##
+
+Your application may need to override default message but you are not using [ember-i18n](https://github.com/jamesarosen/ember-i18n).
+There are two possibilities: you can either extends the default validations messages 
+service or you can create your own. In both case, the service must be named `my-app/app/services/validations/messages.js` 
+
+#### Extending the default service ####
+Here is a simple example overriding the defaults English messages with French messages. 
+```javascript
+import Messages from 'ember-validations/services/validations/messages';
+
+export default Messages.extend({
+  defaults: {
+    inclusion: "n'est pas dans la liste",
+    exclusion: "est un mot reservé",
+    invalid: "n'est pas valide",
+    confirmation: "ne correspond pas à {{attribute}}",
+    accepted: "doit être accepté",
+    empty: "ne peut être vide",
+    blank: "est requis",
+    present: "doit être vide",
+    tooLong: "est trop long (longueur maximale de {{count}} caractères)",
+    tooShort: "est trop court (longueur minimale de {{count}} caractères)",
+    wrongLength: "n'a pas la bonne longueur (doit être de {{count}} caractères)",
+    notANumber: "n'est pas un nombre",
+    notAnInteger: "doit être un entier",
+    greaterThan: "doit être suppérieur à {{count}}",
+    greaterThanOrEqualTo: "doit être suppérieur ou égal à {{count}}",
+    equalTo: "doit être égal à {{count}}",
+    lessThan: "doit être inférieur à {{count}}",
+    lessThanOrEqualTo: "doit être inférieur ou égal à {{count}}",
+    otherThan: "doit être différent de {{count}}",
+    odd: "doit être impair",
+    even: "doit être pair",
+    url: "n'est pas une URL valide"
+  }
+});
+```
+
+#### Creating your own ####
+There is only one constraint you must respect: the service must have the function `render(attribute, context)`
+* `attribute` validation key 
+* `context` an array of additional data for creating the message
 
 ## Authors ##
 
