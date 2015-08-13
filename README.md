@@ -240,6 +240,7 @@ Will ensure the value is a number
   * `even` - Ensures the value is even
 
 ##### Messages #####
+  * `numericality` - Message used when value failes to be a number. Overrides `i18n`
   * `greaterThan` - Message used when value failes to be greater than. Overrides `i18n`
   * `greaterThanOrEqualTo` - Message used when value failes to be greater than or equal to. Overrides `i18n`
   * `equalTo` - Message used when value failes to be equal to. Overrides `i18n`
@@ -251,6 +252,7 @@ Will ensure the value is a number
 ```javascript
 // Examples
 numericality: true
+numericality: { messages: { numericality: 'must be a number' } }
 numericality: { odd: true, messages: { odd: 'must be an odd number' } }
 numericality: { onlyInteger: true, greaterThan: 5, lessThanOrEqualTo : 10 }
 ```
