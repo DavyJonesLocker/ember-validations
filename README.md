@@ -62,8 +62,9 @@ seen as a validatable object.
 
 ```javascript
 import Ember from 'ember';
+import EmberValidations from 'ember-validations';
 
-export default Ember.ObjectController.extend({
+export default Ember.ObjectController.extend(EmberValidations, {
   validations: {
     firstName: {
       presence: true,
@@ -82,8 +83,9 @@ to nested objects:
 
 ```javascript
 import Ember from 'ember';
+import EmberValidations from 'ember-validations';
 
-export default Ember.Component.extend({
+export default Ember.Component.extend(EmberValidations, {
   validations: {
     'user.firstName': {
       presence: true,
@@ -100,8 +102,9 @@ again, until this is officially built into the project, YMMV.
 
 ```javascript
 import Ember from 'ember';
+import EmberValidations from 'ember-validations';
 
-export default Ember.ObjectController.extend({
+export default Ember.ObjectController.extend(EmberValidations, {
   init: function() {
     // this call is necessary, don't forget it!
     this._super.apply(this, arguments);
