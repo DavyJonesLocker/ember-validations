@@ -69,6 +69,8 @@ test('if with property reference', function(assert) {
       set(user, 'canValidate', true);
       user.validate().then(null, function(){
         assert.deepEqual(get(user.errors, 'firstName'), ["can't be blank"]);
+        set(user, 'canValidate', false);
+        assert.deepEqual(get(user.errors, 'firstName'), []);
       });
     });
   });
@@ -159,6 +161,8 @@ test('unless with property reference', function(assert) {
       set(user, 'canValidate', false);
       user.validate().then(null, function(){
         assert.deepEqual(get(user.errors, 'firstName'), ["can't be blank"]);
+        set(user, 'canValidate', true);
+        assert.deepEqual(get(user.errors, 'firstName'), []);
       });
     });
   });
