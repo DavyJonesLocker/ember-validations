@@ -18,6 +18,14 @@ export default Ember.Object.extend({
       this.model.addObserver(key, this, this._validate);
     }, this);
   }),
+  pushConditionalDependentValidationKeys: Ember.on('init', function() {
+    Ember.A(['if', 'unless']).forEach((conditionalKind) => {
+      const conditional = this.conditionals[conditionalKind];
+      if (typeof(conditional) === 'string' && typeof(this.model[conditional]) !== 'function') {
+        this.dependentValidationKeys.pushObject(conditional);
+      }
+    });
+  }),
   pushDependentValidationKeyToModel: Ember.on('init', function() {
     var model = get(this, 'model');
     if (model.dependentValidationKeys[this.property] === undefined) {
