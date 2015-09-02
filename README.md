@@ -50,7 +50,7 @@ validations to:
 import Ember from 'ember';
 import EmberValidations from 'ember-validations';
 
-export default Ember.ObjectController.extend(EmberValidations);
+export default Ember.Controller.extend(EmberValidations);
 ```
 
 You define your validations as a JSON object. They should be added to
@@ -64,16 +64,16 @@ seen as a validatable object.
 import Ember from 'ember';
 import EmberValidations from 'ember-validations';
 
-export default Ember.ObjectController.extend(EmberValidations, {
+export default Ember.Controller.extend(EmberValidations, {
   validations: {
-    firstName: {
+    'model.firstName': {
       presence: true,
       length: { minimum: 5 }
     },
-    age: {
+    'model.age': {
       numericality: true
     },
-    profile: true
+    'model.profile': true
   }
 });
 ```
@@ -104,7 +104,7 @@ again, until this is officially built into the project, YMMV.
 import Ember from 'ember';
 import EmberValidations from 'ember-validations';
 
-export default Ember.ObjectController.extend(EmberValidations, {
+export default Ember.Controller.extend(EmberValidations, {
   init: function() {
     // this call is necessary, don't forget it!
     this._super.apply(this, arguments);
@@ -289,7 +289,7 @@ in quotes**
 
 ```javascript
 // function form
-firstName: {
+'model.firstName': {
   presence: {
     'if': function(object, validator) {
       return true;
@@ -300,7 +300,7 @@ firstName: {
 // string form
 // if 'canValidate' is a function on the object it will be called
 // if 'canValidate' is a property object.get('canValidate') will be called
-firstName: {
+'model.firstName': {
   presence: {
     unless: 'canValidate'
   }
@@ -403,7 +403,7 @@ import EmberValidations, { validator } from 'ember-validations';
 
 User.create({
   validations: {
-    name: {
+    'model.name': {
       inline: validator(function() {
         if (this.model.get('canNotDoSomething')) {
           return "you can't do this!"
@@ -425,7 +425,7 @@ you can use a more concise syntax:
 ```javascript
 User.create({
   validations: {
-    name: EmberValidations.validator(function() {
+    'model.name': EmberValidations.validator(function() {
       if (this.model.get('canNotDoSomething')) {
         return "you can't do this!"
       }
@@ -472,7 +472,7 @@ import EmberValidations from 'ember-validations';
 
 export default Ember.Object.extend(EmberValidations, {
   validations: {
-    firstName: { presence: true }
+    'model.firstName': { presence: true }
   }
 });
 ```
