@@ -596,6 +596,10 @@ Ember.I18n.translations = {
 }
 ````
 
+## Other Resources ##
+
+* [Six-part screencast series on ember-validations](https://www.emberscreencasts.com/tags/form-validations)
+
 ## Authors ##
 
 * [Brian Cardarella](http://twitter.com/bcardarella)
