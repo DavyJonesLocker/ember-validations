@@ -14,7 +14,7 @@ Example:
 
 ```javascript
 // parent
-var Controller = Ember.Controller.extend(EmberValiations, {
+var Controller = Ember.Controller.extend(EmberValidations, {
   validations: {
     model: true,
     'model.name': {
