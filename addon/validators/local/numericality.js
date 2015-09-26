@@ -62,16 +62,16 @@ export default Base.extend({
 
     if (Ember.isEmpty(get(this.model, this.property))) {
       if (this.options.allowBlank === undefined) {
-        this.errors.pushObject(this.options.messages.numericality);
+        this.validationErrors.pushObject(this.options.messages.numericality);
       }
     } else if (!Patterns.numericality.test(get(this.model, this.property))) {
-      this.errors.pushObject(this.options.messages.numericality);
+      this.validationErrors.pushObject(this.options.messages.numericality);
     } else if (this.options.onlyInteger === true && !(/^[+\-]?\d+$/.test(get(this.model, this.property)))) {
-      this.errors.pushObject(this.options.messages.onlyInteger);
+      this.validationErrors.pushObject(this.options.messages.onlyInteger);
     } else if (this.options.odd  && parseInt(get(this.model, this.property), 10) % 2 === 0) {
-      this.errors.pushObject(this.options.messages.odd);
+      this.validationErrors.pushObject(this.options.messages.odd);
     } else if (this.options.even && parseInt(get(this.model, this.property), 10) % 2 !== 0) {
-      this.errors.pushObject(this.options.messages.even);
+      this.validationErrors.pushObject(this.options.messages.even);
     } else {
       for (check in this.CHECKS) {
         if (this.options[check] === undefined) {
@@ -91,7 +91,7 @@ export default Base.extend({
         );
 
         if (!comparisonResult) {
-          this.errors.pushObject(this.options.messages[check]);
+          this.validationErrors.pushObject(this.options.messages[check]);
         }
       }
     }

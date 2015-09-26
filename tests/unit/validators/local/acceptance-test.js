@@ -23,7 +23,7 @@ test('when attribute is true', function(assert) {
     validator = Acceptance.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', true);
   });
-  assert.deepEqual(validator.errors, []);
+  assert.deepEqual(validator.validationErrors, []);
 });
 
 test('when attribute is not true', function(assert) {
@@ -32,7 +32,7 @@ test('when attribute is not true', function(assert) {
     validator = Acceptance.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', false);
   });
-  assert.deepEqual(validator.errors, ['failed validation']);
+  assert.deepEqual(validator.validationErrors, ['failed validation']);
 });
 
 test('when attribute is value of 1', function(assert) {
@@ -41,7 +41,7 @@ test('when attribute is value of 1', function(assert) {
     validator = Acceptance.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', 1);
   });
-  assert.deepEqual(validator.errors, []);
+  assert.deepEqual(validator.validationErrors, []);
 });
 
 test('when attribute value is 2 and accept value is 2', function(assert) {
@@ -50,7 +50,7 @@ test('when attribute value is 2 and accept value is 2', function(assert) {
     validator = Acceptance.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', 2);
   });
-  assert.deepEqual(validator.errors, []);
+  assert.deepEqual(validator.validationErrors, []);
 });
 
 test('when attribute value is 1 and accept value is 2', function(assert) {
@@ -59,7 +59,7 @@ test('when attribute value is 1 and accept value is 2', function(assert) {
     validator = Acceptance.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', 1);
   });
-  assert.deepEqual(validator.errors, ['failed validation']);
+  assert.deepEqual(validator.validationErrors, ['failed validation']);
 });
 
 test('when options is true', function(assert) {
@@ -68,7 +68,7 @@ test('when options is true', function(assert) {
     validator = Acceptance.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', false);
   });
-  assert.deepEqual(validator.errors, ['must be accepted']);
+  assert.deepEqual(validator.validationErrors, ['must be accepted']);
 });
 
 test('when no message is passed', function(assert) {
@@ -77,5 +77,5 @@ test('when no message is passed', function(assert) {
     validator = Acceptance.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', false);
   });
-  assert.deepEqual(validator.errors, ['must be accepted']);
+  assert.deepEqual(validator.validationErrors, ['must be accepted']);
 });

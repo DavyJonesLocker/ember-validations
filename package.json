@@ -1,6 +1,6 @@
 {
   "name": "ember-validations",
-  "version": "2.0.0-alpha.4",
+  "version": "2.1.0",
   "description": "Validations for Ember Objects",
   "directories": {
     "doc": "doc",
@@ -11,7 +11,7 @@
     "build": "ember build",
     "test": "ember try:testall"
   },
-  "repository": "https://github.com/dockyard/ember-validations",
+  "repository": "dockyard/ember-validations",
   "engines": {
     "node": ">= 0.10.0"
   },

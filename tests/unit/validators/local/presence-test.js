@@ -22,7 +22,7 @@ test('when value is not empty', function(assert) {
     validator = Presence.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', 'not empty');
   });
-  assert.deepEqual(validator.errors, []);
+  assert.deepEqual(validator.validationErrors, []);
 });
 
 test('when value is empty', function(assert) {
@@ -31,7 +31,7 @@ test('when value is empty', function(assert) {
     validator = Presence.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', '');
   });
-  assert.deepEqual(validator.errors, ['failed validation']);
+  assert.deepEqual(validator.validationErrors, ['failed validation']);
 });
 
 test('when options is true', function(assert) {
@@ -40,7 +40,7 @@ test('when options is true', function(assert) {
     validator = Presence.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', '');
   });
-  assert.deepEqual(validator.errors, ["can't be blank"]);
+  assert.deepEqual(validator.validationErrors, ["can't be blank"]);
 });
 
 test('when value is blank', function(assert) {
@@ -49,5 +49,5 @@ test('when value is blank', function(assert) {
     validator = Presence.create({model: model, property: 'attribute', options: options});
     model.set('attribute', ' ');
   });
-  assert.deepEqual(validator.errors, ['failed validation']);
+  assert.deepEqual(validator.validationErrors, ['failed validation']);
 });

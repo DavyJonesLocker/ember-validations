@@ -23,7 +23,7 @@ export default Base.extend({
 
     if(!Ember.isEmpty(original) || !Ember.isEmpty(confirmation)) {
       if (original !== confirmation) {
-        this.errors.pushObject(this.options.message);
+        this.validationErrors.pushObject(this.options.message);
       }
     }
   }
