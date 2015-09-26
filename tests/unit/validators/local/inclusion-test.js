@@ -22,7 +22,7 @@ test('when value is in the list', function(assert) {
     validator = Inclusion.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', 1);
   });
-  assert.deepEqual(validator.errors, []);
+  assert.deepEqual(validator.validationErrors, []);
 });
 
 test('when value is not in the list', function(assert) {
@@ -31,7 +31,7 @@ test('when value is not in the list', function(assert) {
     validator = Inclusion.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', 4);
   });
-  assert.deepEqual(validator.errors, ['failed validation']);
+  assert.deepEqual(validator.validationErrors, ['failed validation']);
 });
 
 test('when allowing blank', function(assert) {
@@ -40,7 +40,7 @@ test('when allowing blank', function(assert) {
     validator = Inclusion.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', '');
   });
-  assert.deepEqual(validator.errors, []);
+  assert.deepEqual(validator.validationErrors, []);
 });
 
 test('when not allowing blank', function(assert) {
@@ -49,7 +49,7 @@ test('when not allowing blank', function(assert) {
     validator = Inclusion.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', '');
   });
-  assert.deepEqual(validator.errors, ['failed validation']);
+  assert.deepEqual(validator.validationErrors, ['failed validation']);
 });
 
 test('when value is in the range', function(assert) {
@@ -58,7 +58,7 @@ test('when value is in the range', function(assert) {
     validator = Inclusion.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', 1);
   });
-  assert.deepEqual(validator.errors, []);
+  assert.deepEqual(validator.validationErrors, []);
 });
 
 test('when value is not in the range', function(assert) {
@@ -67,7 +67,7 @@ test('when value is not in the range', function(assert) {
     validator = Inclusion.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', 4);
   });
-  assert.deepEqual(validator.errors, ['failed validation']);
+  assert.deepEqual(validator.validationErrors, ['failed validation']);
 });
 
 test('when options is array', function(assert) {
@@ -76,7 +76,7 @@ test('when options is array', function(assert) {
     validator = Inclusion.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', '');
   });
-  assert.deepEqual(validator.errors, ['is not included in the list']);
+  assert.deepEqual(validator.validationErrors, ['is not included in the list']);
 });
 
 test('when no message is passed', function(assert) {
@@ -85,5 +85,5 @@ test('when no message is passed', function(assert) {
     validator = Inclusion.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', '');
   });
-  assert.deepEqual(validator.errors, ['is not included in the list']);
+  assert.deepEqual(validator.validationErrors, ['is not included in the list']);
 });

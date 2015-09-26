@@ -33,14 +33,14 @@ test('validations are run on instantiation', function(assert) {
     user = User.create();
   });
   assert.equal(get(user, 'isValid'), false);
-  assert.deepEqual(get(user, 'errors.name'), ["can't be blank"]);
-  assert.deepEqual(get(user, 'errors.age'), ["can't be blank", 'is not a number']);
+  assert.deepEqual(get(user, 'validationErrors.name'), ["can't be blank"]);
+  assert.deepEqual(get(user, 'validationErrors.age'), ["can't be blank", 'is not a number']);
   run(function() {
     user = User.create({name: 'Brian', age: 33});
   });
   assert.ok(get(user, 'isValid'));
-  assert.ok(Ember.isEmpty(get(user, 'errors.name')));
-  assert.ok(Ember.isEmpty(get(user, 'errors.age')));
+  assert.ok(Ember.isEmpty(get(user, 'validationErrors.name')));
+  assert.ok(Ember.isEmpty(get(user, 'validationErrors.age')));
 });
 
 test('when errors are resolved', function(assert) {
@@ -48,26 +48,26 @@ test('when errors are resolved', function(assert) {
     user = User.create();
   });
   assert.equal(get(user, 'isValid'), false);
-  assert.deepEqual(get(user, 'errors.name'), ["can't be blank"]);
-  assert.deepEqual(get(user, 'errors.age'), ["can't be blank", 'is not a number']);
+  assert.deepEqual(get(user, 'validationErrors.name'), ["can't be blank"]);
+  assert.deepEqual(get(user, 'validationErrors.age'), ["can't be blank", 'is not a number']);
   run(function() {
     set(user, 'name', 'Brian');
   });
   assert.equal(get(user, 'isValid'), false);
-  assert.ok(Ember.isEmpty(get(user, 'errors.name')));
-  assert.deepEqual(get(user, 'errors.age'), ["can't be blank", 'is not a number']);
+  assert.ok(Ember.isEmpty(get(user, 'validationErrors.name')));
+  assert.deepEqual(get(user, 'validationErrors.age'), ["can't be blank", 'is not a number']);
   run(function() {
     set(user, 'age', 'thirty three');
   });
   assert.equal(get(user, 'isValid'), false);
-  assert.ok(Ember.isEmpty(get(user, 'errors.name')));
-  assert.deepEqual(get(user, 'errors.age'), ['is not a number']);
+  assert.ok(Ember.isEmpty(get(user, 'validationErrors.name')));
+  assert.deepEqual(get(user, 'validationErrors.age'), ['is not a number']);
   run(function() {
     set(user, 'age', 33);
   });
   assert.ok(get(user, 'isValid'));
-  assert.ok(Ember.isEmpty(get(user, 'errors.name')));
-  assert.ok(Ember.isEmpty(get(user, 'errors.age')));
+  assert.ok(Ember.isEmpty(get(user, 'validationErrors.name')));
+  assert.ok(Ember.isEmpty(get(user, 'validationErrors.age')));
 });
 
 // test('validations use Ember.I18n.t to render the message if Ember.I18n is present', function() {
@@ -94,16 +94,16 @@ test('when errors are resolved', function(assert) {
       // return Ember.I18n.lookupKey(key, Ember.I18n.translations);
     // }
   // };
-  
+
   // run(function() {
     // user = User.create();
   // });
   // equal(get(user, 'isValid'), false);
-  // assert.deepEqual(get(user, 'errors.name'), ['muss ausgefüllt werden']);
-  // assert.deepEqual(get(user, 'errors.age'), ['muss ausgefüllt werden', 'ist keine Zahl']);
+  // assert.deepEqual(get(user, 'validationErrors.name'), ['muss ausgefüllt werden']);
+  // assert.deepEqual(get(user, 'validationErrors.age'), ['muss ausgefüllt werden', 'ist keine Zahl']);
   // run(function() {
     // set(user, 'age', 'thirty three');
   // });
   // equal(get(user, 'isValid'), false);
-  // assert.deepEqual(get(user, 'errors.age'), ['ist keine Zahl']);
+  // assert.deepEqual(get(user, 'validationErrors.age'), ['ist keine Zahl']);
 // });

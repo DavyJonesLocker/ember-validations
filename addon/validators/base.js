@@ -4,8 +4,9 @@ var get = Ember.get;
 var set = Ember.set;
 
 export default Ember.Object.extend({
+  errors: Ember.computed.deprecatingAlias('validationErrors'),
   init: function() {
-    set(this, 'errors', Ember.A());
+    set(this, 'validationErrors', Ember.A());
     this.dependentValidationKeys = Ember.A();
     this.conditionals = {
       'if': get(this, 'options.if'),
@@ -42,13 +43,13 @@ export default Ember.Object.extend({
       return get(model, key);
     }
   },
-  isValid: Ember.computed.empty('errors.[]'),
+  isValid: Ember.computed.empty('validationErrors.[]'),
   isInvalid: Ember.computed.not('isValid'),
   validate: function() {
     var self = this;
     return this._validate().then(function(success) {
       // Convert validation failures to rejects.
-      var errors = get(self, 'model.errors');
+      var errors = get(self, 'model.validationErrors');
       if (success) {
         return errors;
       } else {
@@ -57,7 +58,7 @@ export default Ember.Object.extend({
     });
   },
   _validate: Ember.on('init', function() {
-    this.errors.clear();
+    this.validationErrors.clear();
     if (this.canValidate()) {
       this.call();
     }
