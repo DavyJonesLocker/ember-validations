@@ -82,6 +82,10 @@ var ArrayValidatorProxy = Ember.ArrayProxy.extend(setValidityMixin, {
 export default Ember.Mixin.create(setValidityMixin, {
   errors: Ember.computed.deprecatingAlias('validationErrors'),
   init: function() {
+    this.initValidations();
+    this._super.apply(this, arguments);
+  },
+  initValidations: function() {
     this._super();
     this.validationErrors = Errors.create();
     this.dependentValidationKeys = {};
