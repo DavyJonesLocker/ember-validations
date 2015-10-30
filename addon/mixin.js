@@ -1,5 +1,4 @@
 import Ember from 'ember';
-import Errors from 'ember-validations/errors';
 import Base from 'ember-validations/validators/base';
 import DS from 'ember-data';
 
