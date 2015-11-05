@@ -244,6 +244,7 @@ Will ensure the value is a number
 
 ##### Messages #####
   * `numericality` - Message used when value failes to be a number. Overrides `i18n`
+  * `onlyInteger` -  Message used when value failes to be an integer. Overrides `i18n`
   * `greaterThan` - Message used when value failes to be greater than. Overrides `i18n`
   * `greaterThanOrEqualTo` - Message used when value failes to be greater than or equal to. Overrides `i18n`
   * `equalTo` - Message used when value failes to be equal to. Overrides `i18n`
