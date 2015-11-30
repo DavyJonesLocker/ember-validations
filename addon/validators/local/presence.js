@@ -17,7 +17,7 @@ export default Base.extend({
     }
   },
   call: function() {
-    if (Ember.isBlank(get(this.model, this.property))) {
+    if (Ember.isBlank(get(this.model, this.property)) || typeof get(this.model, this.property) === 'object' && Ember.isEmpty(get(this.model, this.property).get('content'))) {
       this.errors.pushObject(this.options.message);
     }
   }
