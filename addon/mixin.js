@@ -80,7 +80,8 @@ var ArrayValidatorProxy = Ember.ArrayProxy.extend(setValidityMixin, {
   validators: Ember.computed.alias('content')
 });
 
-export default Ember.Mixin.create(setValidityMixin, {
+
+const mixin = Ember.Mixin.create(setValidityMixin, {
   init: function() {
     this._super();
     this.errors = Errors.create();
@@ -167,3 +168,6 @@ export default Ember.Mixin.create(setValidityMixin, {
     return Ember.RSVP.all(promises);
   })
 });
+
+mixin[Ember.NAME_KEY]= 'ember-validations';
+export default mixin;
