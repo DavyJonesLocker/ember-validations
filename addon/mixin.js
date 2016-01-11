@@ -16,6 +16,7 @@ var setValidityMixin = Ember.Mixin.create({
   }),
   isInvalid: Ember.computed.not('isValid')
 });
+setValidityMixin[Ember.NAME_KEY]= 'ember-validations:validity';
 
 var pushValidatableObject = function(model, property) {
   var content = get(model, property);
