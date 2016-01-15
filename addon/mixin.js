@@ -88,6 +88,8 @@ export default Ember.Mixin.create(setValidityMixin, {
     this.validators = Ember.A();
     if (get(this, 'validations') === undefined) {
       this.validations = {};
+    } else {
+      this.validations = get(this, 'validations');
     }
     this.buildValidators();
     this.validators.forEach(function(validator) {
@@ -106,10 +108,12 @@ export default Ember.Mixin.create(setValidityMixin, {
     var property;
 
     for (property in this.validations) {
-      if (this.validations[property].constructor === Object) {
-        this.buildRuleValidator(property);
-      } else {
-        this.buildObjectValidator(property);
+      if (this.validations[property] !== undefined) {
+        if (this.validations[property].constructor === Object) {
+          this.buildRuleValidator(property);
+        } else {
+          this.buildObjectValidator(property);
+        }
       }
     }
   },
