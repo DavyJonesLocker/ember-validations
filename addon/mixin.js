@@ -63,9 +63,7 @@ var lookupValidator = function(validatorName) {
     cache[validatorName] = validators;
   }
 
-  if (Ember.isEmpty(validators)) {
-    Ember.warn('Could not find the "'+validatorName+'" validator.');
-  }
+  Ember.warn('Could not find the "'+validatorName+'" validator.', !Ember.isEmpty(validators), {id: 'ember-validations.faild-to-find-validator'});
 
   return validators;
 };
