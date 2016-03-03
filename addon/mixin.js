@@ -87,6 +87,8 @@ export default Ember.Mixin.create(setValidityMixin, {
     this.validators = Ember.A();
     if (get(this, 'validations') === undefined) {
       this.validations = {};
+    } else {
+      this.validations = get(this, 'validations');
     }
     this.buildValidators();
     this.validators.forEach(function(validator) {
