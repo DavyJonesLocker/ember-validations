@@ -57,20 +57,20 @@ export default Base.extend({
     lessThan             : '<',
     lessThanOrEqualTo    : '<='
   },
-  call: function() {
+  call(value) {
     var check, checkValue, comparisonResult;
 
-    if (Ember.isEmpty(get(this.model, this.property))) {
+    if (Ember.isEmpty(value)) {
       if (this.options.allowBlank === undefined) {
         this.errors.pushObject(this.options.messages.numericality);
       }
-    } else if (!Patterns.numericality.test(get(this.model, this.property))) {
+    } else if (!Patterns.numericality.test(value)) {
       this.errors.pushObject(this.options.messages.numericality);
-    } else if (this.options.onlyInteger === true && !(/^[+\-]?\d+$/.test(get(this.model, this.property)))) {
+    } else if (this.options.onlyInteger === true && !(/^[+\-]?\d+$/.test(value))) {
       this.errors.pushObject(this.options.messages.onlyInteger);
-    } else if (this.options.odd  && parseInt(get(this.model, this.property), 10) % 2 === 0) {
+    } else if (this.options.odd  && parseInt(value, 10) % 2 === 0) {
       this.errors.pushObject(this.options.messages.odd);
-    } else if (this.options.even && parseInt(get(this.model, this.property), 10) % 2 !== 0) {
+    } else if (this.options.even && parseInt(value, 10) % 2 !== 0) {
       this.errors.pushObject(this.options.messages.even);
     } else {
       for (check in this.CHECKS) {
@@ -85,7 +85,7 @@ export default Base.extend({
         }
 
         comparisonResult = this.compare(
-          get(this.model, this.property),
+          value,
           checkValue,
           this.CHECKS[check]
         );

@@ -45,28 +45,37 @@ export default Ember.Object.extend({
   isValid: Ember.computed.empty('errors.[]'),
   isInvalid: Ember.computed.not('isValid'),
   validate: function() {
-    var self = this;
-    return this._validate().then(function(success) {
-      // Convert validation failures to rejects.
-      var errors = get(self, 'model.errors');
-      if (success) {
-        return errors;
-      } else {
-        return Ember.RSVP.reject(errors);
-      }
+    return this._validate().then((success) => {
+      const errors = this.errors;
+      return success ? errors : Ember.RSVP.reject(errors);
     });
   },
+
+  handlePropertyRetrievalError(error) {
+    this.errors.pushObject(error);
+  },
+
   _validate: Ember.on('init', function() {
     this.errors.clear();
-    if (this.canValidate()) {
-      this.call();
+    const isValid = get(this, 'isValid');
+
+    if (!this.canValidate()) {
+      return Ember.RSVP.resolve(isValid);
     }
-    if (get(this, 'isValid')) {
-      return Ember.RSVP.resolve(true);
-    } else {
-      return Ember.RSVP.resolve(false);
-    }
+
+    const valuePromise = get(this.model, this.property);
+    return new Ember.RSVP.Promise((resolve) => {
+      resolve(valuePromise);
+    }).then((results) => {
+      this.errors.clear();
+      this.call(results);
+      const isValid = get(this, 'isValid');
+      return Ember.RSVP.resolve(isValid);
+    }, (error) => {
+      this.handlePropertyRetrievalError(error);
+    });
   }),
+
   canValidate: function() {
     if (typeof(this.conditionals) === 'object') {
       if (this.conditionals['if']) {

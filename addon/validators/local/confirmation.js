@@ -17,9 +17,9 @@ export default Base.extend({
       set(this, 'options', { message: Messages.render('confirmation', this.options) });
     }
   },
-  call: function() {
+  call(value) {
     var original = get(this.model, this.originalProperty);
-    var confirmation = get(this.model, this.property);
+    var confirmation = value;
 
     if(!Ember.isEmpty(original) || !Ember.isEmpty(confirmation)) {
       if (original !== confirmation) {
