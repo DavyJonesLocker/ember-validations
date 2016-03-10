@@ -75,32 +75,17 @@ export default Ember.Object.extend({
       this.handlePropertyRetrievalError(error);
     });
   }),
-
   canValidate: function() {
-    if (typeof(this.conditionals) === 'object') {
-      if (this.conditionals['if']) {
-        if (typeof(this.conditionals['if']) === 'function') {
-          return this.conditionals['if'](this.model, this.property);
-        } else if (typeof(this.conditionals['if']) === 'string') {
-          if (typeof(this.model[this.conditionals['if']]) === 'function') {
-            return this.model[this.conditionals['if']]();
-          } else {
-            return get(this.model, this.conditionals['if']);
-          }
-        }
-      } else if (this.conditionals.unless) {
-        if (typeof(this.conditionals.unless) === 'function') {
-          return !this.conditionals.unless(this.model, this.property);
-        } else if (typeof(this.conditionals.unless) === 'string') {
-          if (typeof(this.model[this.conditionals.unless]) === 'function') {
-            return !this.model[this.conditionals.unless]();
-          } else {
-            return !get(this.model, this.conditionals.unless);
-          }
-        }
-      } else {
-        return true;
-      }
+    let conditionals = this.conditionals;
+    if (typeof(conditionals) !== 'object') { return true; }
+
+    let ifConditional = conditionals['if'];
+    let unlessConditional = conditionals['unless'];
+
+    if (ifConditional) {
+      return this._handleConditional(ifConditional, false);
+    } else if (unlessConditional) {
+      return this._handleConditional(unlessConditional, true);
     } else {
       return true;
     }
@@ -115,5 +100,21 @@ export default Ember.Object.extend({
       case '<':   return a < b;
       default:    return false;
     }
+  },
+  // invert handles the unless condition
+  _handleConditional(conditional, invert=false) {
+    let result;
+
+    if (typeof(conditional) === 'function') {
+      result = conditional(this.model, this.property);
+    } else if (typeof(conditional) === 'string') {
+      result = get(this.model, conditional);
+
+      if (typeof(this.model[conditional]) === 'function') {
+        result = this.model[conditional]();
+      }
+    }
+
+    return invert ? !result : result;
   }
 });
