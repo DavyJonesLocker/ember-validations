@@ -29,8 +29,7 @@ export default Ember.Object.extend({
   }),
   pushDependentValidationKeyToModel: on('init', function() {
     let model = get(this, 'model');
-    let dependentValidationKeys = model.dependentValidationKeys[this.property];
-    if (dependentValidationKeys === undefined) {
+    if (model.dependentValidationKeys[this.property] === undefined) {
       model.dependentValidationKeys[this.property] = new A();
     }
     model.dependentValidationKeys[this.property].addObjects(this.dependentValidationKeys);
