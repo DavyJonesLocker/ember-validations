@@ -1,6 +1,7 @@
 import Ember from 'ember';
 import Base from 'ember-validations/validators/base';
 import DS from 'ember-data';
+import getOwner from 'ember-getowner-polyfill';
 
 var get = Ember.get;
 var set = Ember.set;
@@ -29,8 +30,8 @@ var pushValidatableObject = function(model, property) {
 };
 
 var lookupValidator = function(validatorName) {
-  var container = get(this, 'container');
-  var service = container.lookup('service:validations');
+  var owner = getOwner(this);
+  var service = owner.lookup('service:validations');
   var validators = [];
   var cache;
 
@@ -43,17 +44,17 @@ var lookupValidator = function(validatorName) {
   if (cache[validatorName]) {
     validators = validators.concat(cache[validatorName]);
   } else {
-    var local = container.lookupFactory('validator:local/'+validatorName);
-    var remote = container.lookupFactory('validator:remote/'+validatorName);
+    var local = owner._lookupFactory('validator:local/'+validatorName);
+    var remote = owner._lookupFactory('validator:remote/'+validatorName);
 
     if (local || remote) { validators = validators.concat([local, remote]); }
     else {
-      var base = container.lookupFactory('validator:'+validatorName);
+      var base = owner._lookupFactory('validator:'+validatorName);
 
       if (base) { validators = validators.concat([base]); }
       else {
-        local = container.lookupFactory('ember-validations@validator:local/'+validatorName);
-        remote = container.lookupFactory('ember-validations@validator:remote/'+validatorName);
+        local = owner._lookupFactory('ember-validations@validator:local/'+validatorName);
+        remote = owner._lookupFactory('ember-validations@validator:remote/'+validatorName);
 
         if (local || remote) { validators = validators.concat([local, remote]); }
       }
@@ -62,9 +63,7 @@ var lookupValidator = function(validatorName) {
     cache[validatorName] = validators;
   }
 
-  if (Ember.isEmpty(validators)) {
-    Ember.warn('Could not find the "'+validatorName+'" validator.');
-  }
+  Ember.warn('Could not find the "'+validatorName+'" validator.', !Ember.isEmpty(validators), {id: 'ember-validations.faild-to-find-validator'});
 
   return validators;
 };
