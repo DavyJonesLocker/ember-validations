@@ -388,7 +388,7 @@ export default Base.extend({
 });
 ```
 
-The `init` function is given access to the `this.options` wich is simply
+The `init` function is given access to the `this.options` which is simply
 a POJO of the options passed to the validator.
 `dependentValidationKeys` is the collection of paths relative to
 `this.model` that will be observed for changes. If any changes occur on
