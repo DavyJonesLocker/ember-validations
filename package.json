@@ -32,7 +32,7 @@
     "ember-disable-prototype-extensions": "^1.0.0",
     "ember-export-application-global": "^1.0.2",
     "ember-test-container": "0.1.0",
-    "ember-try": "0.0.4"
+    "ember-try": "0.0.8"
   },
   "keywords": [
     "ember-addon"
