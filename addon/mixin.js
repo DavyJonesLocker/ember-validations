@@ -89,10 +89,10 @@ export default Ember.Mixin.create(setValidityMixin, {
       this.validations = {};
     }
     this.buildValidators();
-    this.validators.forEach(function(validator) {
+    get(this, 'validators').forEach(function(validator) {
       validator.addObserver('errors.[]', this, function(sender) {
         var errors = Ember.A();
-        this.validators.forEach(function(validator) {
+        get(this, 'validators').forEach(function(validator) {
           if (validator.property === sender.property) {
             errors.addObjects(validator.errors);
           }
@@ -104,8 +104,8 @@ export default Ember.Mixin.create(setValidityMixin, {
   buildValidators: function() {
     var property;
 
-    for (property in this.validations) {
-      if (this.validations[property].constructor === Object) {
+    for (property in get(this, 'validations')) {
+      if (get(this, 'validations')[property].constructor === Object) {
         this.buildRuleValidator(property);
       } else {
         this.buildObjectValidator(property);
@@ -115,12 +115,12 @@ export default Ember.Mixin.create(setValidityMixin, {
   buildRuleValidator: function(property) {
     var pushValidator = function(validator) {
       if (validator) {
-        this.validators.pushObject(validator.create({model: this, property: property, options: this.validations[property][validatorName]}));
+        get(this, 'validators').pushObject(validator.create({model: this, property: property, options: get(this, 'validations')[property][validatorName]}));
       }
     };
 
-    if (this.validations[property].callback) {
-      this.validations[property] = { inline: this.validations[property] };
+    if (get(this, 'validations')[property].callback) {
+      get(this, 'validations')[property] = { inline: get(this, 'validations')[property] };
     }
 
     var createInlineClass = function(callback) {
@@ -136,10 +136,10 @@ export default Ember.Mixin.create(setValidityMixin, {
       });
     };
 
-    for (var validatorName in this.validations[property]) {
+    for (var validatorName in get(this, 'validations')[property]) {
       if (validatorName === 'inline') {
-        pushValidator.call(this, createInlineClass(this.validations[property][validatorName].callback));
-      } else if (this.validations[property].hasOwnProperty(validatorName)) {
+        pushValidator.call(this, createInlineClass(get(this, 'validations')[property][validatorName].callback));
+      } else if (get(this, 'validations')[property].hasOwnProperty(validatorName)) {
         lookupValidator.call(this, validatorName).forEach(pushValidator, this);
       }
     }
@@ -162,7 +162,7 @@ export default Ember.Mixin.create(setValidityMixin, {
     });
   },
   _validate: Ember.on('init', function() {
-    var promises = this.validators.invoke('_validate').without(undefined);
+    var promises = get(this, 'validators').invoke('_validate').without(undefined);
     return Ember.RSVP.all(promises);
   })
 });
