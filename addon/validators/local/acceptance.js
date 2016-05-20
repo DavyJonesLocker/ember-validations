@@ -2,7 +2,6 @@ import Ember from 'ember';
 import Base from 'ember-validations/validators/base';
 import Messages from 'ember-validations/messages';
 
-var get = Ember.get;
 var set = Ember.set;
 
 export default Base.extend({
@@ -17,12 +16,12 @@ export default Base.extend({
       set(this, 'options.message', Messages.render('accepted', this.options));
     }
   },
-  call: function() {
+  call(value) {
     if (this.options.accept) {
-      if (get(this.model, this.property) !== this.options.accept) {
+      if (value !== this.options.accept) {
         this.errors.pushObject(this.options.message);
       }
-    } else if (get(this.model, this.property) !== '1' && get(this.model, this.property) !== 1 && get(this.model, this.property) !== true) {
+    } else if (value !== '1' && value !== 1 && value !== true) {
       this.errors.pushObject(this.options.message);
     }
   }

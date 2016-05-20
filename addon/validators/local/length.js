@@ -71,10 +71,10 @@ export default Base.extend({
       return this.renderMessageFor('minimum');
     }
   },
-  call: function() {
+  call(value) {
     var key, comparisonResult;
 
-    if (Ember.isEmpty(get(this.model, this.property))) {
+    if (Ember.isEmpty(value)) {
       if (this.options.allowBlank === undefined && (this.options.is || this.options.minimum)) {
         this.errors.pushObject(this.renderBlankMessage());
       }
@@ -85,7 +85,7 @@ export default Base.extend({
         }
 
         comparisonResult = this.compare(
-          this.options.tokenizer(get(this.model, this.property)).length,
+          this.options.tokenizer(value).length,
           this.getValue(key),
           this.CHECKS[key]
         );

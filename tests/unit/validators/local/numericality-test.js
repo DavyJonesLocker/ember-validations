@@ -174,8 +174,8 @@ test('when only allowing values less than or assert.deepEqual to 10 and value is
   run(function() {
     validator = Numericality.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', 11);
-  assert.deepEqual(validator.errors, ['failed validation']);
   });
+  assert.deepEqual(validator.errors, ['failed validation']);
 });
 
 test('when only allowing values equal to 10 and value is 10', function(assert) {

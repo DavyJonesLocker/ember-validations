@@ -2,7 +2,6 @@ import Ember from 'ember';
 import Base from 'ember-validations/validators/base';
 import Messages from 'ember-validations/messages';
 
-var get = Ember.get;
 var set = Ember.set;
 
 export default Base.extend({
@@ -16,14 +15,14 @@ export default Base.extend({
       set(this, 'options.message',  Messages.render('invalid', this.options));
     }
    },
-   call: function() {
-    if (Ember.isEmpty(get(this.model, this.property))) {
+   call(value) {
+    if (Ember.isEmpty(value)) {
       if (this.options.allowBlank === undefined) {
         this.errors.pushObject(this.options.message);
       }
-    } else if (this.options['with'] && !this.options['with'].test(get(this.model, this.property))) {
+    } else if (this.options['with'] && !this.options['with'].test(value)) {
       this.errors.pushObject(this.options.message);
-    } else if (this.options.without && this.options.without.test(get(this.model, this.property))) {
+    } else if (this.options.without && this.options.without.test(value)) {
       this.errors.pushObject(this.options.message);
     }
   }
