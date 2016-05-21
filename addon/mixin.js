@@ -1,6 +1,6 @@
 import Ember from 'ember';
-import Errors from 'ember-validations/errors';
 import Base from 'ember-validations/validators/base';
+import DS from 'ember-data';
 import getOwner from 'ember-getowner-polyfill';
 
 var get = Ember.get;
@@ -82,7 +82,7 @@ var ArrayValidatorProxy = Ember.ArrayProxy.extend(setValidityMixin, {
 export default Ember.Mixin.create(setValidityMixin, {
   init: function() {
     this._super();
-    this.errors = Errors.create();
+    this.errors = DS.Errors.create();
     this.dependentValidationKeys = {};
     this.validators = Ember.A();
     if (get(this, 'validations') === undefined) {
