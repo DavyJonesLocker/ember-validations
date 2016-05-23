@@ -2,6 +2,7 @@ import Ember from 'ember';
 import { module, test } from 'qunit';
 import Numericality from 'ember-validations/validators/local/numericality';
 import Mixin from 'ember-validations/mixin';
+import buildContainer from '../../../helpers/build-container';
 
 var model, Model, options, validator;
 var set = Ember.set;
@@ -9,7 +10,9 @@ var run = Ember.run;
 
 module('Numericality Validator', {
   setup: function() {
-    Model =  Ember.Object.extend(Mixin);
+    Model =  Ember.Object.extend(Mixin, {
+      container: buildContainer()
+    });
     run(function() {
       model = Model.create();
     });

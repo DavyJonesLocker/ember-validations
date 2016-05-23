@@ -1,6 +1,5 @@
 import Ember from 'ember';
 import Base from 'ember-validations/validators/base';
-import Messages from 'ember-validations/messages';
 import Patterns from 'ember-validations/patterns';
 
 var get = Ember.get;
@@ -21,11 +20,11 @@ export default Base.extend({
 
     if (this.options.messages === undefined || this.options.messages.numericality === undefined) {
       this.options.messages = this.options.messages || {};
-      this.options.messages.numericality = Messages.render('notANumber', this.options);
+      this.options.messages.numericality = this.getMessage('notANumber', this.options);
     }
 
     if (this.options.onlyInteger !== undefined && this.options.messages.onlyInteger === undefined) {
-      this.options.messages.onlyInteger = Messages.render('notAnInteger', this.options);
+      this.options.messages.onlyInteger = this.getMessage('notAnInteger', this.options);
     }
 
     keys = Object.keys(this.CHECKS).concat(['odd', 'even']);
@@ -43,7 +42,7 @@ export default Base.extend({
         if (Ember.$.inArray(key, Object.keys(this.CHECKS)) !== -1) {
           this.options.count = prop;
         }
-        this.options.messages[key] = Messages.render(key, this.options);
+        this.options.messages[key] = this.getMessage(key, this.options);
         if (this.options.count !== undefined) {
           delete this.options.count;
         }

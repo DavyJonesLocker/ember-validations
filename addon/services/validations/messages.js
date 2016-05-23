@@ -1,6 +1,6 @@
 import Ember from 'ember';
 
-export default {
+export default Ember.Service.extend({
   render: function(attribute, context) {
     if (Ember.I18n) {
       return Ember.I18n.t('errors.' + attribute, context);
@@ -37,4 +37,4 @@ export default {
     even: "must be even",
     url: "is not a valid URL"
   }
-};
+});

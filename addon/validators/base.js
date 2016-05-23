@@ -106,5 +106,11 @@ export default Ember.Object.extend({
       case '<':   return a < b;
       default:    return false;
     }
+  },
+  getMessage: function(attribute, context) {
+    var container = get(this, 'container');
+    var service = container.lookup('service:validations');
+    var messages = get(service, 'messages');
+    return messages.render(attribute, context);
   }
 });

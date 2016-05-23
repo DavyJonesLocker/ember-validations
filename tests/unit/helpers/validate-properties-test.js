@@ -8,6 +8,8 @@ var _deepEqual;
 
 moduleFor('controller:foo', 'Unit - Foo Controller Test', {
   needs: [
+    'service:validations',
+    'ember-validations@service:validations/messages',
     'ember-validations@validator:local/presence',
     'ember-validations@validator:local/length'
   ]
@@ -32,6 +34,8 @@ testValidPropertyValues('baz', ['Winston', '12345', null, undefined, ''], functi
 
 moduleFor('controller:foo', 'Unit - Ensure validate properties test helpers fail when invalid', {
   needs: [
+    'service:validations',
+    'ember-validations@service:validations/messages',
     'ember-validations@validator:local/presence',
     'ember-validations@validator:local/length'
   ],

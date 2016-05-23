@@ -1,6 +1,5 @@
 import Ember from 'ember';
 import Base from 'ember-validations/validators/base';
-import Messages from 'ember-validations/messages';
 
 var get = Ember.get;
 var set = Ember.set;
@@ -14,7 +13,7 @@ export default Base.extend({
     }
 
     if (this.options.message === undefined) {
-      set(this, 'options.message', Messages.render('accepted', this.options));
+      set(this, 'options.message', this.getMessage('accepted', this.options));
     }
   },
   call: function() {
