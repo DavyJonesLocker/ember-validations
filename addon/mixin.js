@@ -82,7 +82,7 @@ var ArrayValidatorProxy = Ember.ArrayProxy.extend(setValidityMixin, {
 export default Ember.Mixin.create(setValidityMixin, {
   init: function() {
     this._super();
-    this.errors = Errors.create();
+    this.set('errors', Errors.create());
     this.dependentValidationKeys = {};
     this.validators = Ember.A();
     if (get(this, 'validations') === undefined) {
