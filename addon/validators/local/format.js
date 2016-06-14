@@ -16,12 +16,19 @@ export default Base.extend({
       set(this, 'options.message',  Messages.render('invalid', this.options));
     }
    },
+   getValue: function() {
+     if (this.options['with'].constructor === String) {
+       return new RegExp(this.model.get(this.options['with'])) || /.*/;
+     } else {
+       return this.options['with'];
+     }
+   },
    call: function() {
     if (Ember.isEmpty(get(this.model, this.property))) {
       if (this.options.allowBlank === undefined) {
         this.errors.pushObject(this.options.message);
       }
-    } else if (this.options['with'] && !this.options['with'].test(get(this.model, this.property))) {
+    } else if (this.options['with'] && !this.getValue().test(get(this.model, this.property))) {
       this.errors.pushObject(this.options.message);
     } else if (this.options.without && this.options.without.test(get(this.model, this.property))) {
       this.errors.pushObject(this.options.message);
