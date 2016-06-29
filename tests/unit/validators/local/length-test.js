@@ -195,3 +195,23 @@ test('when using a property instead of a number', function(assert) {
   });
   assert.deepEqual(validator.errors, ['is the wrong length (should be 5 characters)']);
 });
+
+test('when using a property for "minimum" and model property is 0 allow blank', function(assert) {
+  options = { minimum: 'minLength' };
+  run(function() {
+    set(model, 'minLength', 0);
+    validator = Length.create({model: model, property: 'attribute', options: options});
+    set(model, 'attribute', '');
+  });
+  assert.deepEqual(validator.errors, []);
+});
+
+test('when using property for "is" and model property is 0 allow blank', function(assert) {
+  options = { is: 'isLength' };
+  run(function() {
+    set(model, 'isLength', 0);
+    validator = Length.create({model: model, property: 'attribute', options: options});
+    set(model, 'attribute', '');
+  });
+  assert.deepEqual(validator.errors, []);
+});

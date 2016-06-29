@@ -44,7 +44,9 @@ export default Base.extend({
     'maximum' : 'tooLong'
   },
   getValue: function(key) {
-    if (this.options[key].constructor === String) {
+    if (typeof this.options[key] === "undefined" || this.options[key] === null) {
+      return false;
+    } else if (this.options[key].constructor === String) {
       return get(this.model, this.options[key]) || 0;
     } else {
       return this.options[key];
@@ -75,7 +77,7 @@ export default Base.extend({
     var key, comparisonResult;
 
     if (Ember.isEmpty(get(this.model, this.property))) {
-      if (this.options.allowBlank === undefined && (this.options.is || this.options.minimum)) {
+      if (this.options.allowBlank === undefined && (this.getValue('is') || this.getValue('minimum'))) {
         this.errors.pushObject(this.renderBlankMessage());
       }
     } else {
