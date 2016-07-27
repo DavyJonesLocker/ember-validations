@@ -96,7 +96,7 @@ export default Ember.Component.extend(EmberValidations, {
 ```
 
 This is useful for things like Components which don't act as proxies, but
-again, until this is officially built into the project, YMMV.
+again, until this is officially built into the project, [YMMV](http://www.urbandictionary.com/define.php?term=ymmv).
 
 **Note: If you override the init function, you must call _super()**
 
