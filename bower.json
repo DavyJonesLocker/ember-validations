@@ -1,0 +1,22 @@
+{
+  "name": "ember-validations",
+  "homepage": "https://github.com/dockyard/ember-validations",
+  "authors": [
+    "Brian Cardarella <brian@dockyard.com>"
+  ],
+  "description": "",
+  "main": "dist/ember-validations.js",
+  "moduleType": [],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tmp",
+    "packages",
+    "generators",
+    "dist",
+    "tests"
+  ]
+}
