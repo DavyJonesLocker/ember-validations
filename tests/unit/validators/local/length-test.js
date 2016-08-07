@@ -22,7 +22,7 @@ test('when allowed length is 3 and value length is 3', function(assert) {
     validator = Length.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', '123');
   });
-  assert.deepEqual(validator.errors, []);
+  assert.deepEqual(validator.validationErrors, []);
 });
 
 test('when allowed length is 3 and value length is 4', function(assert) {
@@ -31,7 +31,7 @@ test('when allowed length is 3 and value length is 4', function(assert) {
     validator = Length.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', '1234');
   });
-  assert.deepEqual(validator.errors, ['failed validation']);
+  assert.deepEqual(validator.validationErrors, ['failed validation']);
 });
 
 test('when allowed length is 3 and value length is 2', function(assert) {
@@ -40,7 +40,7 @@ test('when allowed length is 3 and value length is 2', function(assert) {
     validator = Length.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', '12');
   });
-  assert.deepEqual(validator.errors, ['failed validation']);
+  assert.deepEqual(validator.validationErrors, ['failed validation']);
 });
 
 test('when allowing blank and allowed length is 3', function(assert) {
@@ -49,7 +49,7 @@ test('when allowing blank and allowed length is 3', function(assert) {
     validator = Length.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', '');
   });
-  assert.deepEqual(validator.errors, []);
+  assert.deepEqual(validator.validationErrors, []);
 });
 
 test('when allowing blank and minimum length is 3 and maximum length is 100', function(assert) {
@@ -58,7 +58,7 @@ test('when allowing blank and minimum length is 3 and maximum length is 100', fu
     validator = Length.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', '');
   });
-  assert.deepEqual(validator.errors, []);
+  assert.deepEqual(validator.validationErrors, []);
 });
 
 test('when not allowing blank and allowed length is 3', function(assert) {
@@ -67,7 +67,7 @@ test('when not allowing blank and allowed length is 3', function(assert) {
     validator = Length.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', '');
   });
-  assert.deepEqual(validator.errors, ['failed validation']);
+  assert.deepEqual(validator.validationErrors, ['failed validation']);
 });
 
 test('when allowed length is 3 and a different tokenizer', function(assert) {
@@ -76,7 +76,7 @@ test('when allowed length is 3 and a different tokenizer', function(assert) {
     validator = Length.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', 'one two three');
   });
-  assert.deepEqual(validator.errors, []);
+  assert.deepEqual(validator.validationErrors, []);
 });
 
 test('when allowed length minimum is 3 and value length is 3', function(assert) {
@@ -85,7 +85,7 @@ test('when allowed length minimum is 3 and value length is 3', function(assert) 
     validator = Length.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', '123');
   });
-  assert.deepEqual(validator.errors, []);
+  assert.deepEqual(validator.validationErrors, []);
 });
 
 test('when allowed length minimum is 3 and value length is 2', function(assert) {
@@ -94,7 +94,7 @@ test('when allowed length minimum is 3 and value length is 2', function(assert) 
     validator = Length.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', '12');
   });
-  assert.deepEqual(validator.errors, ['failed validation']);
+  assert.deepEqual(validator.validationErrors, ['failed validation']);
 });
 
 test('when allowed length maximum is 3 and value length is 3', function(assert) {
@@ -103,7 +103,7 @@ test('when allowed length maximum is 3 and value length is 3', function(assert) 
     validator = Length.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', '123');
   });
-  assert.deepEqual(validator.errors, []);
+  assert.deepEqual(validator.validationErrors, []);
 });
 
 test('when allowed length maximum is 3 and value length is 4', function(assert) {
@@ -112,7 +112,7 @@ test('when allowed length maximum is 3 and value length is 4', function(assert) 
     validator = Length.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', '1234');
   });
-  assert.deepEqual(validator.errors, ['failed validation']);
+  assert.deepEqual(validator.validationErrors, ['failed validation']);
 });
 
 test('when allowed length maximum is 3 and value is blank', function(assert) {
@@ -121,7 +121,7 @@ test('when allowed length maximum is 3 and value is blank', function(assert) {
     validator = Length.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', '');
   });
-  assert.deepEqual(validator.errors, []);
+  assert.deepEqual(validator.validationErrors, []);
 });
 
 test('when options is a number', function(assert) {
@@ -131,7 +131,7 @@ test('when options is a number', function(assert) {
     validator = Length.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', '');
   });
-  assert.deepEqual(validator.errors, ['is the wrong length (should be 3 characters)']);
+  assert.deepEqual(validator.validationErrors, ['is the wrong length (should be 3 characters)']);
 });
 
 test('when options is a number and value is undefined', function(assert) {
@@ -140,7 +140,7 @@ test('when options is a number and value is undefined', function(assert) {
     validator = Length.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', '');
   });
-  assert.deepEqual(validator.errors, ['is the wrong length (should be 3 characters)']);
+  assert.deepEqual(validator.validationErrors, ['is the wrong length (should be 3 characters)']);
 });
 
 test('when allowed length is 3, value length is 4 and no message is set', function(assert) {
@@ -149,7 +149,7 @@ test('when allowed length is 3, value length is 4 and no message is set', functi
     validator = Length.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', '1234');
   });
-  assert.deepEqual(validator.errors, ['is the wrong length (should be 3 characters)']);
+  assert.deepEqual(validator.validationErrors, ['is the wrong length (should be 3 characters)']);
 });
 
 test('when allowed length minimum is 3, value length is 2 and no message is set', function(assert) {
@@ -158,7 +158,7 @@ test('when allowed length minimum is 3, value length is 2 and no message is set'
     validator = Length.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', '12');
   });
-  assert.deepEqual(validator.errors, ['is too short (minimum is 3 characters)']);
+  assert.deepEqual(validator.validationErrors, ['is too short (minimum is 3 characters)']);
 });
 
 test('when allowed length maximum is 3, value length is 4 and no message is set', function(assert) {
@@ -167,7 +167,7 @@ test('when allowed length maximum is 3, value length is 4 and no message is set'
     validator = Length.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', '1234');
   });
-  assert.deepEqual(validator.errors, ['is too long (maximum is 3 characters)']);
+  assert.deepEqual(validator.validationErrors, ['is too long (maximum is 3 characters)']);
 });
 
 test('when value is non-string, then the value is still checked', function(assert) {
@@ -176,7 +176,7 @@ test('when value is non-string, then the value is still checked', function(asser
     validator = Length.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', 1234);
   });
-  assert.deepEqual(validator.errors, ['is too long (maximum is 3 characters)']);
+  assert.deepEqual(validator.validationErrors, ['is too long (maximum is 3 characters)']);
 });
 
 test('when using a property instead of a number', function(assert) {
@@ -185,13 +185,13 @@ test('when using a property instead of a number', function(assert) {
     validator = Length.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', '123');
   });
-  assert.deepEqual(validator.errors, ['is the wrong length (should be 0 characters)']);
+  assert.deepEqual(validator.validationErrors, ['is the wrong length (should be 0 characters)']);
   run(function() {
     set(model, 'countProperty', 3);
   });
-  assert.deepEqual(validator.errors, []);
+  assert.deepEqual(validator.validationErrors, []);
   run(function() {
     set(model, 'countProperty', 5);
   });
-  assert.deepEqual(validator.errors, ['is the wrong length (should be 5 characters)']);
+  assert.deepEqual(validator.validationErrors, ['is the wrong length (should be 5 characters)']);
 });

@@ -27,15 +27,15 @@ test('when values match', function(assert) {
     set(model, 'attribute', 'test');
     set(model, 'attributeConfirmation', 'test');
   });
-  assert.deepEqual(validator.errors, []);
+  assert.deepEqual(validator.validationErrors, []);
   run(function() {
     set(model, 'attributeConfirmation', 'newTest');
   });
-  assert.deepEqual(validator.errors, ['failed validation']);
+  assert.deepEqual(validator.validationErrors, ['failed validation']);
   run(function() {
     set(model, 'attribute', 'newTest');
   });
-  assert.deepEqual(validator.errors, []);
+  assert.deepEqual(validator.validationErrors, []);
 });
 
 test('when values do not match', function(assert) {
@@ -44,7 +44,7 @@ test('when values do not match', function(assert) {
     validator = Confirmation.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', 'test');
   });
-  assert.deepEqual(validator.errors, ['failed validation']);
+  assert.deepEqual(validator.validationErrors, ['failed validation']);
 });
 
 test('when original is null', function(assert) {
@@ -52,7 +52,7 @@ test('when original is null', function(assert) {
     validator = Confirmation.create({model: model, property: 'attribute'});
     model.set('attribute', null);
   });
-  assert.ok(Ember.isEmpty(validator.errors));
+  assert.ok(Ember.isEmpty(validator.validationErrors));
 });
 
 test('when confirmation is null', function(assert) {
@@ -60,7 +60,7 @@ test('when confirmation is null', function(assert) {
     validator = Confirmation.create({model: model, property: 'attribute'});
     model.set('attributeConfirmation', null);
   });
-  assert.ok(Ember.isEmpty(validator.errors));
+  assert.ok(Ember.isEmpty(validator.validationErrors));
 });
 
 test('when options is true', function(assert) {
@@ -69,7 +69,7 @@ test('when options is true', function(assert) {
     validator = Confirmation.create({model: model, property: 'attribute', options: options});
     set(model, 'attribute', 'test');
   });
-  assert.deepEqual(validator.errors, ["doesn't match attribute"]);
+  assert.deepEqual(validator.validationErrors, ["doesn't match attribute"]);
 });
 
 test('message integration on model, prints message on Confirmation property', function(assert) {
@@ -86,6 +86,6 @@ test('message integration on model, prints message on Confirmation property', fu
     set(otherModel, 'attribute', 'test');
   });
 
-  assert.deepEqual(get(otherModel, 'errors.attributeConfirmation'), ["doesn't match attribute"]);
-  assert.deepEqual(get(otherModel, 'errors.attribute'), []);
+  assert.deepEqual(get(otherModel, 'validationErrors.attributeConfirmation'), ["doesn't match attribute"]);
+  assert.deepEqual(get(otherModel, 'validationErrors.attribute'), []);
 });

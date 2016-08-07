@@ -80,9 +80,10 @@ var ArrayValidatorProxy = Ember.ArrayProxy.extend(setValidityMixin, {
 });
 
 export default Ember.Mixin.create(setValidityMixin, {
+  errors: Ember.computed.deprecatingAlias('validationErrors'),
   init: function() {
     this._super();
-    this.errors = Errors.create();
+    this.validationErrors = Errors.create();
     this.dependentValidationKeys = {};
     this.validators = Ember.A();
     if (get(this, 'validations') === undefined) {
@@ -90,14 +91,14 @@ export default Ember.Mixin.create(setValidityMixin, {
     }
     this.buildValidators();
     this.validators.forEach(function(validator) {
-      validator.addObserver('errors.[]', this, function(sender) {
+      validator.addObserver('validationErrors.[]', this, function(sender) {
         var errors = Ember.A();
         this.validators.forEach(function(validator) {
           if (validator.property === sender.property) {
-            errors.addObjects(validator.errors);
+            errors.addObjects(validator.validationErrors);
           }
         }, this);
-        set(this, 'errors.' + sender.property, errors);
+        set(this, 'validationErrors.' + sender.property, errors);
       });
     }, this);
   },
@@ -129,7 +130,7 @@ export default Ember.Mixin.create(setValidityMixin, {
           var errorMessage = this.callback.call(this);
 
           if (errorMessage) {
-            this.errors.pushObject(errorMessage);
+            this.validationErrors.pushObject(errorMessage);
           }
         },
         callback: callback
@@ -154,7 +155,7 @@ export default Ember.Mixin.create(setValidityMixin, {
   validate: function() {
     var self = this;
     return this._validate().then(function(vals) {
-      var errors = get(self, 'errors');
+      var errors = get(self, 'validationErrors');
       if (vals.indexOf(false) > -1) {
         return Ember.RSVP.reject(errors);
       }

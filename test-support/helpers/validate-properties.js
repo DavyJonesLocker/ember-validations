@@ -8,8 +8,8 @@ function validateValues(object, propertyName, values, isTestForValid) {
   var validatedValues = [];
 
   values.forEach(function(value) {
-    function handleValidation(errors) {
-      var hasErrors = object.get('errors.' + propertyName + '.firstObject');
+    function handleValidation() {
+      var hasErrors = object.get('validationErrors.' + propertyName + '.firstObject');
       if ((hasErrors && !isTestForValid) || (!hasErrors && isTestForValid)) {
         validatedValues.push(value);
       }
