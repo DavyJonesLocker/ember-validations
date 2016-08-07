@@ -72,8 +72,8 @@ var ArrayValidatorProxy = Ember.ArrayProxy.extend(setValidityMixin, {
   validate: function() {
     return this._validate();
   },
-  _validate: Ember.on('init', function() {
-    var promises = get(this, 'content').invoke('_validate').without(undefined);
+  _validate: Ember.on('init', function(scenario) {
+    var promises = get(this, 'content').invoke('_validate', scenario).without(undefined);
     return Ember.RSVP.all(promises);
   }),
   validators: Ember.computed.alias('content')
@@ -151,9 +151,9 @@ export default Ember.Mixin.create(setValidityMixin, {
       pushValidatableObject(this, property);
     }
   },
-  validate: function() {
+  validate: function(scenario) {
     var self = this;
-    return this._validate().then(function(vals) {
+    return this._validate(scenario).then(function(vals) {
       var errors = get(self, 'errors');
       if (vals.indexOf(false) > -1) {
         return Ember.RSVP.reject(errors);
@@ -161,8 +161,8 @@ export default Ember.Mixin.create(setValidityMixin, {
       return errors;
     });
   },
-  _validate: Ember.on('init', function() {
-    var promises = this.validators.invoke('_validate').without(undefined);
+  _validate: Ember.on('init', function(scenario) {
+    var promises = this.validators.invoke('_validate', scenario).without(undefined);
     return Ember.RSVP.all(promises);
   })
 });

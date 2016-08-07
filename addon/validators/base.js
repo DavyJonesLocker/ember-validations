@@ -11,6 +11,7 @@ export default Ember.Object.extend({
       'if': get(this, 'options.if'),
       unless: get(this, 'options.unless')
     };
+    this.scenario = get(this, 'options.scenario');
     this.model.addObserver(this.property, this, this._validate);
   },
   addObserversForDependentValidationKeys: Ember.on('init', function() {
@@ -44,9 +45,9 @@ export default Ember.Object.extend({
   },
   isValid: Ember.computed.empty('errors.[]'),
   isInvalid: Ember.computed.not('isValid'),
-  validate: function() {
+  validate: function(scenario) {
     var self = this;
-    return this._validate().then(function(success) {
+    return this._validate(scenario).then(function(success) {
       // Convert validation failures to rejects.
       var errors = get(self, 'model.errors');
       if (success) {
@@ -56,9 +57,9 @@ export default Ember.Object.extend({
       }
     });
   },
-  _validate: Ember.on('init', function() {
+  _validate: Ember.on('init', function(scenario) {
     this.errors.clear();
-    if (this.canValidate()) {
+    if (this.canValidate(scenario)) {
       this.call();
     }
     if (get(this, 'isValid')) {
@@ -67,7 +68,14 @@ export default Ember.Object.extend({
       return Ember.RSVP.resolve(false);
     }
   }),
-  canValidate: function() {
+  canValidate: function(scenario) {
+    if(typeof this.scenario === 'object'){
+      if(this.scenario.contains(scenario)){
+        return true;
+      } else {
+        return false;
+      }
+    }
     if (typeof(this.conditionals) === 'object') {
       if (this.conditionals['if']) {
         if (typeof(this.conditionals['if']) === 'function') {
