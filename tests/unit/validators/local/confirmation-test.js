@@ -1,22 +1,20 @@
 import Ember from 'ember';
-import { module, test } from 'qunit';
+import { moduleFor, test } from 'ember-qunit';
 import Confirmation from 'ember-validations/validators/local/confirmation';
 import Mixin from 'ember-validations/mixin';
-import buildContainer from '../../../helpers/build-container';
 
 var model, Model, options, validator;
 var get = Ember.get;
 var set = Ember.set;
 var run = Ember.run;
 
-module('Confirmation Validator', {
-  setup: function() {
-    Model = Ember.Object.extend(Mixin, {
-      container: buildContainer()
-    });
-    run(function() {
-      model = Model.create();
-    });
+moduleFor('object:model', 'Confirmation Validator', {
+  integration: true,
+
+  beforeEach: function() {
+    Model = Ember.Object.extend(Mixin);
+    this.registry.register('object:model', Model);
+    run(() => model = this.subject());
   }
 });
 
@@ -73,7 +71,7 @@ test('when options is true', function(assert) {
 });
 
 test('message integration on model, prints message on Confirmation property', function(assert) {
-  var otherModel, OtherModel = Model.extend({
+  var otherModel, OtherModel = this.container.lookupFactory('object:model').extend({
     validations: {
       attribute: {
         confirmation: true
@@ -81,10 +79,10 @@ test('message integration on model, prints message on Confirmation property', fu
     }
   });
 
-  run(function() {
-    otherModel = OtherModel.create();
-    set(otherModel, 'attribute', 'test');
-  });
+  this.registry.register('model:other', OtherModel);
+
+  run(() => otherModel = this.container.lookupFactory('model:other').create());
+  run(() => set(otherModel, 'attribute', 'test'));
 
   assert.deepEqual(get(otherModel, 'errors.attributeConfirmation'), ["doesn't match attribute"]);
   assert.deepEqual(get(otherModel, 'errors.attribute'), []);
