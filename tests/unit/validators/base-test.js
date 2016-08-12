@@ -2,22 +2,30 @@ import Ember from 'ember';
 import { moduleFor, test } from 'ember-qunit';
 import Base from 'ember-validations/validators/base';
 
-var model, Model, CustomValidator, validator;
-var get = Ember.get;
-var run = Ember.run;
+let model;
+let Model;
+let CustomValidator;
+let validator;
+
+const {
+  Object: EmberObject,
+  get,
+  run
+} = Ember;
 
 moduleFor('object:model', 'Base Validator', {
   integration: true,
-  beforeEach: function() {
-    Model = Ember.Object.extend({
+  beforeEach() {
+    Model = EmberObject.extend({
       dependentValidationKeys: {}
     });
     CustomValidator = Base.extend({
-      init: function() {
+      init() {
         this._super();
         this.dependentValidationKeys.pushObject('otherAttribute');
       },
-      call: function() {}
+      call() {
+      }
     });
 
     this.registry.register('object:model', Model);
@@ -26,37 +34,31 @@ moduleFor('object:model', 'Base Validator', {
 });
 
 test('when value is not empty', function(assert) {
-  run(function() {
-    validator = CustomValidator.create({model: model, property: 'attribute'});
-  });
+  run(() => validator = CustomValidator.create({ model, property: 'attribute' }));
   assert.equal(get(validator, 'isValid'), true);
 });
 
 test('validator has isInvalid flag', function(assert) {
-  run(function() {
-    validator = CustomValidator.create({model: model, property: 'attribute'});
-  });
+  run(() => validator = CustomValidator.create({ model, property: 'attribute' }));
   assert.equal(get(validator, 'isInvalid'), false);
 });
 
 test('generates dependentValidationKeys on the model', function(assert) {
-  run(function() {
-    validator = CustomValidator.create({model: model, property: 'attribute'});
-  });
-  assert.deepEqual(get(model, 'dependentValidationKeys'), {attribute: ['otherAttribute']});
+  run(() => validator = CustomValidator.create({ model, property: 'attribute' }));
+  assert.deepEqual(get(model, 'dependentValidationKeys'), { attribute: ['otherAttribute'] });
 });
 
 test('inactive validators should be considered valid', function(assert) {
-  var canValidate = true;
-  run(function() {
+  let canValidate = true;
+  run(() => {
     validator = CustomValidator.create({
-      model: model,
+      model,
       property: 'attribute',
-      canValidate: function() {
+      canValidate() {
         return canValidate;
       },
-      call: function() {
-        this.errors.pushObject("nope");
+      call() {
+        this.errors.pushObject('nope');
       }
     });
   });

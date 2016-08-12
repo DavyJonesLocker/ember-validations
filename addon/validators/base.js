@@ -1,89 +1,104 @@
 import Ember from 'ember';
 
-var get = Ember.get;
-var set = Ember.set;
+const {
+  A: emberArray,
+  Object: EmberObject,
+  RSVP: { reject, resolve },
+  computed: { empty, not },
+  get,
+  on,
+  set
+} = Ember;
 
-export default Ember.Object.extend({
-  init: function() {
-    set(this, 'errors', Ember.A());
-    this.dependentValidationKeys = Ember.A();
+export default EmberObject.extend({
+  init() {
+    set(this, 'errors', emberArray());
+    this.dependentValidationKeys = emberArray();
     this.conditionals = {
       'if': get(this, 'options.if'),
       unless: get(this, 'options.unless')
     };
     this.model.addObserver(this.property, this, this._validate);
   },
-  addObserversForDependentValidationKeys: Ember.on('init', function() {
+
+  addObserversForDependentValidationKeys: on('init', function() {
     this.dependentValidationKeys.forEach(function(key) {
       this.model.addObserver(key, this, this._validate);
     }, this);
   }),
-  pushConditionalDependentValidationKeys: Ember.on('init', function() {
-    Ember.A(['if', 'unless']).forEach((conditionalKind) => {
-      const conditional = this.conditionals[conditionalKind];
-      if (typeof(conditional) === 'string' && typeof(this.model[conditional]) !== 'function') {
+
+  pushConditionalDependentValidationKeys: on('init', function() {
+    emberArray(['if', 'unless']).forEach((conditionalKind) => {
+      let conditional = this.conditionals[conditionalKind];
+      if (typeof conditional === 'string' && typeof this.model[conditional] !== 'function') {
         this.dependentValidationKeys.pushObject(conditional);
       }
     });
   }),
-  pushDependentValidationKeyToModel: Ember.on('init', function() {
-    var model = get(this, 'model');
+
+  pushDependentValidationKeyToModel: on('init', function() {
+    let model = get(this, 'model');
     if (model.dependentValidationKeys[this.property] === undefined) {
-      model.dependentValidationKeys[this.property] = Ember.A();
+      model.dependentValidationKeys[this.property] = emberArray();
     }
     model.dependentValidationKeys[this.property].addObjects(this.dependentValidationKeys);
   }),
-  call: function () {
+
+  call() {
     throw 'Not implemented!';
   },
-  unknownProperty: function(key) {
-    var model = get(this, 'model');
+
+  unknownProperty(key) {
+    let model = get(this, 'model');
     if (model) {
       return get(model, key);
     }
   },
-  isValid: Ember.computed.empty('errors.[]'),
-  isInvalid: Ember.computed.not('isValid'),
-  validate: function() {
-    var self = this;
-    return this._validate().then(function(success) {
+
+  isValid: empty('errors.[]'),
+  isInvalid: not('isValid'),
+
+  validate() {
+    return this._validate().then((success) => {
       // Convert validation failures to rejects.
-      var errors = get(self, 'model.errors');
+      let errors = get(this, 'model.errors');
       if (success) {
         return errors;
       } else {
-        return Ember.RSVP.reject(errors);
+        return reject(errors);
       }
     });
   },
-  _validate: Ember.on('init', function() {
+
+  _validate: on('init', function() {
     this.errors.clear();
     if (this.canValidate()) {
       this.call();
     }
     if (get(this, 'isValid')) {
-      return Ember.RSVP.resolve(true);
+      return resolve(true);
     } else {
-      return Ember.RSVP.resolve(false);
+      return resolve(false);
     }
   }),
-  canValidate: function() {
-    if (typeof(this.conditionals) === 'object') {
+
+  canValidate() {
+    if (typeof this.conditionals === 'object') {
       if (this.conditionals['if']) {
-        if (typeof(this.conditionals['if']) === 'function') {
+        if (typeof this.conditionals['if'] === 'function') {
           return this.conditionals['if'](this.model, this.property);
-        } else if (typeof(this.conditionals['if']) === 'string') {
-          if (typeof(this.model[this.conditionals['if']]) === 'function') {
+        } else if (typeof this.conditionals['if'] === 'string') {
+          if (typeof this.model[this.conditionals['if']] === 'function') {
             return this.model[this.conditionals['if']]();
           } else {
             return get(this.model, this.conditionals['if']);
           }
         }
       } else if (this.conditionals.unless) {
-        if (typeof(this.conditionals.unless) === 'function') {
+        if (typeof this.conditionals.unless === 'function') {
           return !this.conditionals.unless(this.model, this.property);
-        } else if (typeof(this.conditionals.unless) === 'string') {
-          if (typeof(this.model[this.conditionals.unless]) === 'function') {
+        } else if (typeof this.conditionals.unless === 'string') {
+          if (typeof this.model[this.conditionals.unless] === 'function') {
             return !this.model[this.conditionals.unless]();
           } else {
             return !get(this.model, this.conditionals.unless);
@@ -96,7 +111,8 @@ export default Ember.Object.extend({
       return true;
     }
   },
-  compare: function (a, b, operator) {
+
+  compare(a, b, operator) {
     switch (operator) {
       case '==':  return a == b; // jshint ignore:line
       case '===': return a === b;

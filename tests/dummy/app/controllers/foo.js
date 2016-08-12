@@ -1,7 +1,9 @@
 import Ember from 'ember';
 import EmberValidations from 'ember-validations';
 
-export default Ember.Controller.extend(EmberValidations, {
+const { Controller } = Ember;
+
+export default Controller.extend(EmberValidations, {
   validations: {
     foo: {
       presence: true
