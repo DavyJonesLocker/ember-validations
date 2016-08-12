@@ -10,12 +10,15 @@ export default Base.extend({
     this.originalProperty = this.property;
     this.property = this.property + 'Confirmation';
     this._super();
-    this.dependentValidationKeys.pushObject(this.originalProperty);
     /*jshint expr:true*/
     if (this.options === true) {
       set(this, 'options', { attribute: this.originalProperty });
       set(this, 'options', { message: Messages.render('confirmation', this.options) });
     }
+  },
+  pushDependentValidationKeys: function () {
+    this._super();
+    this.dependentValidationKeys.pushObject(this.originalProperty);
   },
   call: function() {
     var original = get(this.model, this.originalProperty);
