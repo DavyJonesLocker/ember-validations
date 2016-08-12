@@ -2,6 +2,14 @@
 
 [![Build Status](https://travis-ci.org/DockYard/ember-validations.svg?branch=master)](https://travis-ci.org/DockYard/ember-validations) [![CircleCI](https://circleci.com/gh/DockYard/ember-validations.svg?style=shield)](https://circleci.com/gh/DockYard/ember-validations) [![npm version](https://badge.fury.io/js/ember-validations.svg)](https://badge.fury.io/js/ember-validations) [![Ember Observer Score](http://emberobserver.com/badges/ember-validations.svg)](http://emberobserver.com/addons/ember-validations)
 
+## WARNING ##
+
+This addon is no longer actively developed. At DockYard we have switched over to
+using [ember-changeset-validations](https://github.com/DockYard/ember-changeset-validations/)
+together with [ember-changeset](https://github.com/DockYard/ember-changeset).
+
+We do still maintain this addon.
+
 ## Installing ##
 
 ```
