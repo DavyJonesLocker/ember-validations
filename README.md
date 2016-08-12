@@ -2,34 +2,11 @@
 
 [![Build Status](https://travis-ci.org/DockYard/ember-validations.svg?branch=master)](https://travis-ci.org/DockYard/ember-validations) [![CircleCI](https://circleci.com/gh/DockYard/ember-validations.svg?style=shield)](https://circleci.com/gh/DockYard/ember-validations) [![npm version](https://badge.fury.io/js/ember-validations.svg)](https://badge.fury.io/js/ember-validations) [![Ember Observer Score](http://emberobserver.com/badges/ember-validations.svg)](http://emberobserver.com/addons/ember-validations)
 
-## Building yourself ##
-
-```bash
-npm install
-bower install
-ember build
-```
-
-The builds will be in the `dist/` directory.
-
 ## Installing ##
 
-#### With Ember-CLI ####
-
-If you are using
-[`ember-cli`](https://github.com/stefanpenner/ember-cli) >= 0.2.3, you can install
-ember-validations by running:
-
-    ember install ember-validations
-
-
-#### Without Ember-CLI ####
-
-We will continue to build `EmberValidations` to the DockYard build
-server until `ember-cli` is officially recommended by Ember. You can
-select a build version from:
-[http://builds.dockyard.com](http://builds.dockyard.com) for use in
-Bower.
+```
+ember install ember-validations
+```
 
 ## Looking for help? ##
 
@@ -613,7 +590,7 @@ on how to properly submit issues and pull requests.
 
 ## Legal ##
 
-[DockYard](http://dockyard.com/ember-consulting), LLC &copy; 2013
+[DockYard](http://dockyard.com/ember-consulting), LLC &copy; 2016
 
 [@dockyard](http://twitter.com/dockyard)
 
