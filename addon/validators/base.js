@@ -11,28 +11,23 @@ export default Ember.Object.extend({
       'if': get(this, 'options.if'),
       unless: get(this, 'options.unless')
     };
-    this.model.addObserver(this.property, this, this._validate);
+    this.dependentValidationKeys.pushObject(this.property);
+    this.pushConditionalDependentValidationKeys();
+    this.addObserversForDependentValidationKeys();
   },
-  addObserversForDependentValidationKeys: Ember.on('init', function() {
+  addObserversForDependentValidationKeys: function() {
     this.dependentValidationKeys.forEach(function(key) {
       this.model.addObserver(key, this, this._validate);
     }, this);
-  }),
-  pushConditionalDependentValidationKeys: Ember.on('init', function() {
+  },
+  pushConditionalDependentValidationKeys: function() {
     Ember.A(['if', 'unless']).forEach((conditionalKind) => {
       const conditional = this.conditionals[conditionalKind];
       if (typeof(conditional) === 'string' && typeof(this.model[conditional]) !== 'function') {
         this.dependentValidationKeys.pushObject(conditional);
       }
     });
-  }),
-  pushDependentValidationKeyToModel: Ember.on('init', function() {
-    var model = get(this, 'model');
-    if (model.dependentValidationKeys[this.property] === undefined) {
-      model.dependentValidationKeys[this.property] = Ember.A();
-    }
-    model.dependentValidationKeys[this.property].addObjects(this.dependentValidationKeys);
-  }),
+  },
   call: function () {
     throw 'Not implemented!';
   },
