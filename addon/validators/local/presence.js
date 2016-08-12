@@ -2,11 +2,11 @@ import Ember from 'ember';
 import Base from 'ember-validations/validators/base';
 import Messages from 'ember-validations/messages';
 
-var get = Ember.get;
+const { get, isBlank } = Ember;
 
 export default Base.extend({
-  init: function() {
-    this._super();
+  init() {
+    this._super(...arguments);
     /*jshint expr:true*/
     if (this.options === true) {
       this.options = {};
@@ -16,8 +16,8 @@ export default Base.extend({
       this.options.message = Messages.render('blank', this.options);
     }
   },
-  call: function() {
-    if (Ember.isBlank(get(this.model, this.property))) {
+  call() {
+    if (isBlank(get(this.model, this.property))) {
       this.errors.pushObject(this.options.message);
     }
   }

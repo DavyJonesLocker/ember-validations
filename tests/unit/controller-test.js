@@ -8,6 +8,6 @@ moduleFor('controller:foo', 'Controller sanity test', {
 });
 
 test('does not blow up', function(assert) {
-  var controller = this.subject();
+  let controller = this.subject();
   assert.ok(controller);
 });

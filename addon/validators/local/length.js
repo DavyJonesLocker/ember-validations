@@ -2,15 +2,16 @@ import Ember from 'ember';
 import Base from 'ember-validations/validators/base';
 import Messages from 'ember-validations/messages';
 
-var get = Ember.get;
-var set = Ember.set;
+const { get, isEmpty, set } = Ember;
 
 export default Base.extend({
-  init: function() {
-    var index, key;
-    this._super();
+  init() {
+    let index;
+    let key;
+
+    this._super(...arguments);
     /*jshint expr:true*/
-    if (typeof(this.options) === 'number') {
+    if (typeof this.options === 'number') {
       set(this, 'options', { 'is': this.options });
     }
 
@@ -25,56 +26,61 @@ export default Base.extend({
       }
     }
 
-    this.options.tokenizer = this.options.tokenizer || function(value) { return value.toString().split(''); };
-    // if (typeof(this.options.tokenizer) === 'function') {
-      // debugger;
-      // // this.tokenizedLength = new Function('value', 'return '
-    // } else {
-      // this.tokenizedLength = new Function('value', 'return (value || "").' + (this.options.tokenizer || 'split("")') + '.length');
-    // }
+    this.options.tokenizer = this.options.tokenizer || ((value) => value.toString().split(''));
   },
+
   CHECKS: {
-    'is'      : '==',
-    'minimum' : '>=',
-    'maximum' : '<='
+    'is': '==',
+    'minimum': '>=',
+    'maximum': '<='
   },
+
   MESSAGES: {
-    'is'      : 'wrongLength',
-    'minimum' : 'tooShort',
-    'maximum' : 'tooLong'
+    'is': 'wrongLength',
+    'minimum': 'tooShort',
+    'maximum': 'tooLong'
   },
-  getValue: function(key) {
+
+  getValue(key) {
     if (this.options[key].constructor === String) {
       return get(this.model, this.options[key]) || 0;
     } else {
       return this.options[key];
     }
   },
-  messageKeys: function() {
+
+  messageKeys() {
     return Object.keys(this.MESSAGES);
   },
-  checkKeys: function() {
+
+  checkKeys() {
     return Object.keys(this.CHECKS);
   },
-  renderMessageFor: function(key) {
-    var options = {count: this.getValue(key)}, _key;
+
+  renderMessageFor(key) {
+    let options = { count: this.getValue(key) };
+    let _key;
+
     for (_key in this.options) {
       options[_key] = this.options[_key];
     }
 
     return this.options.messages[this.MESSAGES[key]] || Messages.render(this.MESSAGES[key], options);
   },
-  renderBlankMessage: function() {
+
+  renderBlankMessage() {
     if (this.options.is) {
       return this.renderMessageFor('is');
     } else if (this.options.minimum) {
       return this.renderMessageFor('minimum');
     }
   },
-  call: function() {
-    var key, comparisonResult;
 
-    if (Ember.isEmpty(get(this.model, this.property))) {
+  call() {
+    let key;
+    let comparisonResult;
+
+    if (isEmpty(get(this.model, this.property))) {
       if (this.options.allowBlank === undefined && (this.options.is || this.options.minimum)) {
         this.errors.pushObject(this.renderBlankMessage());
       }

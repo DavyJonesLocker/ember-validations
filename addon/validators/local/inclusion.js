@@ -1,13 +1,14 @@
 import Ember from 'ember';
+import jquery from 'jquery';
 import Base from 'ember-validations/validators/base';
 import Messages from 'ember-validations/messages';
 
-var get = Ember.get;
-var set = Ember.set;
+const { get, isEmpty, set } = Ember;
+const { inArray } = jquery;
 
 export default Base.extend({
-  init: function() {
-    this._super();
+  init() {
+    this._super(...arguments);
     if (this.options.constructor === Array) {
       set(this, 'options', { 'in': this.options });
     }
@@ -16,14 +17,17 @@ export default Base.extend({
       set(this, 'options.message', Messages.render('inclusion', this.options));
     }
   },
-  call: function() {
-    var lower, upper;
-    if (Ember.isEmpty(get(this.model, this.property))) {
+
+  call() {
+    let lower;
+    let upper;
+
+    if (isEmpty(get(this.model, this.property))) {
       if (this.options.allowBlank === undefined) {
         this.errors.pushObject(this.options.message);
       }
     } else if (this.options['in']) {
-      if (Ember.$.inArray(get(this.model, this.property), this.options['in']) === -1) {
+      if (inArray(get(this.model, this.property), this.options['in']) === -1) {
         this.errors.pushObject(this.options.message);
       }
     } else if (this.options.range) {

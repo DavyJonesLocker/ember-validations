@@ -2,12 +2,11 @@ import Ember from 'ember';
 import Base from 'ember-validations/validators/base';
 import Messages from 'ember-validations/messages';
 
-var get = Ember.get;
-var set = Ember.set;
+const { get, isEmpty, set } = Ember;
 
 export default Base.extend({
-  init: function() {
-    this._super();
+  init() {
+    this._super(...arguments);
     if (this.options.constructor === RegExp) {
       set(this, 'options', { 'with': this.options });
     }
@@ -15,9 +14,10 @@ export default Base.extend({
     if (this.options.message === undefined) {
       set(this, 'options.message',  Messages.render('invalid', this.options));
     }
-   },
-   call: function() {
-    if (Ember.isEmpty(get(this.model, this.property))) {
+  },
+
+  call() {
+    if (isEmpty(get(this.model, this.property))) {
       if (this.options.allowBlank === undefined) {
         this.errors.pushObject(this.options.message);
       }

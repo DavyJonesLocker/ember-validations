@@ -3,16 +3,27 @@ import { moduleFor, test } from 'ember-qunit';
 import EmberValidations, { validator } from 'ember-validations';
 import Base from 'ember-validations/validators/base';
 
-var user, User, promise;
-var get = Ember.get;
-var set = Ember.set;
-var run = Ember.run;
+let user;
+let User;
+let promise;
+
+const {
+  A: emberArray,
+  ArrayController,
+  K,
+  Object: EmberObject,
+  ObjectController,
+  get,
+  isEmpty,
+  run,
+  set
+} = Ember;
 
 moduleFor('object:user', 'Validate test', {
   integration: true,
 
-  beforeEach: function() {
-    User = Ember.Object.extend(EmberValidations, {
+  beforeEach() {
+    User = EmberObject.extend(EmberValidations, {
       validations: {
         firstName: {
           presence: true,
@@ -42,25 +53,25 @@ test('returns a promise', function(assert) {
 
 test('isInvalid tracks isValid', function(assert) {
   assert.equal(get(user, 'isInvalid'), true);
-  run(() => user.setProperties({firstName: 'Brian', lastName: 'Cardarella'}));
+  run(() => user.setProperties({ firstName: 'Brian', lastName: 'Cardarella' }));
   assert.equal(get(user, 'isInvalid'), false);
 });
 
 test('runs all validations', function(assert) {
-  run(function(){
-    promise = user.validate().then(null, function(errors){
+  run(() => {
+    promise = user.validate().catch(function(errors) {
       assert.deepEqual(get(errors, 'firstName'), ["can't be blank", 'is the wrong length (should be 5 characters)']);
-      assert.deepEqual(get(errors, 'lastName'), ["is invalid"]);
+      assert.deepEqual(get(errors, 'lastName'), ['is invalid']);
       assert.equal(get(user, 'isValid'), false);
       set(user, 'firstName', 'Bob');
-      user.validate('firstName').then(null, function(errors){
+      user.validate('firstName').catch(function(errors) {
         assert.deepEqual(get(errors, 'firstName'), ['is the wrong length (should be 5 characters)']);
         assert.equal(get(user, 'isValid'), false);
         set(user, 'firstName', 'Brian');
         set(user, 'lastName', 'Cardarella');
-        user.validate().then(function(errors){
-          assert.ok(Ember.isEmpty(get(errors, 'firstName')));
-          assert.ok(Ember.isEmpty(get(errors, 'lastName')));
+        user.validate().then(function(errors) {
+          assert.ok(isEmpty(get(errors, 'firstName')));
+          assert.ok(isEmpty(get(errors, 'lastName')));
           assert.equal(get(user, 'isValid'), true);
         });
       });
@@ -70,11 +81,13 @@ test('runs all validations', function(assert) {
   return promise;
 });
 
-if (Ember.ObjectController) {
+if (ObjectController) {
   test('can be mixed into an controller', function(assert) {
-    var Controller, controller, user;
+    let Controller;
+    let controller;
+    let user;
 
-    Controller = Ember.ObjectController.extend(EmberValidations, {
+    Controller = ObjectController.extend(EmberValidations, {
       validations: {
         name: {
           presence: true
@@ -87,7 +100,7 @@ if (Ember.ObjectController) {
     run(() => controller = this.container.lookupFactory('controller:user').create());
     assert.equal(get(controller, 'isValid'), false);
 
-    user = Ember.Object.create();
+    user = EmberObject.create();
     run(() => set(controller, 'model', user));
     assert.equal(get(controller, 'isValid'), false);
 
@@ -96,15 +109,18 @@ if (Ember.ObjectController) {
   });
 }
 
-if (Ember.ArrayController) {
+if (ObjectController && ArrayController) {
   moduleFor('controller:user', 'Array controller', {
     integration: true
   });
 
   test('can be mixed into an array controller', function(assert) {
-    var Controller, controller, user, UserController;
+    let Controller;
+    let controller;
+    let user;
+    let UserController;
 
-    UserController = Ember.ObjectController.extend(EmberValidations, {
+    UserController = ObjectController.extend(EmberValidations, {
       validations: {
         name: {
           presence: true
@@ -114,7 +130,7 @@ if (Ember.ArrayController) {
 
     this.registry.register('controller:user', UserController);
 
-    Controller = Ember.ArrayController.extend(EmberValidations, {
+    Controller = ArrayController.extend(EmberValidations, {
       itemController: 'User',
       validations: {
         '[]': true
@@ -127,7 +143,7 @@ if (Ember.ArrayController) {
 
     assert.equal(get(controller, 'isValid'), true);
 
-    user = Ember.Object.create();
+    user = EmberObject.create();
 
     run(() => controller.pushObject(user));
 
@@ -141,13 +157,14 @@ if (Ember.ArrayController) {
   });
 }
 
-var Profile, profile;
+let Profile;
+let profile;
 
 moduleFor('object:profile', 'Relationship validators', {
   integration: true,
 
-  beforeEach: function() {
-    Profile = Ember.Object.extend(EmberValidations, {
+  beforeEach() {
+    Profile = EmberObject.extend(EmberValidations, {
       validations: {
         title: {
           presence: true
@@ -155,7 +172,7 @@ moduleFor('object:profile', 'Relationship validators', {
       }
     });
 
-    User = Ember.Object.extend(EmberValidations);
+    User = EmberObject.extend(EmberValidations);
 
     this.registry.register('object:profile', Profile);
     this.registry.register('object:user', User);
@@ -185,22 +202,9 @@ test('validates other validatable property', function(assert) {
   assert.equal(get(user, 'isValid'), true);
 });
 
-// test('validates custom validator', function() {
-  // run(function() {
-    // user = User.create({
-      // profile: profile,
-      // validations: [AgeValidator]
-    // });
-  // });
-  // equal(get(user, 'isValid'), false);
-  // run(function() {
-    // set(user, 'age', 22);
-  // });
-  // equal(get(user, 'isValid'), true);
-// });
-
 test('validates array of validable objects', function(assert) {
-  var friend1, friend2;
+  let friend1;
+  let friend2;
 
   run(() => {
     user = this.factory('object:user').create({
@@ -213,7 +217,7 @@ test('validates array of validable objects', function(assert) {
   assert.equal(get(user, 'isValid'), true);
 
   run(function() {
-    set(user, 'friends', Ember.A());
+    set(user, 'friends', emberArray());
   });
 
   assert.equal(get(user, 'isValid'), true);
@@ -261,9 +265,9 @@ test('validates array of validable objects', function(assert) {
   assert.equal(get(user, 'isValid'), true);
 });
 
-
 test('revalidates arrays when they are replaced', function(assert) {
-  var friend1, friend2;
+  let friend1;
+  let friend2;
 
   run(() => {
     user = this.factory('object:user').create({
@@ -276,7 +280,7 @@ test('revalidates arrays when they are replaced', function(assert) {
   assert.equal(get(user, 'isValid'), true);
 
   run(function() {
-    set(user, 'friends', Ember.A());
+    set(user, 'friends', emberArray());
   });
 
   assert.equal(get(user, 'isValid'), true);
@@ -292,7 +296,7 @@ test('revalidates arrays when they are replaced', function(assert) {
   });
 
   run(function() {
-    set(user, 'friends', Ember.A([friend1]));
+    set(user, 'friends', emberArray([friend1]));
   });
 
   assert.equal(get(user, 'isValid'), false);
@@ -312,7 +316,7 @@ test('revalidates arrays when they are replaced', function(assert) {
       }
     });
 
-    set(user, 'friends', Ember.A([friend1, friend2]));
+    set(user, 'friends', emberArray([friend1, friend2]));
   });
 
   assert.equal(get(user, 'isValid'), false);
@@ -327,22 +331,22 @@ test('revalidates arrays when they are replaced', function(assert) {
 moduleFor('object:user', 'validator class lookup order', {
   integration: true,
 
-  beforeEach: function() {
-    User = Ember.Object.extend(EmberValidations);
+  beforeEach() {
+    User = EmberObject.extend(EmberValidations);
     this.registry.register('object:user', User);
   }
 });
 
 test('should lookup in project namespace first', function(assert) {
-  var dummyValidatorCalled = false;
-  var nativeValidatorCalled = false;
+  let dummyValidatorCalled = false;
+  let nativeValidatorCalled = false;
 
   this.registry.register('ember-validations@validator:local/presence', Base.extend({
     init() {
       this._super(...arguments);
       nativeValidatorCalled = true;
     },
-    call: Ember.K
+    call: K
   }));
 
   this.registry.register('validator:local/presence', Base.extend({
@@ -350,7 +354,7 @@ test('should lookup in project namespace first', function(assert) {
       this._super(...arguments);
       dummyValidatorCalled = true;
     },
-    call: Ember.K
+    call: K
   }));
 
   run(() => {
@@ -368,16 +372,15 @@ test('should lookup in project namespace first', function(assert) {
 });
 
 test('will lookup both local and remote validators of similar name', function(assert) {
-  var localValidatorCalled = false;
-  var remoteValidatorCalled = false;
-
+  let localValidatorCalled = false;
+  let remoteValidatorCalled = false;
 
   this.registry.register('validator:local/uniqueness', Base.extend({
     init() {
       this._super(...arguments);
       localValidatorCalled = true;
     },
-    call: Ember.K
+    call: K
   }));
 
   this.registry.register('validator:remote/uniqueness', Base.extend({
@@ -385,7 +388,7 @@ test('will lookup both local and remote validators of similar name', function(as
       this._super(...arguments);
       remoteValidatorCalled = true;
     },
-    call: Ember.K
+    call: K
   }));
 
   run(() => {
@@ -403,16 +406,15 @@ test('will lookup both local and remote validators of similar name', function(as
 });
 
 test('should prefer lookup in just "validators" before "native"', function(assert) {
-  var dummyValidatorCalled = false;
-  var nativeValidatorCalled = false;
-
+  let dummyValidatorCalled = false;
+  let nativeValidatorCalled = false;
 
   this.registry.register('ember-validations@validator:remote/uniqueness', Base.extend({
     init() {
       this._super(...arguments);
       nativeValidatorCalled = true;
     },
-    call: Ember.K
+    call: K
   }));
 
   this.registry.register('validator:presence', Base.extend({
@@ -420,7 +422,7 @@ test('should prefer lookup in just "validators" before "native"', function(asser
       this._super(...arguments);
       dummyValidatorCalled = true;
     },
-    call: Ember.K
+    call: K
   }));
 
   run(() => {
@@ -438,16 +440,15 @@ test('should prefer lookup in just "validators" before "native"', function(asser
 });
 
 test('should store validators in cache for faster lookup', function(assert) {
-  var validatorResolvedCount = 0;
-
-  var oldResolveRegistration = this.registry.resolveRegistration;
+  let validatorResolvedCount = 0;
+  let oldResolveRegistration = this.registry.resolveRegistration;
 
   this.registry.resolveRegistration = (fullName) => {
     validatorResolvedCount += 1;
     return oldResolveRegistration.call(this.registry, fullName);
   };
 
-  var user2;
+  let user2;
 
   run(() => {
     user = this.subject({
@@ -479,13 +480,13 @@ test('should store validators in cache for faster lookup', function(assert) {
 moduleFor('object:user', 'inline validations', {
   integration: true,
 
-  beforeEach: function() {
-    User = Ember.Object.extend(EmberValidations);
+  beforeEach() {
+    User = EmberObject.extend(EmberValidations);
     this.registry.register('object:user', User);
   }
 });
 
-test("mixed validation syntax", function(assert) {
+test('mixed validation syntax', function(assert) {
   run(() => {
     user = this.subject({
       validations: {
@@ -501,7 +502,7 @@ test("mixed validation syntax", function(assert) {
   assert.deepEqual(['it failed'], get(user, 'errors.name'));
 });
 
-test("concise validation syntax", function(assert) {
+test('concise validation syntax', function(assert) {
   run(() => {
     user = this.subject({
       validations: {
