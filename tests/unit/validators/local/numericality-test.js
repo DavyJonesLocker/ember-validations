@@ -41,6 +41,15 @@ test('when value is a decimal number', function(assert) {
   assert.deepEqual(validator.errors, []);
 });
 
+test('when value is a decimal number in a string with a leading dot', function(assert) {
+  options = { messages: { numericality: 'failed validation' } };
+  run(function() {
+    validator = Numericality.create({ model, property: 'attribute', options });
+    set(model, 'attribute', '.456');
+  });
+  assert.deepEqual(validator.errors, []);
+});
+
 test('when value is not a number', function(assert) {
   options = { messages: { numericality: 'failed validation' } };
   run(function() {
