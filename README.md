@@ -374,10 +374,9 @@ import Base from 'ember-validations/validators/base';
 import Ember from 'ember';
 
 export default Base.extend({
-  init: function() {
+  pushDependentValidationKeys: function() {
     // this call is necessary, don't forget it!
     this._super();
-
     this.dependentValidationKeys.pushObject(this.options.alsoWatch);
   },
   call: function() {
@@ -388,8 +387,8 @@ export default Base.extend({
 });
 ```
 
-The `init` function is given access to the `this.options` which is simply
-a POJO of the options passed to the validator.
+The `pushDependentValidationKeys` function is called during `init` and is given access 
+to the `this.options` which is simply a POJO of the options passed to the validator.
 `dependentValidationKeys` is the collection of paths relative to
 `this.model` that will be observed for changes. If any changes occur on
 any given path the validator will automatically trigger.
