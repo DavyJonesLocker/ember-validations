@@ -1,17 +1,17 @@
 import Ember from 'ember';
-import { module, test } from 'qunit';
+import { moduleFor, test } from 'ember-qunit';
 import Mixin from 'ember-validations/mixin';
-import buildContainer from '../helpers/build-container';
 
 var user, User;
 var get = Ember.get;
 var set = Ember.set;
 var run = Ember.run;
 
-module('Errors test', {
-  setup: function() {
+moduleFor('object:user', 'Errors test', {
+  integration: true,
+
+  beforeEach: function() {
     User = Ember.Object.extend(Mixin, {
-      container: buildContainer(),
       validations: {
         name: {
           presence: true
@@ -22,49 +22,46 @@ module('Errors test', {
         }
       }
     });
+
+    this.registry.register('object:user', User);
   },
-  teardown: function() {
+
+  afterEach: function() {
     delete Ember.I18n;
   }
 });
 
-test('validations are run on instantiation', function(assert) {
-  run(function() {
-    user = User.create();
-  });
+test('validations are run on instantiation - invalid', function(assert) {
+  run(() => user = this.subject());
   assert.equal(get(user, 'isValid'), false);
   assert.deepEqual(get(user, 'errors.name'), ["can't be blank"]);
   assert.deepEqual(get(user, 'errors.age'), ["can't be blank", 'is not a number']);
-  run(function() {
-    user = User.create({name: 'Brian', age: 33});
-  });
+});
+
+test('validations are run on instantiation - valid', function(assert) {
+  run(() => user = this.subject({name: 'Brian', age: 33}));
   assert.ok(get(user, 'isValid'));
   assert.ok(Ember.isEmpty(get(user, 'errors.name')));
   assert.ok(Ember.isEmpty(get(user, 'errors.age')));
 });
 
 test('when errors are resolved', function(assert) {
-  run(function() {
-    user = User.create();
-  });
+  run(() => user = this.subject());
   assert.equal(get(user, 'isValid'), false);
   assert.deepEqual(get(user, 'errors.name'), ["can't be blank"]);
   assert.deepEqual(get(user, 'errors.age'), ["can't be blank", 'is not a number']);
-  run(function() {
-    set(user, 'name', 'Brian');
-  });
+
+  run(() => set(user, 'name', 'Brian'));
   assert.equal(get(user, 'isValid'), false);
   assert.ok(Ember.isEmpty(get(user, 'errors.name')));
   assert.deepEqual(get(user, 'errors.age'), ["can't be blank", 'is not a number']);
-  run(function() {
-    set(user, 'age', 'thirty three');
-  });
+
+  run(() => set(user, 'age', 'thirty three'));
   assert.equal(get(user, 'isValid'), false);
   assert.ok(Ember.isEmpty(get(user, 'errors.name')));
   assert.deepEqual(get(user, 'errors.age'), ['is not a number']);
-  run(function() {
-    set(user, 'age', 33);
-  });
+
+  run(() => set(user, 'age', 33));
   assert.ok(get(user, 'isValid'));
   assert.ok(Ember.isEmpty(get(user, 'errors.name')));
   assert.ok(Ember.isEmpty(get(user, 'errors.age')));

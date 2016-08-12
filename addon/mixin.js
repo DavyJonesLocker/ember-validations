@@ -44,19 +44,23 @@ var lookupValidator = function(validatorName) {
   if (cache[validatorName]) {
     validators = validators.concat(cache[validatorName]);
   } else {
-    var local = owner._lookupFactory('validator:local/'+validatorName);
-    var remote = owner._lookupFactory('validator:remote/'+validatorName);
+    var local = owner.resolveRegistration('validator:local/' + validatorName);
+    var remote = owner.resolveRegistration('validator:remote/' + validatorName);
 
-    if (local || remote) { validators = validators.concat([local, remote]); }
-    else {
-      var base = owner._lookupFactory('validator:'+validatorName);
+    if (local || remote) {
+      validators = validators.concat([local, remote]);
+    } else {
+      var base = owner.resolveRegistration('validator:'+validatorName);
 
-      if (base) { validators = validators.concat([base]); }
-      else {
-        local = owner._lookupFactory('ember-validations@validator:local/'+validatorName);
-        remote = owner._lookupFactory('ember-validations@validator:remote/'+validatorName);
+      if (base) {
+        validators = validators.concat([base]);
+      } else {
+        local = owner.resolveRegistration('ember-validations@validator:local/'+validatorName);
+        remote = owner.resolveRegistration('ember-validations@validator:remote/'+validatorName);
 
-        if (local || remote) { validators = validators.concat([local, remote]); }
+        if (local || remote) {
+          validators = validators.concat([local, remote]);
+        }
       }
     }
 

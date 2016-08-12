@@ -1,13 +1,14 @@
 import Ember from 'ember';
-import { module, test } from 'qunit';
+import { moduleFor, test } from 'ember-qunit';
 import Base from 'ember-validations/validators/base';
 
-var model, Model, options, CustomValidator, validator;
+var model, Model, CustomValidator, validator;
 var get = Ember.get;
 var run = Ember.run;
 
-module('Base Validator', {
-  setup: function() {
+moduleFor('object:model', 'Base Validator', {
+  integration: true,
+  beforeEach: function() {
     Model = Ember.Object.extend({
       dependentValidationKeys: {}
     });
@@ -18,9 +19,9 @@ module('Base Validator', {
       },
       call: function() {}
     });
-    run(function() {
-      model = Model.create();
-    });
+
+    this.registry.register('object:model', Model);
+    run(() => model = this.subject());
   }
 });
 
@@ -48,7 +49,7 @@ test('generates dependentValidationKeys on the model', function(assert) {
 test('inactive validators should be considered valid', function(assert) {
   var canValidate = true;
   run(function() {
-    validator = CustomValidator.createWithMixins({
+    validator = CustomValidator.create({
       model: model,
       property: 'attribute',
       canValidate: function() {
