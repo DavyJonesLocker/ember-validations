@@ -376,7 +376,7 @@ import Ember from 'ember';
 export default Base.extend({
   init: function() {
     // this call is necessary, don't forget it!
-    this._super();
+    this._super.apply(this, arguments);
 
     this.dependentValidationKeys.pushObject(this.options.alsoWatch);
   },
