@@ -13,26 +13,32 @@ export default Ember.Object.extend({
     };
     this.model.addObserver(this.property, this, this._validate);
   },
-  addObserversForDependentValidationKeys: Ember.on('init', function() {
+  AfterInit: Ember.on('init', function() {
+    this._validate();
+    this.pushDependentValidationKeyToModel();
+    this.pushConditionalDependentValidationKeys();
+    this.addObserversForDependentValidationKeys();
+  }),
+  addObserversForDependentValidationKeys: function() {
     this.dependentValidationKeys.forEach(function(key) {
       this.model.addObserver(key, this, this._validate);
     }, this);
-  }),
-  pushConditionalDependentValidationKeys: Ember.on('init', function() {
+  },
+  pushConditionalDependentValidationKeys: function() {
     Ember.A(['if', 'unless']).forEach((conditionalKind) => {
       const conditional = this.conditionals[conditionalKind];
       if (typeof(conditional) === 'string' && typeof(this.model[conditional]) !== 'function') {
         this.dependentValidationKeys.pushObject(conditional);
       }
     });
-  }),
-  pushDependentValidationKeyToModel: Ember.on('init', function() {
+  },
+  pushDependentValidationKeyToModel: function() {
     var model = get(this, 'model');
     if (model.dependentValidationKeys[this.property] === undefined) {
       model.dependentValidationKeys[this.property] = Ember.A();
     }
     model.dependentValidationKeys[this.property].addObjects(this.dependentValidationKeys);
-  }),
+  },
   call: function () {
     throw 'Not implemented!';
   },
@@ -56,7 +62,7 @@ export default Ember.Object.extend({
       }
     });
   },
-  _validate: Ember.on('init', function() {
+  _validate: function() {
     this.errors.clear();
     if (this.canValidate()) {
       this.call();
@@ -66,7 +72,7 @@ export default Ember.Object.extend({
     } else {
       return Ember.RSVP.resolve(false);
     }
-  }),
+  },
   canValidate: function() {
     if (typeof(this.conditionals) === 'object') {
       if (this.conditionals['if']) {
