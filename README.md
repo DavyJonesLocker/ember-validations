@@ -27,9 +27,9 @@ validations to:
 
 ```javascript
 import Ember from 'ember';
-import EmberValidations from 'ember-validations';
+import { Mixin } from 'ember-validations';
 
-export default Ember.Controller.extend(EmberValidations);
+export default Ember.Controller.extend(Mixin);
 ```
 
 You define your validations as a JSON object. They should be added to
@@ -41,9 +41,9 @@ seen as a validatable object.
 
 ```javascript
 import Ember from 'ember';
-import EmberValidations from 'ember-validations';
+import { Mixin } from 'ember-validations';
 
-export default Ember.Controller.extend(EmberValidations, {
+export default Ember.Controller.extend(Mixin, {
   validations: {
     'model.firstName': {
       presence: true,
@@ -62,9 +62,9 @@ to nested objects:
 
 ```javascript
 import Ember from 'ember';
-import EmberValidations from 'ember-validations';
+import { Mixin } from 'ember-validations';
 
-export default Ember.Component.extend(EmberValidations, {
+export default Ember.Component.extend(Mixin, {
   validations: {
     'user.firstName': {
       presence: true,
@@ -81,9 +81,9 @@ again, until this is officially built into the project, [YMMV](http://www.urband
 
 ```javascript
 import Ember from 'ember';
-import EmberValidations from 'ember-validations';
+import { Mixin } from 'ember-validations';
 
-export default Ember.Controller.extend(EmberValidations, {
+export default Ember.Controller.extend(Mixin, {
   init: function() {
     // this call is necessary, don't forget it!
     this._super.apply(this, arguments);
