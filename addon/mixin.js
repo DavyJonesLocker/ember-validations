@@ -11,7 +11,6 @@ const {
   computed,
   computed: { alias, not },
   get,
-  inject: { service },
   isArray,
   isNone,
   isPresent,
@@ -44,7 +43,7 @@ const pushValidatableObject = function(model, property) {
 
 const lookupValidator = function(validatorName) {
   let owner = getOwner(this);
-  let service = get(this, 'validationService');
+  let service = owner.lookup('service:validations');
   let validators = [];
   let cache;
 
@@ -105,7 +104,6 @@ const ArrayValidatorProxy = ArrayProxy.extend(setValidityMixin, {
 });
 
 export default Mixin.create(setValidityMixin, {
-  validationService: service('validations'),
 
   init() {
     this._super(...arguments);
