@@ -14,9 +14,11 @@ const {
   Object: EmberObject,
   ObjectController,
   get,
+  getOwner,
   isEmpty,
   run,
-  set
+  set,
+  setOwner
 } = Ember;
 
 moduleFor('object:user', 'Validate test', {
@@ -79,6 +81,19 @@ test('runs all validations', function(assert) {
   });
 
   return promise;
+});
+
+test('it can be mixed into an Ember Object', function(assert) {
+  let defaults = {
+    validations: {
+      soul: { presence: true }
+    }
+  };
+
+  setOwner(defaults, getOwner(this));
+  let Being = EmberObject.extend(EmberValidations, defaults);
+  let being = Being.create({ soul: null });
+  assert.equal(get(being, 'isValid'), false);
 });
 
 if (ObjectController) {
