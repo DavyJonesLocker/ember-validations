@@ -113,6 +113,8 @@ export default Mixin.create(setValidityMixin, {
 
     if (get(this, 'validations') === undefined) {
       this.validations = {};
+    } else {
+      this.validations = get(this, 'validations');
     }
 
     this.buildValidators();
@@ -138,10 +140,12 @@ export default Mixin.create(setValidityMixin, {
     let property;
 
     for (property in this.validations) {
-      if (this.validations[property].constructor === Object) {
-        this.buildRuleValidator(property);
-      } else {
-        this.buildObjectValidator(property);
+      if (this.validations[property] !== undefined) {
+        if (this.validations[property].constructor === Object) {
+          this.buildRuleValidator(property);
+        } else {
+          this.buildObjectValidator(property);
+        }
       }
     }
   },
