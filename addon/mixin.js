@@ -113,6 +113,8 @@ export default Mixin.create(setValidityMixin, {
 
     if (get(this, 'validations') === undefined) {
       this.validations = {};
+    } else {
+      this.validations = get(this, 'validations');
     }
 
     this.buildValidators();
