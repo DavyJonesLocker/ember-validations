@@ -32,6 +32,15 @@ test('when value is a number', function(assert) {
   assert.deepEqual(validator.errors, []);
 });
 
+test('when value is a string repreenting a number', function(assert) {
+  options = { messages: { numericality: 'failed validation' } };
+  run(function() {
+    validator = Numericality.create({model: model, property: 'attribute', options: options});
+    set(model, 'attribute', '123');
+  });
+  assert.deepEqual(validator.errors, []);
+});
+
 test('when value is a decimal number', function(assert) {
   options = { messages: { numericality: 'failed validation' } };
   run(function() {
@@ -129,6 +138,15 @@ test('when only allowing values greater than 10 and value is greater than 10', f
     set(model, 'attribute', 11);
   });
   assert.deepEqual(validator.errors, []);
+});
+
+test('when only allowing values greater than 10 in string and value is 2 in string', function(assert) {
+  options = { messages: { greaterThan: 'failed validation', numericality: 'failed validation' }, greaterThan: '10' };
+  run(function() {
+    validator = Numericality.create({model: model, property: 'attribute', options: options});
+    set(model, 'attribute', '2');
+  });
+  assert.deepEqual(validator.errors, ['failed validation']);
 });
 
 test('when only allowing values greater than 10 and value is 10', function(assert) {
