@@ -21,3 +21,7 @@ Failure to do so will result in an immediate closing of the pull
 request. If you update and rebase the pull request to follow the
 guidelines your pull request will be re-opened and considered for
 inclusion.
+
+## How to Run Unit Tests ##
+1. Setup: run `bundle install`
+2. Test: run `bundle exec rake test[all]`
