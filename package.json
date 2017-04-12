@@ -1,6 +1,6 @@
 {
-  "name": "ember-validations",
-  "version": "2.2.2-dsc.2",
+  "name": "@dollarshaveclub/ember-validations",
+  "version": "2.2.3",
   "description": "Validations for Ember Objects",
   "directories": {
     "doc": "doc",
