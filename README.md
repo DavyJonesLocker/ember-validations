@@ -2,6 +2,8 @@
 
 [![Build Status](https://travis-ci.org/DockYard/ember-validations.svg?branch=master)](https://travis-ci.org/DockYard/ember-validations) [![CircleCI](https://circleci.com/gh/DockYard/ember-validations.svg?style=shield)](https://circleci.com/gh/DockYard/ember-validations) [![npm version](https://badge.fury.io/js/ember-validations.svg)](https://badge.fury.io/js/ember-validations) [![Ember Observer Score](http://emberobserver.com/badges/ember-validations.svg)](http://emberobserver.com/addons/ember-validations)
 
+**[ember-validations is built and maintained by DockYard, contact us for expert Ember.js consulting](https://dockyard.com/ember-consulting)**.
+
 ## WARNING ##
 
 This addon is no longer actively developed. At DockYard we have switched over to
