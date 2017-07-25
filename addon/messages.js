@@ -1,11 +1,11 @@
 import Ember from 'ember';
 
-const { I18n } = Ember;
-
 export default {
   render(attribute, context) {
-    if (I18n) {
-      return I18n.t(`errors.${attribute}`, context);
+    // ember-i18n users may override this at runtime.
+    // jscs:disable disallowDirectPropertyAccess
+    if (Ember.I18n) {
+      return Ember.I18n.t(`errors.${attribute}`, context);
     } else {
       let regex = new RegExp('{{(.*?)}}');
       let attributeName = '';
