@@ -1,7 +1,6 @@
 import Ember from 'ember';
 import Errors from 'ember-validations/errors';
 import Base from 'ember-validations/validators/base';
-import getOwner from 'ember-getowner-polyfill';
 
 const {
   A: emberArray,
@@ -11,6 +10,7 @@ const {
   computed,
   computed: { alias, not },
   get,
+  getOwner,
   isArray,
   isNone,
   isPresent,
