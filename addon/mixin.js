@@ -1,7 +1,6 @@
 import Ember from 'ember';
 import Errors from 'ember-validations/errors';
 import Base from 'ember-validations/validators/base';
-import getOwner from 'ember-getowner-polyfill';
 
 const {
   A: emberArray,
@@ -42,7 +41,7 @@ const pushValidatableObject = function(model, property) {
 };
 
 const lookupValidator = function(validatorName) {
-  let owner = getOwner(this);
+  let owner = Ember.getOwner(this);
   let service = owner.lookup('service:validations');
   let validators = [];
   let cache;
